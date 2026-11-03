@@ -9,9 +9,10 @@ import { BookOpen, FileText, Search, X, ExternalLink, Sigma } from 'lucide-react
 
 interface FormulaBookletModalProps {
   onClose: () => void;
+  mode?: 'modal' | 'drawer';
 }
 
-export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClose }) => {
+export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClose, mode = 'modal' }) => {
   const [search, setSearch] = useState('');
   const [activeQual, setActiveQual] = useState<'all' | 'maths' | 'fm'>('all');
 
@@ -36,9 +37,17 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
     return { ...cat, sections: matchingSections };
   }).filter((cat) => cat.sections.length > 0);
 
+  const containerClasses = mode === 'drawer'
+    ? 'w-full md:w-[440px] border-l border-[#93785B]/35 bg-[#3E362E] flex flex-col h-full shadow-2xl shrink-0 z-30 transition-all'
+    : 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2C2620]/85 backdrop-blur-sm text-[#FAF6F0]';
+
+  const cardClasses = mode === 'drawer'
+    ? 'flex flex-col h-full w-full overflow-hidden'
+    : 'bg-[#3E362E] border border-[#93785B]/40 rounded-xl w-full max-w-3xl overflow-hidden flex flex-col max-h-[90vh] shadow-2xl';
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2C2620]/85 backdrop-blur-sm text-[#FAF6F0]">
-      <div className="bg-[#3E362E] border border-[#93785B]/40 rounded-xl w-full max-w-3xl overflow-hidden flex flex-col max-h-[90vh] shadow-2xl">
+    <div className={containerClasses}>
+      <div className={cardClasses}>
         {/* Header */}
         <div className="px-5 py-3.5 border-b border-[#93785B]/25 flex items-center justify-between shrink-0 bg-[#2C2620]">
           <div className="flex items-center gap-2.5">

@@ -7,11 +7,23 @@ import { GradeBoundariesModal } from './components/GradeBoundariesModal';
 import { FormulaBookletModal } from './components/FormulaBookletModal';
 import { InteractiveExamRunner } from './components/InteractiveExamRunner';
 import { getInteractivePaper, InteractivePaper } from './data/interactiveQuestions';
+import { getStoredTheme, applyTheme, ThemeId } from './utils/theme';
 import { Sigma, BarChart3 } from 'lucide-react';
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState<'home' | 'maths' | 'further-maths'>('home');
   const [activeModuleId, setActiveModuleId] = useState<string>('p1');
+  const [currentTheme, setCurrentTheme] = useState<ThemeId>(() => getStoredTheme());
+
+  // Initialize theme on mount
+  useEffect(() => {
+    applyTheme(currentTheme);
+  }, [currentTheme]);
+
+  const handleSelectTheme = (theme: ThemeId) => {
+    setCurrentTheme(theme);
+    applyTheme(theme);
+  };
 
   // Modals
   const [pdfModal, setPdfModal] = useState<{
@@ -84,6 +96,8 @@ export default function App() {
         }}
         onOpenBoundaries={() => setShowBoundariesModal(true)}
         onOpenFormulas={() => setShowFormulasModal(true)}
+        currentTheme={currentTheme}
+        onSelectTheme={handleSelectTheme}
       />
 
       {/* Main View */}

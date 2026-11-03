@@ -74,8 +74,8 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
   const [isTimerPaused, setIsTimerPaused] = useState(false);
   const [timeSpent, setTimeSpent] = useState(0);
 
-  // Formula booklet overlay
-  const [showFormulaModal, setShowFormulaModal] = useState(false);
+  // Formula booklet side drawer
+  const [showFormulaDrawer, setShowFormulaDrawer] = useState(false);
 
   // Completed exam summary view
   const [isFinished, setIsFinished] = useState(false);
@@ -83,6 +83,91 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
   // Past attempts history
   const [pastAttempts, setPastAttempts] = useState<ExamAttempt[]>([]);
   const [showAttemptsModal, setShowAttemptsModal] = useState(false);
+
+  // In-progress session draft recovery
+  const draftStorageKey = `matheseus_draft_${paper.id}`;
+  const [savedDraft, setSavedDraft] = useState<{
+    scores: Record<number, number>;
+    flagged: Record<number, boolean>;
+    currentIndex: number;
+    timeSpent: number;
+    secondsRemaining: number;
+    feedbackMode: 'immediate' | 'end';
+    timingMode: 'timed' | 'untimed';
+    timestamp: number;
+  } | null>(() => {
+    try {
+      const raw = localStorage.getItem(`matheseus_draft_${paper.id}`);
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  // Auto-save ongoing draft
+  useEffect(() => {
+    if (isStarted && !isFinished) {
+      try {
+        localStorage.setItem(
+          draftStorageKey,
+          JSON.stringify({
+            scores,
+            flagged,
+            currentIndex,
+            timeSpent,
+            secondsRemaining,
+            feedbackMode,
+            timingMode,
+            timestamp: Date.now(),
+          })
+        );
+      } catch (e) {
+        console.warn('Failed to auto-save exam draft', e);
+      }
+    }
+  }, [
+    isStarted,
+    isFinished,
+    scores,
+    flagged,
+    currentIndex,
+    timeSpent,
+    secondsRemaining,
+    feedbackMode,
+    timingMode,
+    draftStorageKey,
+  ]);
+
+  // Keyboard Shortcuts navigation
+  useEffect(() => {
+    if (!isStarted || isFinished) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const activeEl = document.activeElement;
+      if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) {
+        return;
+      }
+
+      if (e.key === 'ArrowRight' || e.key === 'l' || e.key === 'L') {
+        setCurrentIndex((prev) => Math.min(paper.questions.length - 1, prev + 1));
+      } else if (e.key === 'ArrowLeft' || e.key === 'h' || e.key === 'H') {
+        setCurrentIndex((prev) => Math.max(0, prev - 1));
+      } else if (e.key === 'm' || e.key === 'M') {
+        if (feedbackMode === 'immediate') {
+          const qNum = paper.questions[currentIndex].number;
+          setRevealedSolutions((prev) => ({ ...prev, [qNum]: !prev[qNum] }));
+        }
+      } else if (e.key === 'f' || e.key === 'F') {
+        const qNum = paper.questions[currentIndex].number;
+        setFlagged((prev) => ({ ...prev, [qNum]: !prev[qNum] }));
+      } else if (e.key === 'b' || e.key === 'B') {
+        setShowFormulaDrawer((prev) => !prev);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isStarted, isFinished, currentIndex, paper.questions, feedbackMode]);
 
   // Load past attempts on mount
   useEffect(() => {
@@ -176,6 +261,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
     setPastAttempts(updated);
     try {
       localStorage.setItem('matheseus_exam_attempts', JSON.stringify(updated));
+      localStorage.removeItem(draftStorageKey);
     } catch (e) {
       console.warn('Failed to save attempt', e);
     }
@@ -186,6 +272,10 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
   };
 
   const handleRestart = () => {
+    try {
+      localStorage.removeItem(draftStorageKey);
+    } catch {}
+    setSavedDraft(null);
     setScores({});
     setRevealedSolutions({});
     setFlagged({});
@@ -202,7 +292,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
 
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2C2620]/90 backdrop-blur-sm text-[#FAF6F0]">
-        <div className="bg-[#3E362E] border border-[#93785B]/40 rounded-xl max-w-lg w-full p-6 space-y-6 shadow-2xl">
+        <div className="bg-[#3E362E] border border-[#93785B]/40 rounded-xl max-w-lg w-full p-6 space-y-5 shadow-2xl">
           <div className="border-b border-[#93785B]/25 pb-4">
             <div className="flex items-center justify-between">
               <span className="text-xs px-2.5 py-1 rounded bg-[#2C2620] border border-[#93785B]/40 text-[#865D36] font-semibold">
@@ -223,6 +313,53 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
               {paper.questions.length} questions · {paperMaxMarks} marks
             </p>
           </div>
+
+          {/* Session Draft Recovery Banner */}
+          {savedDraft && (
+            <div className="p-3.5 rounded-xl bg-[#2C2620] border border-[#865D36]/60 flex items-center justify-between text-xs shadow-sm">
+              <div>
+                <div className="font-semibold text-[#FAF6F0] flex items-center gap-1.5">
+                  <Clock size={13} className="text-[#865D36]" />
+                  <span>Resume In-Progress Attempt?</span>
+                </div>
+                <div className="text-[11px] text-[#AC8968] mt-0.5">
+                  {Object.keys(savedDraft.scores || {}).length} questions marked · Q{(savedDraft.currentIndex || 0) + 1} of {paper.questions.length}
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    try {
+                      localStorage.removeItem(draftStorageKey);
+                    } catch {}
+                    setSavedDraft(null);
+                  }}
+                  className="px-2 py-1 text-[11px] text-[#A69080] hover:text-[#FAF6F0] transition-colors"
+                >
+                  Discard
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setScores(savedDraft.scores || {});
+                    setFlagged(savedDraft.flagged || {});
+                    setCurrentIndex(savedDraft.currentIndex || 0);
+                    setTimeSpent(savedDraft.timeSpent || 0);
+                    if (savedDraft.secondsRemaining !== undefined) {
+                      setSecondsRemaining(savedDraft.secondsRemaining);
+                    }
+                    if (savedDraft.feedbackMode) setFeedbackMode(savedDraft.feedbackMode);
+                    if (savedDraft.timingMode) setTimingMode(savedDraft.timingMode);
+                    setIsStarted(true);
+                  }}
+                  className="px-3 py-1.5 rounded-lg bg-[#865D36] hover:bg-[#93785B] text-[#FAF6F0] font-semibold text-xs transition-colors shadow-sm"
+                >
+                  Resume
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Option: Feedback Mode */}
           <div className="space-y-2">
@@ -561,11 +698,15 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
 
         {/* Header Right Actions */}
         <div className="flex items-center gap-2.5">
-          {/* Formula Booklet Access Button */}
+          {/* Formula Booklet Access Button (Dock / Drawer) */}
           <button
-            onClick={() => setShowFormulaModal(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg bg-[#2C2620] hover:bg-[#865D36] text-[#FAF6F0] border border-[#93785B]/40 font-medium transition-colors"
-            title="Open Formula Booklet"
+            onClick={() => setShowFormulaDrawer(!showFormulaDrawer)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg border font-medium transition-colors ${
+              showFormulaDrawer
+                ? 'bg-[#2C2620] border-[#865D36] text-[#FAF6F0]'
+                : 'bg-[#2C2620] hover:bg-[#865D36] text-[#FAF6F0] border-[#93785B]/40'
+            }`}
+            title="Toggle Formula Booklet Dock (Key: B)"
           >
             <BookOpen size={13} className="text-[#AC8968]" />
             <span className="hidden sm:inline">Formula Booklet</span>
@@ -679,8 +820,10 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
         </div>
       )}
 
-      {/* Main Question Scrollable Area */}
-      <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+      {/* Main Content Area (Question + Optional Docked Formula Drawer) */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Main Question Scrollable Area */}
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
         <div className="max-w-3xl mx-auto space-y-6">
           {/* Question Header Card with INLINE COUNTDOWN CLOCK in Libre Font */}
           <div className="p-4 sm:p-5 rounded-xl bg-[#3E362E] border border-[#93785B]/30 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -854,23 +997,42 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
         </div>
       </div>
 
+      {/* Docked Formula Drawer */}
+      {showFormulaDrawer && (
+        <FormulaBookletModal
+          mode="drawer"
+          onClose={() => setShowFormulaDrawer(false)}
+        />
+      )}
+      </div>
+
       {/* Bottom Navigation Toolbar */}
       <div className="h-14 px-4 bg-[#3E362E] border-t border-[#93785B]/30 flex items-center justify-between gap-4 shrink-0 shadow-lg">
-        <button
-          onClick={() => setCurrentIndex(Math.max(0, currentIndex - 1))}
-          disabled={currentIndex === 0}
-          className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-semibold border transition-colors ${
-            currentIndex === 0
-              ? 'opacity-40 cursor-not-allowed bg-[#2C2620] text-[#A69080]/40 border-transparent'
-              : 'bg-[#2C2620] hover:bg-[#865D36] text-[#FAF6F0] border-[#93785B]/40'
-          }`}
-        >
-          <ArrowLeft size={13} />
-          <span>Previous</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setCurrentIndex(Math.max(0, currentIndex - 1))}
+            disabled={currentIndex === 0}
+            className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-semibold border transition-colors ${
+              currentIndex === 0
+                ? 'opacity-40 cursor-not-allowed bg-[#2C2620] text-[#A69080]/40 border-transparent'
+                : 'bg-[#2C2620] hover:bg-[#865D36] text-[#FAF6F0] border-[#93785B]/40'
+            }`}
+          >
+            <ArrowLeft size={13} />
+            <span>Previous</span>
+          </button>
 
-        <div className="text-xs text-[#AC8968] tabular-nums hidden sm:inline">
-          {Object.keys(scores).length} of {paper.questions.length} marked
+          <div className="text-xs text-[#AC8968] tabular-nums hidden sm:inline">
+            {Object.keys(scores).length} of {paper.questions.length} marked
+          </div>
+        </div>
+
+        {/* Keyboard shortcut badges */}
+        <div className="text-[11px] text-[#A69080] hidden md:flex items-center gap-3">
+          <span><kbd className="px-1.5 py-0.5 rounded bg-[#2C2620] border border-[#93785B]/30 text-[10px] font-sans">←</kbd> <kbd className="px-1.5 py-0.5 rounded bg-[#2C2620] border border-[#93785B]/30 text-[10px] font-sans">→</kbd> Navigate</span>
+          <span><kbd className="px-1.5 py-0.5 rounded bg-[#2C2620] border border-[#93785B]/30 text-[10px] font-sans">M</kbd> Mark Scheme</span>
+          <span><kbd className="px-1.5 py-0.5 rounded bg-[#2C2620] border border-[#93785B]/30 text-[10px] font-sans">F</kbd> Flag</span>
+          <span><kbd className="px-1.5 py-0.5 rounded bg-[#2C2620] border border-[#93785B]/30 text-[10px] font-sans">B</kbd> Formulas</span>
         </div>
 
         {currentIndex === paper.questions.length - 1 ? (
@@ -891,11 +1053,6 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
           </button>
         )}
       </div>
-
-      {/* Formula Booklet Overlay Modal */}
-      {showFormulaModal && (
-        <FormulaBookletModal onClose={() => setShowFormulaModal(false)} />
-      )}
     </div>
   );
 };

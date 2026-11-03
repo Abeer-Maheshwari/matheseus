@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MODULES_DATA } from '../data/papersData';
+import { MODULES_DATA, ModuleSection } from '../data/papersData';
 import { 
   BookOpen, 
   Columns, 
@@ -8,7 +8,8 @@ import {
   Search, 
   Check, 
   GraduationCap, 
-  Layers 
+  Layers,
+  Download
 } from 'lucide-react';
 
 interface PapersViewProps {
@@ -38,6 +39,42 @@ export const PapersView: React.FC<PapersViewProps> = ({
 
   const availableModules = MODULES_DATA.filter((m) => m.subject === currentSubject);
   const activeModule = availableModules.find((m) => m.id === activeModuleId) || availableModules[0];
+
+  // Group modules into logical categories for clean navigation
+  const moduleCategories: { title: string; modules: ModuleSection[] }[] = 
+    currentSubject === 'further-maths'
+      ? [
+          {
+            title: 'Core Pure',
+            modules: availableModules.filter((m) => ['cp1', 'cp2'].includes(m.id)),
+          },
+          {
+            title: 'Further Pure',
+            modules: availableModules.filter((m) => ['fp1', 'fp2'].includes(m.id)),
+          },
+          {
+            title: 'Mechanics',
+            modules: availableModules.filter((m) => ['fm1', 'fm2'].includes(m.id)),
+          },
+          {
+            title: 'Statistics',
+            modules: availableModules.filter((m) => ['fs1', 'fs2'].includes(m.id)),
+          },
+          {
+            title: 'Decision',
+            modules: availableModules.filter((m) => ['d1', 'd2'].includes(m.id)),
+          },
+        ].filter((cat) => cat.modules.length > 0)
+      : [
+          {
+            title: 'Pure Mathematics',
+            modules: availableModules.filter((m) => ['p1', 'p2'].includes(m.id)),
+          },
+          {
+            title: 'Applied Mathematics',
+            modules: availableModules.filter((m) => ['p3'].includes(m.id)),
+          },
+        ];
 
   const filteredPapers = activeModule.papers.filter((paper) => {
     if (!searchTerm.trim()) return true;
@@ -84,32 +121,45 @@ export const PapersView: React.FC<PapersViewProps> = ({
         </button>
       </div>
 
-      {/* Subsections: Module Navigation Pills */}
-      <div className="space-y-2">
+      {/* Subsections: Categorized Module Navigation */}
+      <div className="space-y-3">
         <div className="text-xs text-[#AC8968] font-semibold uppercase tracking-wider flex items-center gap-1.5">
           <BookOpen size={13} className="text-[#865D36]" />
-          <span>Module:</span>
+          <span>Modules:</span>
         </div>
-        <div className="flex flex-wrap gap-2">
-          {availableModules.map((m) => {
-            const isSelected = m.id === activeModule.id;
-            return (
-              <button
-                key={m.id}
-                onClick={() => onSelectModule(m.id)}
-                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-medium border transition-all ${
-                  isSelected
-                    ? 'bg-[#3E362E] text-[#FAF6F0] border-[#865D36] shadow-sm font-semibold'
-                    : 'bg-[#2C2620] text-[#AC8968] hover:text-[#FAF6F0] border-[#93785B]/30 hover:border-[#93785B]/60'
-                }`}
-              >
-                <span>{m.title}</span>
-                <span className="text-[11px] px-1.5 py-0.2 rounded bg-[#2C2620] border border-[#93785B]/40 text-[#A69080]">
-                  {m.code}
-                </span>
-              </button>
-            );
-          })}
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {moduleCategories.map((category) => (
+            <div
+              key={category.title}
+              className="p-2.5 rounded-xl bg-[#3E362E] border border-[#93785B]/30 space-y-1.5 shadow-sm"
+            >
+              <div className="text-[11px] font-semibold text-[#AC8968] uppercase tracking-wider px-1">
+                {category.title}
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {category.modules.map((m) => {
+                  const isSelected = m.id === activeModule.id;
+                  return (
+                    <button
+                      key={m.id}
+                      onClick={() => onSelectModule(m.id)}
+                      className={`flex-1 min-w-[120px] flex items-center justify-between px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
+                        isSelected
+                          ? 'bg-[#2C2620] text-[#FAF6F0] border-[#865D36] shadow-sm font-semibold ring-1 ring-[#865D36]/40'
+                          : 'bg-[#2C2620]/60 text-[#AC8968] hover:text-[#FAF6F0] border-[#93785B]/25 hover:border-[#93785B]/60'
+                      }`}
+                    >
+                      <span className="truncate">{m.title}</span>
+                      <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#3E362E] border border-[#93785B]/30 text-[#A69080] ml-1.5 shrink-0">
+                        {m.code.split('/')[1] || m.code}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -123,7 +173,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
             </span>
           </h3>
           <p className="text-xs text-[#AC8968] mt-0.5">
-            Past papers and mark schemes.
+            {filteredPapers.length} past exam paper series with mark schemes.
           </p>
         </div>
 
@@ -146,7 +196,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
             <tr className="border-b border-[#93785B]/25 bg-[#2C2620]/90 text-[#AC8968] text-[11px] font-semibold uppercase tracking-wider">
               <th className="py-3 px-4">Series</th>
               <th className="py-3 px-4 text-center">Practice</th>
-              <th className="py-3 px-4 text-center">PDF (Split View)</th>
+              <th className="py-3 px-4 text-center">PDF Options</th>
               <th className="py-3 px-4 text-center">Report</th>
               <th className="py-3 px-4 text-right">Status</th>
             </tr>
@@ -168,7 +218,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
                     </div>
                   </td>
 
-                  {/* Website Version: Question-by-Question Interactive Mode */}
+                  {/* Practice Interactive Mode */}
                   <td className="py-3 px-4 text-center">
                     <button
                       onClick={() => onOpenInteractive(paper.id, paperTitle, activeModule.code)}
@@ -180,16 +230,44 @@ export const PapersView: React.FC<PapersViewProps> = ({
                     </button>
                   </td>
 
-                  {/* Merged PDF Version + Split View */}
+                  {/* Split View + Quick Direct Download */}
                   <td className="py-3 px-4 text-center">
-                    <button
-                      onClick={() => onOpenSplitView(paperTitle, paper.qpUrl, paper.msUrl)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#2C2620] hover:bg-[#865D36]/30 text-[#FAF6F0] font-medium border border-[#93785B]/40 transition-colors"
-                      title="Open Question Paper and Mark Scheme side-by-side"
-                    >
-                      <Columns size={13} className="text-[#AC8968]" />
-                      <span>PDF (Split View)</span>
-                    </button>
+                    <div className="inline-flex items-center gap-2">
+                      <button
+                        onClick={() => onOpenSplitView(paperTitle, paper.qpUrl, paper.msUrl)}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#2C2620] hover:bg-[#865D36]/30 text-[#FAF6F0] font-medium border border-[#93785B]/40 transition-colors"
+                        title="Open Question Paper and Mark Scheme side-by-side"
+                      >
+                        <Columns size={13} className="text-[#AC8968]" />
+                        <span>Split View</span>
+                      </button>
+
+                      {/* Direct QP / MS Download icons */}
+                      <div className="flex items-center border border-[#93785B]/35 rounded-lg overflow-hidden bg-[#2C2620]">
+                        <a
+                          href={paper.qpUrl}
+                          download
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-2 py-1 text-[11px] text-[#AC8968] hover:text-[#FAF6F0] hover:bg-[#3E362E] transition-colors border-r border-[#93785B]/25 flex items-center gap-1"
+                          title="Download Question Paper PDF"
+                        >
+                          <Download size={11} className="text-[#865D36]" />
+                          <span>QP</span>
+                        </a>
+                        <a
+                          href={paper.msUrl}
+                          download
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-2 py-1 text-[11px] text-[#AC8968] hover:text-[#FAF6F0] hover:bg-[#3E362E] transition-colors flex items-center gap-1"
+                          title="Download Mark Scheme PDF"
+                        >
+                          <Download size={11} className="text-[#AC8968]" />
+                          <span>MS</span>
+                        </a>
+                      </div>
+                    </div>
                   </td>
 
                   {/* Reports */}
