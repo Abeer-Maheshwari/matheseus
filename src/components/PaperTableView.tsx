@@ -1,5 +1,6 @@
 import React from 'react';
 import { PastPaper, PaperProgress } from '../types';
+import { Columns, CheckCircle2, Check, Clock, Award, FileText } from 'lucide-react';
 
 interface PaperTableViewProps {
   papers: PastPaper[];
@@ -19,95 +20,60 @@ export const PaperTableView: React.FC<PaperTableViewProps> = ({
   onToggleStatus,
 }) => {
   return (
-    <div className="border border-zinc-800 rounded-lg overflow-hidden bg-zinc-950">
+    <div className="border border-slate-800 rounded-xl overflow-hidden bg-slate-900/40 shadow-md">
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs border-collapse">
           <thead>
-            <tr className="border-b border-zinc-800 bg-zinc-900/80 text-zinc-400 font-semibold uppercase tracking-wider text-[11px]">
+            <tr className="border-b border-slate-800 bg-slate-900/90 text-slate-400 font-semibold uppercase tracking-wider text-[11px]">
               <th className="py-3 px-4">Series</th>
               <th className="py-3 px-4">Code</th>
               <th className="py-3 px-4">Paper Title</th>
               <th className="py-3 px-4 text-center">Marks & Time</th>
-              <th className="py-3 px-4 text-center">Materials</th>
-              <th className="py-3 px-4 text-center">Split Review</th>
+              <th className="py-3 px-4 text-center">PDF (Split View)</th>
               <th className="py-3 px-4 text-right">Status</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-zinc-800/80">
+          <tbody className="divide-y divide-slate-800/80">
             {papers.map((paper) => {
               const prog = progressMap[paper.id];
               const isCompleted = prog?.status === 'completed';
               const isInProgress = prog?.status === 'in_progress';
 
               return (
-                <tr key={paper.id} className="hover:bg-zinc-900/50 transition-colors">
+                <tr key={paper.id} className="hover:bg-slate-850/50 transition-colors">
                   {/* Series */}
-                  <td className="py-3 px-4 whitespace-nowrap font-medium text-zinc-200">
+                  <td className="py-3 px-4 whitespace-nowrap font-medium text-slate-200">
                     {paper.season} {paper.year}
                   </td>
 
                   {/* Code */}
-                  <td className="py-3 px-4 whitespace-nowrap font-mono text-zinc-400 font-medium">
+                  <td className="py-3 px-4 whitespace-nowrap font-mono text-sky-400 font-medium">
                     {paper.code}
                   </td>
 
                   {/* Title & Topics */}
                   <td className="py-3 px-4">
-                    <div className="font-semibold text-zinc-100">{paper.title}</div>
-                    <div className="text-[11px] text-zinc-400 truncate max-w-xs mt-0.5">
+                    <div className="font-semibold text-white">{paper.title}</div>
+                    <div className="text-[11px] text-slate-400 truncate max-w-xs mt-0.5">
                       {paper.topics.join(' · ')}
                     </div>
                   </td>
 
                   {/* Marks & Time */}
-                  <td className="py-3 px-4 text-center whitespace-nowrap text-zinc-400">
+                  <td className="py-3 px-4 text-center whitespace-nowrap text-slate-400">
                     <div>{paper.maxMarks} marks</div>
-                    <div className="text-[11px] text-zinc-400">{paper.durationMinutes} mins</div>
+                    <div className="text-[11px] text-slate-500">{paper.durationMinutes} mins</div>
                   </td>
 
-                  {/* Materials: QP, MS, ER */}
-                  <td className="py-3 px-4 text-center whitespace-nowrap">
-                    <div className="inline-flex items-center gap-1">
-                      <button
-                        onClick={() => onOpenSingleDoc(paper, 'qp')}
-                        className="px-2 py-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-200 rounded border border-zinc-800 font-medium"
-                      >
-                        QP
-                      </button>
-                      <button
-                        onClick={() => onOpenSingleDoc(paper, 'ms')}
-                        className="px-2 py-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-200 rounded border border-zinc-800 font-medium"
-                      >
-                        MS
-                      </button>
-                      {paper.erUrl && (
-                        <button
-                          onClick={() => onOpenSingleDoc(paper, 'er')}
-                          className="px-2 py-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 rounded border border-zinc-800 text-[11px]"
-                          title="Examiner Report"
-                        >
-                          ER
-                        </button>
-                      )}
-                      {paper.modelAnswersUrl && (
-                        <button
-                          onClick={() => onOpenSingleDoc(paper, 'ma')}
-                          className="px-2 py-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 rounded border border-zinc-800 text-[11px]"
-                          title="Model Solutions"
-                        >
-                          MA
-                        </button>
-                      )}
-                    </div>
-                  </td>
-
-                  {/* Split Screen Button */}
+                  {/* PDF Split View Merged Button */}
                   <td className="py-3 px-4 text-center whitespace-nowrap">
                     <button
                       onClick={() => onOpenSplitView(paper)}
-                      className="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-white rounded font-medium border border-zinc-700"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white rounded-lg font-medium border border-slate-700/80 transition-colors"
+                      title="Open Question Paper and Mark Scheme side-by-side"
                     >
-                      Split View
+                      <Columns size={13} className="text-sky-400" />
+                      <span>PDF (Split View)</span>
                     </button>
                   </td>
 
@@ -115,28 +81,38 @@ export const PaperTableView: React.FC<PaperTableViewProps> = ({
                   <td className="py-3 px-4 text-right whitespace-nowrap">
                     <div className="flex items-center justify-end gap-2">
                       {prog?.score !== undefined && (
-                        <span className="font-mono font-semibold text-zinc-300 text-[11px]">
+                        <span className="font-mono font-semibold text-emerald-400 text-[11px]">
                           {prog.score}/{paper.maxMarks}
                         </span>
                       )}
                       <button
                         onClick={() => onToggleStatus(paper.id, prog?.status || 'not_started')}
-                        className={`px-2 py-1 rounded text-[11px] font-medium border ${
+                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-medium border transition-colors ${
                           isCompleted
-                            ? 'bg-zinc-200 text-black border-zinc-300 font-semibold'
+                            ? 'bg-emerald-950/70 text-emerald-300 border-emerald-600/80 font-semibold'
                             : isInProgress
-                              ? 'bg-zinc-800 text-zinc-300 border-zinc-700'
-                              : 'bg-zinc-950 text-zinc-400 hover:text-zinc-200 border-zinc-800'
+                              ? 'bg-amber-950/60 text-amber-300 border-amber-600/60'
+                              : 'bg-slate-950 text-slate-400 hover:text-slate-200 border-slate-800 hover:border-slate-700'
                         }`}
                       >
-                        {isCompleted ? 'Done' : isInProgress ? 'In Progress' : 'Mark Done'}
+                        {isCompleted ? (
+                          <>
+                            <Check size={12} className="text-emerald-400" />
+                            <span>Done</span>
+                          </>
+                        ) : isInProgress ? (
+                          <span>In Progress</span>
+                        ) : (
+                          <span>Mark Done</span>
+                        )}
                       </button>
                       <button
                         onClick={() => onStartExam(paper)}
-                        className="px-2 py-1 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-800 text-[11px]"
+                        className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 text-[11px] transition-colors"
                         title="Timed Exam Practice"
                       >
-                        Timer
+                        <Clock size={11} className="text-sky-400" />
+                        <span>Timer</span>
                       </button>
                     </div>
                   </td>

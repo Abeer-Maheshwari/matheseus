@@ -27,10 +27,50 @@ export const MathRenderer: React.FC<MathRendererProps> = ({
 
   return (
     <span
-      className={`katex-rendered ${className}`}
+      className={`katex-rendered inline-block ${className}`}
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );
+};
+
+// Sub-component to render text that may contain markdown bold (**...**), italics (*...*), or code (`...`)
+const RenderTextWithMarkdown: React.FC<{ content: string }> = ({ content }) => {
+  // Regex to match **bold**, `code`, or regular text
+  const parts = useMemo(() => {
+    const tokens = content.split(/(\*\*[^\*]+?\*\*|`[^`]+?`|\*[^\*]+?\*)/g);
+    return tokens.map((token, i) => {
+      if (token.startsWith('**') && token.endsWith('**')) {
+        const inner = token.slice(2, -2);
+        // Highlight mark scheme codes like M1, A1, B1, SC
+        const isMarkCode = /^(M\d|A\d|B\d|SC|M\d\s*A\d|dM\d|A\d\s*ft)/i.test(inner);
+        return (
+          <strong
+            key={i}
+            className={
+              isMarkCode
+                ? 'font-bold font-mono text-sky-400 bg-sky-950/60 px-1 py-0.5 rounded border border-sky-800/60 mr-1 text-[11px]'
+                : 'font-bold text-white'
+            }
+          >
+            {inner}
+          </strong>
+        );
+      }
+      if (token.startsWith('`') && token.endsWith('`')) {
+        return (
+          <code key={i} className="px-1.5 py-0.5 rounded bg-slate-800 text-sky-300 font-mono text-xs border border-slate-700">
+            {token.slice(1, -1)}
+          </code>
+        );
+      }
+      if (token.startsWith('*') && token.endsWith('*')) {
+        return <em key={i} className="italic text-slate-300">{token.slice(1, -1)}</em>;
+      }
+      return <span key={i}>{token}</span>;
+    });
+  }, [content]);
+
+  return <>{parts}</>;
 };
 
 // Helper component that parses markdown-style text with inline $...$ or display $$...$$ math
@@ -39,6 +79,8 @@ export const FormattedMathText: React.FC<{ text: string; className?: string }> =
   className = '',
 }) => {
   const renderedContent = useMemo(() => {
+    if (!text) return null;
+
     // Split by $$...$$ or $...$
     const parts = text.split(/(\$\$[\s\S]+?\$\$|\$[^\$]+?\$)/g);
 
@@ -46,33 +88,42 @@ export const FormattedMathText: React.FC<{ text: string; className?: string }> =
       if (part.startsWith('$$') && part.endsWith('$$')) {
         const math = part.slice(2, -2).trim();
         try {
-          const html = katex.renderToString(math, { displayMode: true, throwOnError: false });
+          const html = katex.renderToString(math, { 
+            displayMode: true, 
+            throwOnError: false,
+            strict: false 
+          });
           return (
             <div
               key={idx}
-              className="my-3 overflow-x-auto py-1"
+              className="my-3 overflow-x-auto py-1 text-center"
               dangerouslySetInnerHTML={{ __html: html }}
             />
           );
         } catch {
-          return <pre key={idx} className="font-mono text-xs">{math}</pre>;
+          return <pre key={idx} className="font-mono text-xs text-rose-300">{math}</pre>;
         }
       } else if (part.startsWith('$') && part.endsWith('$')) {
         const math = part.slice(1, -1).trim();
         try {
-          const html = katex.renderToString(math, { displayMode: false, throwOnError: false });
+          const html = katex.renderToString(math, { 
+            displayMode: false, 
+            throwOnError: false,
+            strict: false 
+          });
           return (
             <span
               key={idx}
-              className="inline-block"
+              className="inline-block px-0.5 align-baseline"
               dangerouslySetInnerHTML={{ __html: html }}
             />
           );
         } catch {
-          return <code key={idx} className="font-mono text-xs">{math}</code>;
+          return <code key={idx} className="font-mono text-xs text-rose-300">{math}</code>;
         }
       }
-      return <span key={idx}>{part}</span>;
+      // Process markdown bold/code on non-math portions
+      return <RenderTextWithMarkdown key={idx} content={part} />;
     });
   }, [text]);
 

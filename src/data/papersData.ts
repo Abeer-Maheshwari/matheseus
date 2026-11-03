@@ -4,6 +4,8 @@ export interface PaperEntry {
   season: 'June' | 'Autumn' | 'Sample';
   qpUrl: string;
   msUrl: string;
+  erUrl?: string;
+  paperNumber?: string;
 }
 
 export interface ModuleSection {

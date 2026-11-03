@@ -5,6 +5,7 @@ import {
   FURTHER_MATHS_FORMULA_BOOKLET_PDF_URL 
 } from '../data/formulaBooklet';
 import { MathRenderer } from './MathRenderer';
+import { BookOpen, FileText, Search, X, ExternalLink, Sigma } from 'lucide-react';
 
 interface FormulaBookletModalProps {
   onClose: () => void;
@@ -36,82 +37,96 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
   }).filter((cat) => cat.sections.length > 0);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 text-zinc-100">
-      <div className="bg-zinc-950 border border-zinc-800 rounded-lg w-full max-w-3xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm text-slate-100">
+      <div className="bg-slate-950 border border-slate-800 rounded-xl w-full max-w-3xl overflow-hidden flex flex-col max-h-[90vh] shadow-2xl">
         {/* Header */}
-        <div className="px-5 py-3 border-b border-zinc-800 flex items-center justify-between shrink-0">
-          <div>
-            <h3 className="font-semibold text-white text-sm">Edexcel Formulae & Statistical Tables</h3>
-            <p className="text-xs text-zinc-400">Mathematical formulae formatted for GCE examinations</p>
+        <div className="px-5 py-3.5 border-b border-slate-800 flex items-center justify-between shrink-0 bg-slate-900/60">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-sky-950/80 border border-sky-800/60 flex items-center justify-center text-sky-400">
+              <Sigma size={18} />
+            </div>
+            <div>
+              <h3 className="font-semibold text-white text-sm">Edexcel Formulae & Statistical Tables</h3>
+              <p className="text-xs text-slate-400">Official mathematical formulae for GCE examinations</p>
+            </div>
           </div>
           <button
             onClick={onClose}
-            className="px-2.5 py-1 text-xs rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-800 font-medium"
+            className="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-700/60 transition-colors"
+            title="Close"
           >
-            Close
+            <X size={16} />
           </button>
         </div>
 
         {/* Official PDFs direct links */}
-        <div className="p-3 bg-zinc-900 border-b border-zinc-800 flex flex-wrap items-center justify-between gap-2 text-xs shrink-0">
-          <span className="text-zinc-400">Official Pearson PDF booklets:</span>
+        <div className="px-5 py-2.5 bg-slate-900/40 border-b border-slate-800/80 flex flex-wrap items-center justify-between gap-2 text-xs shrink-0">
+          <span className="text-slate-400 flex items-center gap-1.5 font-medium">
+            <FileText size={14} className="text-sky-400" />
+            Official Pearson PDF Booklets:
+          </span>
           <div className="flex items-center gap-2">
             <a
               href={FORMULA_BOOKLET_PDF_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-2.5 py-1 bg-zinc-950 hover:bg-zinc-800 text-zinc-200 border border-zinc-700 rounded font-medium"
+              className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-900 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700/80 rounded-md font-medium text-[11px] transition-colors"
             >
-              Maths Booklet PDF
+              <span>Maths Booklet PDF</span>
+              <ExternalLink size={12} className="text-slate-400" />
             </a>
             <a
               href={FURTHER_MATHS_FORMULA_BOOKLET_PDF_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-2.5 py-1 bg-zinc-950 hover:bg-zinc-800 text-zinc-200 border border-zinc-700 rounded font-medium"
+              className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-900 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700/80 rounded-md font-medium text-[11px] transition-colors"
             >
-              Further Maths Booklet PDF
+              <span>Further Maths Booklet PDF</span>
+              <ExternalLink size={12} className="text-slate-400" />
             </a>
           </div>
         </div>
 
         {/* Filter & Search */}
-        <div className="p-3 border-b border-zinc-800 space-y-2 bg-zinc-950 shrink-0">
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search formula (e.g. Binomial, Trigonometry, Parts, Hyperbolic, SUVAT)..."
-            className="w-full px-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500 font-mono"
-          />
+        <div className="p-4 border-b border-slate-800 space-y-3 bg-slate-950 shrink-0">
+          <div className="relative">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search formula by name, section, or notation..."
+              className="w-full pl-9 pr-3 py-2 bg-slate-900/80 border border-slate-800 rounded-lg text-xs text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/50"
+            />
+          </div>
 
-          <div className="flex items-center gap-1.5 text-xs">
+          <div className="flex items-center gap-2 text-xs">
             <button
               onClick={() => setActiveQual('all')}
-              className={`px-2.5 py-1 rounded text-[11px] border ${
+              className={`px-3 py-1 rounded-md text-[11px] font-medium border transition-colors ${
                 activeQual === 'all'
-                  ? 'bg-zinc-800 text-white border-zinc-600 font-semibold'
-                  : 'text-zinc-400 hover:text-zinc-200 bg-zinc-900 border-zinc-800'
+                  ? 'bg-sky-500/15 text-sky-400 border-sky-500/40 font-semibold'
+                  : 'text-slate-400 hover:text-slate-200 bg-slate-900/60 border-slate-800'
               }`}
             >
               All Formulae
             </button>
             <button
               onClick={() => setActiveQual('maths')}
-              className={`px-2.5 py-1 rounded text-[11px] border ${
+              className={`px-3 py-1 rounded-md text-[11px] font-medium border transition-colors ${
                 activeQual === 'maths'
-                  ? 'bg-zinc-800 text-white border-zinc-600 font-semibold'
-                  : 'text-zinc-400 hover:text-zinc-200 bg-zinc-900 border-zinc-800'
+                  ? 'bg-sky-500/15 text-sky-400 border-sky-500/40 font-semibold'
+                  : 'text-slate-400 hover:text-slate-200 bg-slate-900/60 border-slate-800'
               }`}
             >
               A Level Maths
             </button>
             <button
               onClick={() => setActiveQual('fm')}
-              className={`px-2.5 py-1 rounded text-[11px] border ${
+              className={`px-3 py-1 rounded-md text-[11px] font-medium border transition-colors ${
                 activeQual === 'fm'
-                  ? 'bg-zinc-800 text-white border-zinc-600 font-semibold'
-                  : 'text-zinc-400 hover:text-zinc-200 bg-zinc-900 border-zinc-800'
+                  ? 'bg-indigo-500/15 text-indigo-400 border-indigo-500/40 font-semibold'
+                  : 'text-slate-400 hover:text-slate-200 bg-slate-900/60 border-slate-800'
               }`}
             >
               Further Maths
@@ -122,46 +137,44 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
         {/* Formulae Content List */}
         <div className="p-5 overflow-y-auto space-y-6">
           {filteredCategories.length === 0 ? (
-            <div className="text-center py-12 text-zinc-500 text-xs font-mono">
+            <div className="text-center py-12 text-slate-500 text-xs font-mono">
               No matching formulae found.
             </div>
           ) : (
             filteredCategories.map((cat, idx) => (
               <div key={idx} className="space-y-4">
-                <div className="border-b border-zinc-800 pb-1 flex items-center justify-between">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-300">
+                <div className="border-b border-slate-800 pb-1.5 flex items-center justify-between">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
+                    <BookOpen size={14} className="text-sky-400" />
                     {cat.title}
                   </h4>
-                  <span className="text-[11px] text-zinc-500 font-mono">
+                  <span className="text-[11px] text-slate-400 font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-800">
                     {cat.qualification}
                   </span>
                 </div>
 
                 {cat.sections.map((sec, sIdx) => (
-                  <div key={sIdx} className="space-y-2.5 pl-1">
-                    <h5 className="text-xs font-semibold text-zinc-400">
+                  <div key={sIdx} className="space-y-2.5">
+                    <h5 className="text-[11px] font-bold text-slate-400 tracking-wide">
                       {sec.sectionTitle}
                     </h5>
-
-                    <div className="space-y-2">
+                    <div className="grid grid-cols-1 gap-2.5">
                       {sec.items.map((item, iIdx) => (
                         <div
                           key={iIdx}
-                          className="p-3.5 rounded bg-zinc-900/60 border border-zinc-800 text-zinc-100"
+                          className="p-3.5 rounded-lg bg-slate-900/60 border border-slate-800 hover:border-slate-700/80 transition-colors space-y-1.5"
                         >
-                          <div className="flex items-baseline justify-between mb-2">
-                            <span className="text-xs font-semibold text-zinc-200">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-semibold text-slate-100">
                               {item.name}
                             </span>
                             {item.notes && (
-                              <span className="text-[11px] text-zinc-400 font-mono">
+                              <span className="text-[10px] text-slate-400 italic">
                                 {item.notes}
                               </span>
                             )}
                           </div>
-
-                          {/* KaTeX Formatted Math Render */}
-                          <div className="p-3 rounded bg-black border border-zinc-800/80 overflow-x-auto text-sm text-center">
+                          <div className="p-2.5 rounded bg-slate-950 border border-slate-800/80 text-center overflow-x-auto text-sky-200">
                             <MathRenderer math={item.latex} displayMode={true} />
                           </div>
                         </div>

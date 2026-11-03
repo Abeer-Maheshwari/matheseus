@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Columns, FileText, ArrowLeftRight, ExternalLink, X, BookOpen } from 'lucide-react';
 
 interface SplitPdfModalProps {
   title: string;
@@ -27,39 +28,53 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
   const rightLabel = swapped ? 'Question Paper' : 'Mark Scheme';
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-black text-zinc-100">
+    <div className="fixed inset-0 z-50 flex flex-col bg-slate-950 text-slate-100">
       {/* Top Header */}
-      <div className="h-12 px-4 bg-zinc-950 border-b border-zinc-800 flex items-center justify-between gap-4 shrink-0">
-        <div className="font-semibold text-sm text-white truncate">
-          {title}
+      <div className="h-14 px-4 bg-slate-900 border-b border-slate-800 flex items-center justify-between gap-4 shrink-0 shadow-md">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="w-7 h-7 rounded-lg bg-sky-950/80 border border-sky-800/60 flex items-center justify-center text-sky-400 shrink-0">
+            <Columns size={15} />
+          </div>
+          <div className="font-semibold text-sm text-white truncate">
+            {title}
+          </div>
         </div>
 
-        {/* View Switcher */}
+        {/* View Switcher Tabs */}
         {msUrl && (
-          <div className="flex items-center bg-zinc-900 p-0.5 rounded border border-zinc-800 text-xs">
+          <div className="flex items-center bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs">
             <button
               onClick={() => setMode('split')}
-              className={`px-3 py-1 rounded font-medium ${
-                mode === 'split' ? 'bg-zinc-800 text-white font-semibold' : 'text-zinc-400 hover:text-zinc-200'
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
+                mode === 'split'
+                  ? 'bg-sky-500/20 text-sky-300 font-semibold border border-sky-500/40'
+                  : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              Split View
+              <Columns size={13} />
+              <span>Split View</span>
             </button>
             <button
               onClick={() => setMode('qp')}
-              className={`px-3 py-1 rounded font-medium ${
-                mode === 'qp' ? 'bg-zinc-800 text-white font-semibold' : 'text-zinc-400 hover:text-zinc-200'
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
+                mode === 'qp'
+                  ? 'bg-sky-500/20 text-sky-300 font-semibold border border-sky-500/40'
+                  : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              Question Paper
+              <FileText size={13} />
+              <span>Question Paper</span>
             </button>
             <button
               onClick={() => setMode('ms')}
-              className={`px-3 py-1 rounded font-medium ${
-                mode === 'ms' ? 'bg-zinc-800 text-white font-semibold' : 'text-zinc-400 hover:text-zinc-200'
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
+                mode === 'ms'
+                  ? 'bg-sky-500/20 text-sky-300 font-semibold border border-sky-500/40'
+                  : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              Mark Scheme
+              <BookOpen size={13} />
+              <span>Mark Scheme</span>
             </button>
           </div>
         )}
@@ -69,17 +84,20 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
           {mode === 'split' && msUrl && (
             <button
               onClick={() => setSwapped(!swapped)}
-              className="px-2.5 py-1 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-800"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-950 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700/70 transition-colors"
+              title="Swap left and right panels"
             >
-              Swap Sides
+              <ArrowLeftRight size={13} />
+              <span className="hidden sm:inline">Swap Sides</span>
             </button>
           )}
 
           <button
             onClick={onClose}
-            className="px-3 py-1 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-950 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700/70 transition-colors"
           >
-            Close
+            <X size={14} />
+            <span>Close</span>
           </button>
         </div>
       </div>
@@ -89,41 +107,49 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
         {mode === 'split' && msUrl ? (
           <>
             {/* Left Viewer */}
-            <div className="flex-1 flex flex-col h-1/2 md:h-full border-b md:border-b-0 md:border-r border-zinc-800">
-              <div className="h-7 px-3 bg-zinc-900 border-b border-zinc-800 flex items-center justify-between text-xs font-medium text-zinc-300">
-                <span>{leftLabel}</span>
+            <div className="flex-1 flex flex-col h-1/2 md:h-full border-b md:border-b-0 md:border-r border-slate-800">
+              <div className="h-8 px-3.5 bg-slate-900 border-b border-slate-800 flex items-center justify-between text-xs font-semibold text-slate-300">
+                <span className="flex items-center gap-1.5 text-sky-300">
+                  <FileText size={13} />
+                  {leftLabel}
+                </span>
                 <a
                   href={leftUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-zinc-400 hover:text-white text-[11px] underline"
+                  className="flex items-center gap-1 text-slate-400 hover:text-sky-400 text-[11px] transition-colors"
                 >
-                  Open in New Tab
+                  <span>Open in Tab</span>
+                  <ExternalLink size={11} />
                 </a>
               </div>
               <iframe
                 src={leftUrl}
-                className="w-full flex-1 bg-zinc-950 border-none"
+                className="w-full flex-1 bg-slate-950 border-none"
                 title={leftLabel}
               />
             </div>
 
             {/* Right Viewer */}
             <div className="flex-1 flex flex-col h-1/2 md:h-full">
-              <div className="h-7 px-3 bg-zinc-900 border-b border-zinc-800 flex items-center justify-between text-xs font-medium text-zinc-300">
-                <span>{rightLabel}</span>
+              <div className="h-8 px-3.5 bg-slate-900 border-b border-slate-800 flex items-center justify-between text-xs font-semibold text-slate-300">
+                <span className="flex items-center gap-1.5 text-indigo-300">
+                  <BookOpen size={13} />
+                  {rightLabel}
+                </span>
                 <a
                   href={rightUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-zinc-400 hover:text-white text-[11px] underline"
+                  className="flex items-center gap-1 text-slate-400 hover:text-indigo-400 text-[11px] transition-colors"
                 >
-                  Open in New Tab
+                  <span>Open in Tab</span>
+                  <ExternalLink size={11} />
                 </a>
               </div>
               <iframe
                 src={rightUrl}
-                className="w-full flex-1 bg-zinc-950 border-none"
+                className="w-full flex-1 bg-slate-950 border-none"
                 title={rightLabel}
               />
             </div>
@@ -131,20 +157,24 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
         ) : (
           /* Single Viewer */
           <div className="flex-1 flex flex-col h-full">
-            <div className="h-7 px-3 bg-zinc-900 border-b border-zinc-800 flex items-center justify-between text-xs font-medium text-zinc-300">
-              <span>{mode === 'ms' && msUrl ? 'Mark Scheme' : 'Question Paper'}</span>
+            <div className="h-8 px-3.5 bg-slate-900 border-b border-slate-800 flex items-center justify-between text-xs font-semibold text-slate-300">
+              <span className="flex items-center gap-1.5 text-sky-300">
+                <FileText size={13} />
+                {mode === 'ms' && msUrl ? 'Mark Scheme' : 'Question Paper'}
+              </span>
               <a
                 href={mode === 'ms' && msUrl ? msUrl : qpUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-zinc-400 hover:text-white text-[11px] underline"
+                className="flex items-center gap-1 text-slate-400 hover:text-sky-400 text-[11px] transition-colors"
               >
-                Open in New Tab
+                <span>Open in Tab</span>
+                <ExternalLink size={11} />
               </a>
             </div>
             <iframe
               src={mode === 'ms' && msUrl ? msUrl : qpUrl}
-              className="w-full flex-1 bg-zinc-950 border-none"
+              className="w-full flex-1 bg-slate-950 border-none"
               title={title}
             />
           </div>

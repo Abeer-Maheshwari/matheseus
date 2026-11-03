@@ -55,13 +55,13 @@ export const INTERACTIVE_PAPERS: Record<string, InteractivePaper> = {
         number: 2,
         totalMarks: 6,
         topic: 'Calculus - Differentiation & Tangents',
-        contextText: 'A curve has equation $$y = \\frac{3x - 2}{\\sqrt{x + 1}}, \\quad x > -1$$',
+        contextText: 'A curve has equation $$y = \\frac{3x - 1}{\\sqrt{x + 1}}, \\quad x > -1$$',
         parts: [
           {
             partLabel: '(a)',
             marks: 4,
             text: 'Show that $\\frac{dy}{dx} = \\frac{3x + 7}{2(x + 1)^{3/2}}$',
-            solution: 'Apply the quotient rule with $u = 3x - 2$ and $v = (x + 1)^{1/2}$:\n$$\\frac{du}{dx} = 3, \\quad \\frac{dv}{dx} = \\frac{1}{2}(x + 1)^{-1/2}$$\n$$\\frac{dy}{dx} = \\frac{3(x + 1)^{1/2} - (3x - 2)\\frac{1}{2}(x + 1)^{-1/2}}{x + 1}$$\nMultiply numerator and denominator by $2(x + 1)^{1/2}$:\n$$\\frac{dy}{dx} = \\frac{6(x + 1) - (3x - 2)}{2(x + 1)^{3/2}} = \\frac{6x + 6 - 3x + 2}{2(x + 1)^{3/2}} = \\frac{3x + 8}{2(x + 1)^{3/2}}$$'
+            solution: 'Apply the quotient rule with $u = 3x - 1$ and $v = (x + 1)^{1/2}$:\n$$\\frac{du}{dx} = 3, \\quad \\frac{dv}{dx} = \\frac{1}{2}(x + 1)^{-1/2}$$\n$$\\frac{dy}{dx} = \\frac{3(x + 1)^{1/2} - (3x - 1)\\frac{1}{2}(x + 1)^{-1/2}}{x + 1}$$\nMultiply numerator and denominator by $2(x + 1)^{1/2}$:\n$$\\frac{dy}{dx} = \\frac{6(x + 1) - (3x - 1)}{2(x + 1)^{3/2}} = \\frac{6x + 6 - 3x + 1}{2(x + 1)^{3/2}} = \\frac{3x + 7}{2(x + 1)^{3/2}}$$'
           },
           {
             partLabel: '(b)',

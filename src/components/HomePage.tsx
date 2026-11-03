@@ -1,4 +1,5 @@
 import React from 'react';
+import { GraduationCap, Layers, Sigma, BarChart3, ChevronRight, BookOpen, Sparkles, CheckCircle2 } from 'lucide-react';
 
 interface HomePageProps {
   onSelectSubject: (subject: 'maths' | 'further-maths', moduleId?: string) => void;
@@ -12,149 +13,169 @@ export const HomePage: React.FC<HomePageProps> = ({
   onOpenBoundaries,
 }) => {
   return (
-    <div className="max-w-4xl mx-auto px-4 py-10">
+    <div className="max-w-4xl mx-auto px-4 py-10 space-y-8">
       {/* Intro */}
-      <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold tracking-tight text-white mb-2">
+      <div className="text-center space-y-2">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-950/70 border border-sky-800/60 text-sky-400 text-xs font-medium">
+          <Sparkles size={13} />
+          <span>Edexcel GCE Past Papers Archive & Interactive Exam Hall</span>
+        </div>
+        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
           matheseus
         </h1>
-        <p className="text-sm text-zinc-400">
-          Instant, self-hosted Edexcel A Level Mathematics and Further Mathematics past papers.
+        <p className="text-sm text-slate-400 max-w-xl mx-auto">
+          Instant, local access to Edexcel A Level Maths and Further Maths past papers with side-by-side split review and interactive exam mode.
         </p>
       </div>
 
       {/* Main Subjects */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {/* A Level Maths */}
-        <div className="border border-zinc-800 rounded-lg p-5 bg-zinc-950 flex flex-col justify-between">
+        <div className="border border-slate-800 rounded-xl p-6 bg-slate-900/60 flex flex-col justify-between shadow-sm hover:border-slate-700/80 transition-all">
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <h2 className="text-base font-bold text-white">A Level Mathematics</h2>
-              <span className="font-mono text-xs px-2 py-0.5 rounded bg-zinc-900 text-zinc-300 border border-zinc-800">
+            <div className="flex items-center justify-between mb-2.5">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-sky-950/80 border border-sky-800/60 flex items-center justify-center text-sky-400">
+                  <GraduationCap size={18} />
+                </div>
+                <h2 className="text-base font-bold text-white">A Level Mathematics</h2>
+              </div>
+              <span className="font-mono text-xs px-2.5 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800/60 font-semibold">
                 9MA0
               </span>
             </div>
-            <p className="text-xs text-zinc-400 mb-4">
+            <p className="text-xs text-slate-400 mb-4">
               All 3 linear exam papers from June 2018 through 2024.
             </p>
 
-            <div className="space-y-1.5 mb-6 text-xs">
+            <div className="space-y-2 mb-6 text-xs">
               <button
                 onClick={() => onSelectSubject('maths', 'p1')}
-                className="w-full text-left px-3 py-2 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 flex justify-between items-center"
+                className="w-full text-left px-3.5 py-2.5 rounded-lg bg-slate-950/80 hover:bg-slate-800 text-slate-200 border border-slate-800/90 flex justify-between items-center transition-colors group"
               >
-                <span>Pure Mathematics 1 (9MA0/01)</span>
-                <span className="text-zinc-500 font-mono">2018–2024</span>
+                <span className="font-medium group-hover:text-sky-300">Pure Mathematics 1 (9MA0/01)</span>
+                <span className="text-slate-500 font-mono text-[11px] group-hover:text-slate-400">2018–2024</span>
               </button>
               <button
                 onClick={() => onSelectSubject('maths', 'p2')}
-                className="w-full text-left px-3 py-2 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 flex justify-between items-center"
+                className="w-full text-left px-3.5 py-2.5 rounded-lg bg-slate-950/80 hover:bg-slate-800 text-slate-200 border border-slate-800/90 flex justify-between items-center transition-colors group"
               >
-                <span>Pure Mathematics 2 (9MA0/02)</span>
-                <span className="text-zinc-500 font-mono">2018–2024</span>
+                <span className="font-medium group-hover:text-sky-300">Pure Mathematics 2 (9MA0/02)</span>
+                <span className="text-slate-500 font-mono text-[11px] group-hover:text-slate-400">2018–2024</span>
               </button>
               <button
                 onClick={() => onSelectSubject('maths', 'p3')}
-                className="w-full text-left px-3 py-2 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 flex justify-between items-center"
+                className="w-full text-left px-3.5 py-2.5 rounded-lg bg-slate-950/80 hover:bg-slate-800 text-slate-200 border border-slate-800/90 flex justify-between items-center transition-colors group"
               >
-                <span>Statistics & Mechanics (9MA0/03)</span>
-                <span className="text-zinc-500 font-mono">2018–2024</span>
+                <span className="font-medium group-hover:text-sky-300">Statistics & Mechanics (9MA0/03)</span>
+                <span className="text-slate-500 font-mono text-[11px] group-hover:text-slate-400">2018–2024</span>
               </button>
             </div>
           </div>
 
           <button
             onClick={() => onSelectSubject('maths')}
-            className="w-full py-2 bg-white hover:bg-zinc-200 text-black font-semibold rounded text-xs text-center"
+            className="w-full py-2.5 bg-sky-500 hover:bg-sky-400 text-slate-950 font-semibold rounded-lg text-xs text-center transition-colors shadow-md shadow-sky-500/20 flex items-center justify-center gap-1.5"
           >
-            Browse All Maths Papers
+            <span>Browse All Maths Papers</span>
+            <ChevronRight size={14} />
           </button>
         </div>
 
         {/* A Level Further Maths */}
-        <div className="border border-zinc-800 rounded-lg p-5 bg-zinc-950 flex flex-col justify-between">
+        <div className="border border-slate-800 rounded-xl p-6 bg-slate-900/60 flex flex-col justify-between shadow-sm hover:border-slate-700/80 transition-all">
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <h2 className="text-base font-bold text-white">Further Mathematics</h2>
-              <span className="font-mono text-xs px-2 py-0.5 rounded bg-zinc-900 text-zinc-300 border border-zinc-800">
+            <div className="flex items-center justify-between mb-2.5">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-indigo-950/80 border border-indigo-800/60 flex items-center justify-center text-indigo-400">
+                  <Layers size={18} />
+                </div>
+                <h2 className="text-base font-bold text-white">Further Mathematics</h2>
+              </div>
+              <span className="font-mono text-xs px-2.5 py-0.5 rounded bg-indigo-950 text-indigo-400 border border-indigo-800/60 font-semibold">
                 9FM0
               </span>
             </div>
-            <p className="text-xs text-zinc-400 mb-4">
-              All 10 modules (Core Pure 1/2, FP1/2, Stats 1/2, Mech 1/2, Decision 1/2).
+            <p className="text-xs text-slate-400 mb-4">
+              All 10 modules: Core Pure 1/2, FP1/2, Stats 1/2, Mech 1/2, Decision 1/2.
             </p>
 
             <div className="space-y-1.5 mb-6 text-xs">
               <button
                 onClick={() => onSelectSubject('further-maths', 'cp1')}
-                className="w-full text-left px-3 py-1.5 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 flex justify-between items-center"
+                className="w-full text-left px-3 py-2 rounded-lg bg-slate-950/80 hover:bg-slate-800 text-slate-200 border border-slate-800/90 flex justify-between items-center transition-colors group"
               >
-                <span>Core Pure 1 (9FM0/01)</span>
-                <span className="text-zinc-500 font-mono">2019–2025</span>
+                <span className="font-medium group-hover:text-indigo-300">Core Pure 1 (9FM0/01)</span>
+                <span className="text-slate-500 font-mono text-[11px]">2019–2025</span>
               </button>
               <button
                 onClick={() => onSelectSubject('further-maths', 'cp2')}
-                className="w-full text-left px-3 py-1.5 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 flex justify-between items-center"
+                className="w-full text-left px-3 py-2 rounded-lg bg-slate-950/80 hover:bg-slate-800 text-slate-200 border border-slate-800/90 flex justify-between items-center transition-colors group"
               >
-                <span>Core Pure 2 (9FM0/02)</span>
-                <span className="text-zinc-500 font-mono">2019–2025</span>
+                <span className="font-medium group-hover:text-indigo-300">Core Pure 2 (9FM0/02)</span>
+                <span className="text-slate-500 font-mono text-[11px]">2019–2025</span>
               </button>
               <button
                 onClick={() => onSelectSubject('further-maths', 'fp1')}
-                className="w-full text-left px-3 py-1.5 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 flex justify-between items-center"
+                className="w-full text-left px-3 py-2 rounded-lg bg-slate-950/80 hover:bg-slate-800 text-slate-200 border border-slate-800/90 flex justify-between items-center transition-colors group"
               >
-                <span>Further Pure 1 & 2 (FP1 / FP2)</span>
-                <span className="text-zinc-500 font-mono">Options</span>
+                <span className="font-medium group-hover:text-indigo-300">Further Pure 1 & 2 (FP1/2)</span>
+                <span className="text-slate-500 font-mono text-[11px]">Options</span>
               </button>
               <button
                 onClick={() => onSelectSubject('further-maths', 'fm1')}
-                className="w-full text-left px-3 py-1.5 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 flex justify-between items-center"
+                className="w-full text-left px-3 py-2 rounded-lg bg-slate-950/80 hover:bg-slate-800 text-slate-200 border border-slate-800/90 flex justify-between items-center transition-colors group"
               >
-                <span>Further Mechanics 1 & 2 (FM1 / FM2)</span>
-                <span className="text-zinc-500 font-mono">Options</span>
-              </button>
-              <button
-                onClick={() => onSelectSubject('further-maths', 'fs1')}
-                className="w-full text-left px-3 py-1.5 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 flex justify-between items-center"
-              >
-                <span>Further Statistics 1 & 2 (FS1 / FS2)</span>
-                <span className="text-zinc-500 font-mono">Options</span>
-              </button>
-              <button
-                onClick={() => onSelectSubject('further-maths', 'd1')}
-                className="w-full text-left px-3 py-1.5 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 flex justify-between items-center"
-              >
-                <span>Decision 1 & 2 (D1 / D2)</span>
-                <span className="text-zinc-500 font-mono">Options</span>
+                <span className="font-medium group-hover:text-indigo-300">Further Mechanics 1 & 2 (FM1/2)</span>
+                <span className="text-slate-500 font-mono text-[11px]">Options</span>
               </button>
             </div>
           </div>
 
           <button
             onClick={() => onSelectSubject('further-maths')}
-            className="w-full py-2 bg-white hover:bg-zinc-200 text-black font-semibold rounded text-xs text-center"
+            className="w-full py-2.5 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold rounded-lg text-xs text-center transition-colors shadow-md shadow-indigo-500/20 flex items-center justify-center gap-1.5"
           >
-            Browse All 10 FM Modules
+            <span>Browse All 10 FM Modules</span>
+            <ChevronRight size={14} />
           </button>
         </div>
       </div>
 
       {/* Quick Tools */}
-      <div className="grid grid-cols-2 gap-3 text-xs">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
         <button
           onClick={onOpenBoundaries}
-          className="p-3.5 rounded-lg border border-zinc-800 bg-zinc-900 hover:bg-zinc-800 text-left transition-colors"
+          className="p-4 rounded-xl border border-slate-800 bg-slate-900/60 hover:bg-slate-850 text-left transition-all hover:border-slate-700 flex items-start gap-3 group"
         >
-          <div className="font-semibold text-white mb-0.5">Grade Boundaries</div>
-          <div className="text-zinc-400 text-[11px]">Official Edexcel raw mark cutoffs (2018–2024)</div>
+          <div className="p-2 rounded-lg bg-amber-950/60 border border-amber-800/60 text-amber-400 shrink-0">
+            <BarChart3 size={18} />
+          </div>
+          <div>
+            <div className="font-semibold text-white group-hover:text-amber-300 transition-colors">
+              Grade Boundaries Explorer
+            </div>
+            <div className="text-slate-400 text-[11px] mt-0.5">
+              Official Edexcel raw mark cutoffs (A*, A, B, C, D, E) for June 2018–2024.
+            </div>
+          </div>
         </button>
 
         <button
           onClick={onOpenFormulas}
-          className="p-3.5 rounded-lg border border-zinc-800 bg-zinc-900 hover:bg-zinc-800 text-left transition-colors"
+          className="p-4 rounded-xl border border-slate-800 bg-slate-900/60 hover:bg-slate-850 text-left transition-all hover:border-slate-700 flex items-start gap-3 group"
         >
-          <div className="font-semibold text-white mb-0.5">Formula Booklets</div>
-          <div className="text-zinc-400 text-[11px]">Formula sheet reference and Pearson PDFs</div>
+          <div className="p-2 rounded-lg bg-sky-950/60 border border-sky-800/60 text-sky-400 shrink-0">
+            <Sigma size={18} />
+          </div>
+          <div>
+            <div className="font-semibold text-white group-hover:text-sky-300 transition-colors">
+              Formula Booklets & Tables
+            </div>
+            <div className="text-slate-400 text-[11px] mt-0.5">
+              Interactive formulae database and official Pearson PDF booklets.
+            </div>
+          </div>
         </button>
       </div>
     </div>
