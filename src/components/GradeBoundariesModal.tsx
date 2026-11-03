@@ -37,8 +37,8 @@ export const GradeBoundariesModal: React.FC<GradeBoundariesModalProps> = ({ onCl
               <BarChart3 size={18} />
             </div>
             <div>
-              <h3 className="font-serif font-semibold text-[#FAF6F0] text-sm">Official Edexcel Grade Boundaries</h3>
-              <p className="text-xs text-[#AC8968]">Raw mark thresholds by exam series (2018–2024)</p>
+              <h3 className="font-serif font-semibold text-[#FAF6F0] text-sm">Grade Boundaries</h3>
+              <p className="text-xs text-[#AC8968]">Raw mark boundaries from 2018 to 2024</p>
             </div>
           </div>
           <button
@@ -72,7 +72,7 @@ export const GradeBoundariesModal: React.FC<GradeBoundariesModalProps> = ({ onCl
           <div className="p-4 rounded-xl bg-[#2C2620] border border-[#93785B]/30 shadow-sm space-y-2">
             <div className="text-xs font-semibold text-[#FAF6F0] flex items-center gap-1.5">
               <Calculator size={14} className="text-[#865D36]" />
-              <span>Interactive Mark Calculator ({currentData.year})</span>
+              <span>Mark Calculator ({currentData.year})</span>
             </div>
             <div className="flex flex-wrap items-center gap-3">
               <div className="flex items-center gap-2">

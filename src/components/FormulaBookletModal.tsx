@@ -46,8 +46,8 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
               <Sigma size={18} />
             </div>
             <div>
-              <h3 className="font-serif font-semibold text-[#FAF6F0] text-sm">Edexcel Formulae & Statistical Tables</h3>
-              <p className="text-xs text-[#AC8968]">Official mathematical formulae for GCE examinations</p>
+              <h3 className="font-serif font-semibold text-[#FAF6F0] text-sm">Formula Booklet</h3>
+              <p className="text-xs text-[#AC8968]">Official Edexcel formulas and tables</p>
             </div>
           </div>
           <button
@@ -63,7 +63,7 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
         <div className="px-5 py-2.5 bg-[#2C2620]/70 border-b border-[#93785B]/25 flex flex-wrap items-center justify-between gap-2 text-xs shrink-0">
           <span className="text-[#AC8968] flex items-center gap-1.5 font-medium">
             <FileText size={14} className="text-[#865D36]" />
-            Official Pearson PDF Booklets:
+            PDFs:
           </span>
           <div className="flex items-center gap-2">
             <a

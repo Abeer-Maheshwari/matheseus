@@ -3,7 +3,7 @@ import { MODULES_DATA } from '../data/papersData';
 import { 
   BookOpen, 
   Columns, 
-  Sparkles, 
+  Play, 
   FileText, 
   Search, 
   Check, 
@@ -88,7 +88,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
       <div className="space-y-2">
         <div className="text-xs text-[#AC8968] font-semibold uppercase tracking-wider flex items-center gap-1.5">
           <BookOpen size={13} className="text-[#865D36]" />
-          <span>Choose Module Specification:</span>
+          <span>Module:</span>
         </div>
         <div className="flex flex-wrap gap-2">
           {availableModules.map((m) => {
@@ -123,7 +123,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
             </span>
           </h3>
           <p className="text-xs text-[#AC8968] mt-0.5">
-            Archive of official Edexcel past examination papers, mark schemes, and examiner reports.
+            Past papers and mark schemes.
           </p>
         </div>
 
@@ -133,7 +133,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search papers by year or season..."
+            placeholder="Search by year or season..."
             className="w-full pl-9 pr-3 py-1.5 bg-[#2C2620] border border-[#93785B]/40 rounded-lg text-xs text-[#FAF6F0] placeholder-[#A69080] focus:outline-none focus:border-[#865D36]"
           />
         </div>
@@ -144,10 +144,10 @@ export const PapersView: React.FC<PapersViewProps> = ({
         <table className="w-full text-left text-xs border-collapse">
           <thead>
             <tr className="border-b border-[#93785B]/25 bg-[#2C2620]/90 text-[#AC8968] text-[11px] font-semibold uppercase tracking-wider">
-              <th className="py-3 px-4">Exam Series</th>
-              <th className="py-3 px-4 text-center">Website Mode</th>
+              <th className="py-3 px-4">Series</th>
+              <th className="py-3 px-4 text-center">Practice</th>
               <th className="py-3 px-4 text-center">PDF (Split View)</th>
-              <th className="py-3 px-4 text-center">Reports</th>
+              <th className="py-3 px-4 text-center">Report</th>
               <th className="py-3 px-4 text-right">Status</th>
             </tr>
           </thead>
@@ -173,10 +173,10 @@ export const PapersView: React.FC<PapersViewProps> = ({
                     <button
                       onClick={() => onOpenInteractive(paper.id, paperTitle, activeModule.code)}
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#865D36]/25 hover:bg-[#865D36]/40 text-[#FAF6F0] font-semibold border border-[#865D36]/60 transition-colors"
-                      title="Launch Question-by-Question Website Mode"
+                      title="Practice questions one by one"
                     >
-                      <Sparkles size={13} className="text-[#865D36]" />
-                      <span>Web Mode</span>
+                      <Play size={13} className="text-[#865D36]" />
+                      <span>Practice</span>
                     </button>
                   </td>
 

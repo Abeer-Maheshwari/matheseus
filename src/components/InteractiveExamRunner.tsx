@@ -220,14 +220,14 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
             </div>
             <h2 className="text-xl font-serif font-bold text-[#FAF6F0] mt-2.5">{paper.title}</h2>
             <p className="text-xs text-[#AC8968] mt-1">
-              Interactive Digital Mode · {paper.questions.length} Questions · {paperMaxMarks} Marks
+              {paper.questions.length} questions · {paperMaxMarks} marks
             </p>
           </div>
 
           {/* Option: Feedback Mode */}
           <div className="space-y-2">
             <label className="text-xs font-semibold text-[#FAF6F0] block uppercase tracking-wider">
-              1. Mark Scheme & Solution Display
+              Mark Scheme Display
             </label>
             <div className="grid grid-cols-2 gap-2.5 text-xs">
               <button
@@ -241,9 +241,9 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
               >
                 <div className="font-semibold text-[#FAF6F0] mb-0.5 flex items-center gap-1.5">
                   <Eye size={13} className="text-[#865D36]" />
-                  <span>Directly After Question</span>
+                  <span>After Each Question</span>
                 </div>
-                <div className="text-[11px] text-[#A69080]">Reveal solutions and mark schemes on each question as you work.</div>
+                <div className="text-[11px] text-[#A69080]">Show answers and marking guidance as you go.</div>
               </button>
 
               <button
@@ -257,9 +257,9 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
               >
                 <div className="font-semibold text-[#FAF6F0] mb-0.5 flex items-center gap-1.5">
                   <EyeOff size={13} className="text-[#A69080]" />
-                  <span>Shown at the End</span>
+                  <span>At the End</span>
                 </div>
-                <div className="text-[11px] text-[#A69080]">Exam conditions. Solutions revealed after you submit all questions.</div>
+                <div className="text-[11px] text-[#A69080]">Show answers after submitting all questions.</div>
               </button>
             </div>
           </div>
@@ -267,7 +267,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
           {/* Option: Timing */}
           <div className="space-y-2">
             <label className="text-xs font-semibold text-[#FAF6F0] block uppercase tracking-wider">
-              2. Timing Mode
+              Timer
             </label>
             <div className="grid grid-cols-2 gap-2.5 text-xs">
               <button
@@ -283,7 +283,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                   <Clock size={13} className="text-[#865D36]" />
                   <span>Timed ({paper.durationMinutes} mins)</span>
                 </div>
-                <div className="text-[11px] text-[#A69080]">Text countdown with flip transitions and alerts.</div>
+                <div className="text-[11px] text-[#A69080]">Countdown with sound alert.</div>
               </button>
 
               <button
@@ -297,9 +297,9 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
               >
                 <div className="font-semibold text-[#FAF6F0] mb-0.5 flex items-center gap-1.5">
                   <Sparkles size={13} className="text-[#AC8968]" />
-                  <span>Untimed Practice</span>
+                  <span>Untimed</span>
                 </div>
-                <div className="text-[11px] text-[#A69080]">Practice at your own pace without time constraints.</div>
+                <div className="text-[11px] text-[#A69080]">Practice with no time limit.</div>
               </button>
             </div>
           </div>
@@ -307,7 +307,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
           {/* Formula Booklet Access notice */}
           <div className="p-3 rounded-lg bg-[#2C2620] border border-[#93785B]/30 text-xs text-[#AC8968] flex items-center gap-2.5">
             <BookOpen size={16} className="text-[#865D36] shrink-0" />
-            <span>Official Edexcel Formula Booklet is accessible anytime during the exam.</span>
+            <span>Formula booklet is available throughout the test.</span>
           </div>
 
           {/* Actions */}
@@ -322,7 +322,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
               onClick={() => setIsStarted(true)}
               className="px-5 py-2 text-xs font-semibold rounded-lg bg-[#865D36] hover:bg-[#93785B] text-[#FAF6F0] transition-colors flex items-center gap-1.5 shadow-sm"
             >
-              <span>Start Interactive Exam</span>
+              <span>Start</span>
               <ChevronRight size={14} />
             </button>
           </div>
@@ -390,10 +390,10 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                 </span>
                 <span className="text-xs text-[#AC8968] font-medium flex items-center gap-1">
                   <CheckCircle2 size={13} className="text-[#865D36]" />
-                  Exam Complete & Attempt Saved
+                  Saved
                 </span>
               </div>
-              <h2 className="text-2xl font-serif font-bold text-[#FAF6F0] mt-1.5">{paper.title} — Review & Performance</h2>
+              <h2 className="text-2xl font-serif font-bold text-[#FAF6F0] mt-1.5">{paper.title} — Summary</h2>
             </div>
             <div className="flex items-center gap-2.5">
               <button
@@ -401,13 +401,13 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#3E362E] hover:bg-[#865D36] text-[#FAF6F0] border border-[#93785B]/40 text-xs font-medium transition-colors"
               >
                 <RotateCcw size={13} />
-                <span>Retake Exam</span>
+                <span>Retake</span>
               </button>
               <button
                 onClick={onClose}
                 className="px-4 py-1.5 rounded-lg bg-[#865D36] hover:bg-[#93785B] text-[#FAF6F0] font-semibold text-xs transition-colors shadow-sm"
               >
-                Finish & Return
+                Done
               </button>
             </div>
           </div>
@@ -415,14 +415,14 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
           {/* Performance Summary Card */}
           <div className="p-6 rounded-xl border border-[#93785B]/30 bg-[#3E362E] flex flex-wrap items-center justify-between gap-6 shadow-md">
             <div className="space-y-1">
-              <div className="text-xs text-[#AC8968] uppercase tracking-wider font-semibold">Your Overall Score</div>
+              <div className="text-xs text-[#AC8968] uppercase tracking-wider font-semibold">Score</div>
               <div className="text-4xl font-serif font-extrabold text-[#FAF6F0] tabular-nums flex items-baseline gap-2">
                 <span>{totalAchievedScore}</span>
                 <span className="text-lg text-[#AC8968] font-normal">/ {paperMaxMarks}</span>
                 <span className="text-xl text-[#865D36] font-bold ml-2">({percent}%)</span>
               </div>
               <div className="text-xs text-[#A69080]">
-                Time Spent: <span className="text-[#FAF6F0] tabular-nums">{Math.floor(timeSpent / 60)}m {timeSpent % 60}s</span>
+                Time: <span className="text-[#FAF6F0] tabular-nums">{Math.floor(timeSpent / 60)}m {timeSpent % 60}s</span>
               </div>
             </div>
 
@@ -432,7 +432,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                 <div className="text-3xl font-serif font-black text-[#865D36] mt-0.5">{grade}</div>
               </div>
               <div className="text-center p-3.5 rounded-xl bg-[#2C2620] border border-[#93785B]/30 min-w-28">
-                <div className="text-[11px] text-[#AC8968] uppercase tracking-wider">Questions Answered</div>
+                <div className="text-[11px] text-[#AC8968] uppercase tracking-wider">Answered</div>
                 <div className="text-2xl font-bold text-[#FAF6F0] tabular-nums mt-0.5">
                   {Object.keys(scores).length} / {paper.questions.length}
                 </div>
@@ -445,9 +445,9 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-serif font-bold text-[#FAF6F0] uppercase tracking-wider flex items-center gap-2">
                 <Award size={16} className="text-[#865D36]" />
-                Detailed Question-by-Question Review & Mark Scheme
+                Questions & Mark Scheme
               </h3>
-              <span className="text-xs text-[#AC8968]">Adjust marks below; scorecard saves automatically</span>
+              <span className="text-xs text-[#AC8968]">Marks can be updated below</span>
             </div>
 
             {paper.questions.map((q) => {
@@ -581,7 +581,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
             }`}
           >
             <Layers size={13} className="text-[#865D36]" />
-            <span>Navigation & Review</span>
+            <span>Questions</span>
           </button>
 
           {/* Finish & Review */}
@@ -589,7 +589,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
             onClick={handleFinishExam}
             className="px-3.5 py-1.5 text-xs rounded-lg bg-[#865D36] hover:bg-[#93785B] text-[#FAF6F0] font-semibold transition-colors shadow-sm"
           >
-            Finish Exam
+            Finish
           </button>
         </div>
       </div>
@@ -600,7 +600,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
           <div className="max-w-4xl mx-auto space-y-3">
             <div className="flex items-center justify-between text-xs">
               <div className="flex items-center gap-4">
-                <span className="font-semibold text-[#FAF6F0]">Question Status:</span>
+                <span className="font-semibold text-[#FAF6F0]">Status:</span>
                 <span className="text-[#AC8968]">
                   Answered: <strong className="text-[#FAF6F0] tabular-nums">{Object.keys(scores).length}</strong> / {paper.questions.length}
                 </span>
@@ -760,12 +760,12 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                 {revealedSolutions[currentQ.number] ? (
                   <>
                     <EyeOff size={14} className="text-[#AC8968]" />
-                    <span>Hide Mark Scheme & Solution</span>
+                    <span>Hide Mark Scheme</span>
                   </>
                 ) : (
                   <>
                     <Eye size={14} className="text-[#865D36]" />
-                    <span>Reveal Mark Scheme & Solution</span>
+                    <span>Show Mark Scheme</span>
                   </>
                 )}
               </button>
@@ -774,7 +774,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                 <div className="p-5 rounded-xl bg-[#3E362E] border border-[#93785B]/40 space-y-4 shadow-md">
                   <div className="font-serif font-semibold text-xs text-[#FAF6F0] border-b border-[#93785B]/25 pb-2 flex items-center gap-2">
                     <CheckCircle2 size={14} className="text-[#865D36]" />
-                    Official Mark Scheme & Worked Solutions
+                    Mark Scheme & Solutions
                   </div>
 
                   {/* Part solutions */}
@@ -805,14 +805,9 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
 
                   {/* SELF-MARKING INPUT: AFTER THE SOLUTION & MARK SCHEME */}
                   <div className="p-4 rounded-xl bg-[#2C2620] border border-[#93785B]/40 flex items-center justify-between text-xs mt-3">
-                    <div className="space-y-0.5">
-                      <span className="font-semibold text-[#FAF6F0] block">
-                        Enter mark achieved for Question {currentQ.number}:
-                      </span>
-                      <span className="text-[11px] text-[#AC8968]">
-                        Based on the official marking criteria above.
-                      </span>
-                    </div>
+                    <span className="font-semibold text-[#FAF6F0]">
+                      Question {currentQ.number} mark:
+                    </span>
                     <div className="flex items-center gap-2">
                       <input
                         type="number"
@@ -833,13 +828,13 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
             <div className="space-y-3 pt-2">
               <div className="p-4 rounded-xl bg-[#3E362E] border border-[#93785B]/30 text-xs text-[#AC8968] text-center flex items-center justify-center gap-2">
                 <Clock size={14} className="text-[#865D36]" />
-                <span>Exam Mode active: Solutions and marking criteria will be displayed in the final scorecard once you submit the exam.</span>
+                <span>Answers will be shown after submitting.</span>
               </div>
 
               {/* Self marking in exam mode */}
               <div className="p-4 rounded-xl bg-[#3E362E] border border-[#93785B]/30 flex items-center justify-between text-xs">
                 <span className="font-semibold text-[#FAF6F0]">
-                  Mark question complete / record score:
+                  Question {currentQ.number} mark:
                 </span>
                 <div className="flex items-center gap-2">
                   <input

@@ -1,5 +1,5 @@
 import React from 'react';
-import { GraduationCap, Layers, Sigma, BarChart3, ChevronRight, Sparkles } from 'lucide-react';
+import { GraduationCap, Layers, Sigma, BarChart3, ChevronRight } from 'lucide-react';
 
 interface HomePageProps {
   onSelectSubject: (subject: 'maths' | 'further-maths', moduleId?: string) => void;
@@ -15,16 +15,12 @@ export const HomePage: React.FC<HomePageProps> = ({
   return (
     <div className="max-w-4xl mx-auto px-4 py-10 space-y-8">
       {/* Intro */}
-      <div className="text-center space-y-2.5">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#3E362E] border border-[#93785B]/40 text-[#FAF6F0] text-xs font-medium shadow-sm">
-          <Sparkles size={13} className="text-[#865D36]" />
-          <span>Edexcel GCE Past Papers Archive & Interactive Exam Hall</span>
-        </div>
+      <div className="text-center space-y-2">
         <h1 className="text-3xl sm:text-4xl font-serif font-bold tracking-tight text-[#FAF6F0]">
           matheseus
         </h1>
-        <p className="text-sm text-[#AC8968] max-w-xl mx-auto leading-relaxed">
-          Instant, local access to Edexcel A Level Maths and Further Maths past papers with side-by-side split review and interactive exam mode.
+        <p className="text-sm text-[#AC8968] max-w-xl mx-auto">
+          Edexcel A Level Maths and Further Maths past papers with mark schemes and practice mode.
         </p>
       </div>
 
@@ -33,19 +29,19 @@ export const HomePage: React.FC<HomePageProps> = ({
         {/* A Level Maths Card */}
         <div className="border border-[#93785B]/30 rounded-xl p-6 bg-[#3E362E] flex flex-col justify-between shadow-md hover:border-[#93785B]/60 transition-all">
           <div>
-            <div className="flex items-center justify-between mb-2.5">
+            <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-[#2C2620] border border-[#93785B]/40 flex items-center justify-center text-[#865D36]">
                   <GraduationCap size={18} />
                 </div>
-                <h2 className="text-base font-serif font-bold text-[#FAF6F0]">A Level Mathematics</h2>
+                <h2 className="text-base font-serif font-bold text-[#FAF6F0]">A Level Maths</h2>
               </div>
               <span className="text-xs px-2.5 py-0.5 rounded bg-[#2C2620] text-[#FAF6F0] border border-[#93785B]/40 font-semibold">
                 9MA0
               </span>
             </div>
             <p className="text-xs text-[#AC8968] mb-4">
-              All 3 linear exam papers from June 2018 through 2024.
+              Papers 1, 2, and 3 from 2018 to 2024.
             </p>
 
             <div className="space-y-2 mb-6 text-xs">
@@ -77,7 +73,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             onClick={() => onSelectSubject('maths')}
             className="w-full py-2.5 bg-[#865D36] hover:bg-[#93785B] text-[#FAF6F0] font-semibold rounded-lg text-xs text-center transition-colors shadow-sm flex items-center justify-center gap-1.5"
           >
-            <span>Browse All Maths Papers</span>
+            <span>View Maths Papers</span>
             <ChevronRight size={14} />
           </button>
         </div>
@@ -85,19 +81,19 @@ export const HomePage: React.FC<HomePageProps> = ({
         {/* A Level Further Maths Card */}
         <div className="border border-[#93785B]/30 rounded-xl p-6 bg-[#3E362E] flex flex-col justify-between shadow-md hover:border-[#93785B]/60 transition-all">
           <div>
-            <div className="flex items-center justify-between mb-2.5">
+            <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-[#2C2620] border border-[#93785B]/40 flex items-center justify-center text-[#AC8968]">
                   <Layers size={18} />
                 </div>
-                <h2 className="text-base font-serif font-bold text-[#FAF6F0]">Further Mathematics</h2>
+                <h2 className="text-base font-serif font-bold text-[#FAF6F0]">Further Maths</h2>
               </div>
               <span className="text-xs px-2.5 py-0.5 rounded bg-[#865D36] text-[#FAF6F0] border border-[#93785B]/40 font-semibold">
                 9FM0
               </span>
             </div>
             <p className="text-xs text-[#AC8968] mb-4">
-              All 10 modules: Core Pure 1/2, FP1/2, Stats 1/2, Mech 1/2, Decision 1/2.
+              Core Pure and options from 2019 to 2025.
             </p>
 
             <div className="space-y-1.5 mb-6 text-xs">
@@ -136,7 +132,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             onClick={() => onSelectSubject('further-maths')}
             className="w-full py-2.5 bg-[#865D36] hover:bg-[#93785B] text-[#FAF6F0] font-semibold rounded-lg text-xs text-center transition-colors shadow-sm flex items-center justify-center gap-1.5"
           >
-            <span>Browse All 10 FM Modules</span>
+            <span>View Further Maths Papers</span>
             <ChevronRight size={14} />
           </button>
         </div>
@@ -153,10 +149,10 @@ export const HomePage: React.FC<HomePageProps> = ({
           </div>
           <div>
             <div className="font-serif font-bold text-[#FAF6F0] group-hover:text-[#865D36] transition-colors">
-              Grade Boundaries Explorer
+              Grade Boundaries
             </div>
             <div className="text-[#AC8968] text-[11px] mt-0.5">
-              Official Edexcel raw mark cutoffs (A*, A, B, C, D, E) for June 2018–2024.
+              Raw mark boundaries from 2018 to 2024.
             </div>
           </div>
         </button>
@@ -170,10 +166,10 @@ export const HomePage: React.FC<HomePageProps> = ({
           </div>
           <div>
             <div className="font-serif font-bold text-[#FAF6F0] group-hover:text-[#AC8968] transition-colors">
-              Formula Booklets & Tables
+              Formula Booklet
             </div>
             <div className="text-[#AC8968] text-[11px] mt-0.5">
-              Interactive formulae database and official Pearson PDF booklets.
+              Official Edexcel formulas and tables.
             </div>
           </div>
         </button>
