@@ -2,13 +2,13 @@
 
 @layer base {
   body {
-    font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background-color: #162932;
-    color: #FBE9D0;
+    font-family: 'Libre Franklin', 'Libre Baskerville', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #2C2620;
+    color: #FAF6F0;
   }
   
-  code, kbd, samp, pre {
-    font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  h1, h2, h3, .font-serif {
+    font-family: 'Libre Baskerville', Georgia, serif;
   }
 
   button, 
@@ -32,20 +32,21 @@ select {
   cursor: pointer !important;
 }
 
-/* Minimal scrollbars styled with theme */
+/* Minimal scrollbars styled with palette */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #162932;
+  background: #2C2620;
 }
 ::-webkit-scrollbar-thumb {
-  background: #244855;
+  background: #3E362E;
+  border: 1px solid #93785B;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #90AEAD;
+  background: #865D36;
 }
 
 /* ========================================================
@@ -61,7 +62,7 @@ select {
   font-size: 1.08em;
   text-rendering: auto;
   line-height: 1.25;
-  color: #FBE9D0;
+  color: #FAF6F0;
 }
 
 .katex .frac-line {
@@ -106,7 +107,7 @@ select {
 
 /* ========================================================
    Text Countdown Flip Animation
-   (Normal text counting down with smooth flip transition)
+   (Libre font text counting down with smooth flip transition)
    ======================================================== */
 .flip-animate-up {
   animation: flipDigitUp 0.28s cubic-bezier(0.2, 0, 0.2, 1) forwards;

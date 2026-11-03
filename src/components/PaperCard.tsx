@@ -37,7 +37,7 @@ export const PaperCard: React.FC<PaperCardProps> = ({
         {/* Top bar: Code, Series, Status */}
         <div className="flex items-center justify-between gap-2 mb-2 text-xs">
           <div className="flex items-center gap-2">
-            <span className="font-mono font-semibold text-zinc-300 bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800">
+            <span className="font-semibold text-xs px-2 py-0.5 rounded bg-[#2C2620] text-[#865D36] border border-[#93785B]/40">
               {paper.code}
             </span>
             <span className="text-zinc-400 font-medium">
@@ -65,7 +65,7 @@ export const PaperCard: React.FC<PaperCardProps> = ({
         </h3>
 
         {/* Specs: Duration, Marks, Score */}
-        <div className="flex items-center gap-3 text-xs text-zinc-400 mb-3 font-mono">
+        <div className="flex items-center gap-3 text-xs text-[#AC8968] mb-3 tabular-nums">
           <span>{paper.durationMinutes} mins</span>
           <span>·</span>
           <span>{paper.maxMarks} marks</span>

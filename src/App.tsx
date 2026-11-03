@@ -73,7 +73,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#162932] text-[#FBE9D0] flex flex-col font-sans selection:bg-[#E64833]/30 selection:text-[#FBE9D0]">
+    <div className="min-h-screen bg-[#2C2620] text-[#FAF6F0] flex flex-col font-sans selection:bg-[#865D36]/40 selection:text-[#FAF6F0]">
       {/* Top Navbar */}
       <Navbar
         currentTab={currentTab}
@@ -114,26 +114,26 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-[#90AEAD]/20 bg-[#244855] py-6 text-xs text-[#90AEAD]">
+      <footer className="border-t border-[#93785B]/25 bg-[#3E362E] py-6 text-xs text-[#AC8968]">
         <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-[#FBE9D0]">matheseus</span>
-            <span className="text-[#90AEAD]/60">·</span>
+            <span className="font-serif font-semibold text-[#FAF6F0]">matheseus</span>
+            <span className="text-[#93785B]">·</span>
             <span>Edexcel A Level & Further Maths Past Papers Archive</span>
           </div>
           <div className="flex items-center gap-4">
             <button
               onClick={() => setShowFormulasModal(true)}
-              className="hover:text-[#FBE9D0] transition-colors flex items-center gap-1.5"
+              className="hover:text-[#FAF6F0] transition-colors flex items-center gap-1.5"
             >
-              <Sigma size={13} className="text-[#E64833]" />
+              <Sigma size={13} className="text-[#865D36]" />
               <span>Formula Booklets</span>
             </button>
             <button
               onClick={() => setShowBoundariesModal(true)}
-              className="hover:text-[#FBE9D0] transition-colors flex items-center gap-1.5"
+              className="hover:text-[#FAF6F0] transition-colors flex items-center gap-1.5"
             >
-              <BarChart3 size={13} className="text-[#90AEAD]" />
+              <BarChart3 size={13} className="text-[#AC8968]" />
               <span>Grade Boundaries</span>
             </button>
           </div>

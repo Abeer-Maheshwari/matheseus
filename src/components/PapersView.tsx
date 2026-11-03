@@ -52,7 +52,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
   return (
     <div className="max-w-5xl mx-auto px-4 py-8 space-y-6">
       {/* Subject Selector Tabs */}
-      <div className="flex items-center gap-3 border-b border-[#90AEAD]/25 pb-3">
+      <div className="flex items-center gap-3 border-b border-[#93785B]/30 pb-3">
         <button
           onClick={() => {
             onSelectSubject('maths');
@@ -60,8 +60,8 @@ export const PapersView: React.FC<PapersViewProps> = ({
           }}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
             currentSubject === 'maths'
-              ? 'bg-[#E64833] text-[#FBE9D0] shadow-sm'
-              : 'text-[#90AEAD] hover:text-[#FBE9D0] bg-[#244855] border border-[#90AEAD]/25 hover:border-[#90AEAD]/50'
+              ? 'bg-[#865D36] text-[#FAF6F0] shadow-sm'
+              : 'text-[#AC8968] hover:text-[#FAF6F0] bg-[#3E362E] border border-[#93785B]/30 hover:border-[#93785B]/60'
           }`}
         >
           <GraduationCap size={16} />
@@ -75,8 +75,8 @@ export const PapersView: React.FC<PapersViewProps> = ({
           }}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
             currentSubject === 'further-maths'
-              ? 'bg-[#874F41] text-[#FBE9D0] shadow-sm'
-              : 'text-[#90AEAD] hover:text-[#FBE9D0] bg-[#244855] border border-[#90AEAD]/25 hover:border-[#90AEAD]/50'
+              ? 'bg-[#865D36] text-[#FAF6F0] shadow-sm'
+              : 'text-[#AC8968] hover:text-[#FAF6F0] bg-[#3E362E] border border-[#93785B]/30 hover:border-[#93785B]/60'
           }`}
         >
           <Layers size={16} />
@@ -86,8 +86,8 @@ export const PapersView: React.FC<PapersViewProps> = ({
 
       {/* Subsections: Module Navigation Pills */}
       <div className="space-y-2">
-        <div className="text-xs text-[#90AEAD] font-semibold uppercase tracking-wider flex items-center gap-1.5">
-          <BookOpen size={13} className="text-[#E64833]" />
+        <div className="text-xs text-[#AC8968] font-semibold uppercase tracking-wider flex items-center gap-1.5">
+          <BookOpen size={13} className="text-[#865D36]" />
           <span>Choose Module Specification:</span>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -99,12 +99,12 @@ export const PapersView: React.FC<PapersViewProps> = ({
                 onClick={() => onSelectModule(m.id)}
                 className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-medium border transition-all ${
                   isSelected
-                    ? 'bg-[#244855] text-[#FBE9D0] border-[#E64833] shadow-sm font-semibold'
-                    : 'bg-[#162932] text-[#90AEAD] hover:text-[#FBE9D0] border-[#90AEAD]/25 hover:border-[#90AEAD]/50'
+                    ? 'bg-[#3E362E] text-[#FAF6F0] border-[#865D36] shadow-sm font-semibold'
+                    : 'bg-[#2C2620] text-[#AC8968] hover:text-[#FAF6F0] border-[#93785B]/30 hover:border-[#93785B]/60'
                 }`}
               >
                 <span>{m.title}</span>
-                <span className="font-mono text-[11px] px-1.5 py-0.2 rounded bg-[#162932] border border-[#90AEAD]/30 text-[#90AEAD]">
+                <span className="text-[11px] px-1.5 py-0.2 rounded bg-[#2C2620] border border-[#93785B]/40 text-[#A69080]">
                   {m.code}
                 </span>
               </button>
@@ -114,36 +114,36 @@ export const PapersView: React.FC<PapersViewProps> = ({
       </div>
 
       {/* Module Overview Card & Search */}
-      <div className="p-4 rounded-xl bg-[#244855] border border-[#90AEAD]/25 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-md">
+      <div className="p-4 rounded-xl bg-[#3E362E] border border-[#93785B]/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-md">
         <div>
-          <h3 className="text-base font-bold text-[#FBE9D0] flex items-center gap-2">
+          <h3 className="text-base font-serif font-bold text-[#FAF6F0] flex items-center gap-2">
             <span>{activeModule.title}</span>
-            <span className="font-mono text-xs px-2 py-0.5 rounded bg-[#162932] text-[#E64833] border border-[#90AEAD]/30 font-semibold">
+            <span className="text-xs px-2.5 py-0.5 rounded bg-[#2C2620] text-[#865D36] border border-[#93785B]/40 font-semibold">
               {activeModule.code}
             </span>
           </h3>
-          <p className="text-xs text-[#90AEAD] mt-0.5">
+          <p className="text-xs text-[#AC8968] mt-0.5">
             Archive of official Edexcel past examination papers, mark schemes, and examiner reports.
           </p>
         </div>
 
         <div className="relative min-w-56">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#90AEAD]" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#AC8968]" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search papers by year or season..."
-            className="w-full pl-9 pr-3 py-1.5 bg-[#162932] border border-[#90AEAD]/30 rounded-lg text-xs text-[#FBE9D0] placeholder-[#90AEAD]/70 focus:outline-none focus:border-[#E64833]"
+            className="w-full pl-9 pr-3 py-1.5 bg-[#2C2620] border border-[#93785B]/40 rounded-lg text-xs text-[#FAF6F0] placeholder-[#A69080] focus:outline-none focus:border-[#865D36]"
           />
         </div>
       </div>
 
       {/* Papers Table */}
-      <div className="border border-[#90AEAD]/25 rounded-xl overflow-hidden bg-[#244855] shadow-md">
+      <div className="border border-[#93785B]/30 rounded-xl overflow-hidden bg-[#3E362E] shadow-md">
         <table className="w-full text-left text-xs border-collapse">
           <thead>
-            <tr className="border-b border-[#90AEAD]/20 bg-[#1b3741] text-[#90AEAD] text-[11px] font-semibold uppercase tracking-wider">
+            <tr className="border-b border-[#93785B]/25 bg-[#2C2620]/90 text-[#AC8968] text-[11px] font-semibold uppercase tracking-wider">
               <th className="py-3 px-4">Exam Series</th>
               <th className="py-3 px-4 text-center">Website Mode</th>
               <th className="py-3 px-4 text-center">PDF (Split View)</th>
@@ -151,19 +151,19 @@ export const PapersView: React.FC<PapersViewProps> = ({
               <th className="py-3 px-4 text-right">Status</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#90AEAD]/15">
+          <tbody className="divide-y divide-[#93785B]/20">
             {filteredPapers.map((paper) => {
               const isDone = !!completedMap[paper.id];
               const paperTitle = `${activeModule.title} (${paper.season} ${paper.year})`;
 
               return (
-                <tr key={paper.id} className="hover:bg-[#1f3d49] transition-colors">
+                <tr key={paper.id} className="hover:bg-[#2C2620]/50 transition-colors">
                   {/* Series */}
-                  <td className="py-3 px-4 font-medium text-[#FBE9D0]">
-                    <div className="font-semibold text-[#FBE9D0]">
+                  <td className="py-3 px-4 font-medium text-[#FAF6F0]">
+                    <div className="font-semibold text-[#FAF6F0]">
                       {paper.season} {paper.year}
                     </div>
-                    <div className="text-[11px] text-[#90AEAD] font-mono">
+                    <div className="text-[11px] text-[#A69080]">
                       {activeModule.code} {paper.paperNumber ? `· ${paper.paperNumber}` : ''}
                     </div>
                   </td>
@@ -172,10 +172,10 @@ export const PapersView: React.FC<PapersViewProps> = ({
                   <td className="py-3 px-4 text-center">
                     <button
                       onClick={() => onOpenInteractive(paper.id, paperTitle, activeModule.code)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#E64833]/20 hover:bg-[#E64833]/30 text-[#FBE9D0] font-semibold border border-[#E64833]/60 transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#865D36]/25 hover:bg-[#865D36]/40 text-[#FAF6F0] font-semibold border border-[#865D36]/60 transition-colors"
                       title="Launch Question-by-Question Website Mode"
                     >
-                      <Sparkles size={13} className="text-[#E64833]" />
+                      <Sparkles size={13} className="text-[#865D36]" />
                       <span>Web Mode</span>
                     </button>
                   </td>
@@ -184,10 +184,10 @@ export const PapersView: React.FC<PapersViewProps> = ({
                   <td className="py-3 px-4 text-center">
                     <button
                       onClick={() => onOpenSplitView(paperTitle, paper.qpUrl, paper.msUrl)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#162932] hover:bg-[#874F41]/60 text-[#FBE9D0] font-medium border border-[#90AEAD]/30 transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#2C2620] hover:bg-[#865D36]/30 text-[#FAF6F0] font-medium border border-[#93785B]/40 transition-colors"
                       title="Open Question Paper and Mark Scheme side-by-side"
                     >
-                      <Columns size={13} className="text-[#90AEAD]" />
+                      <Columns size={13} className="text-[#AC8968]" />
                       <span>PDF (Split View)</span>
                     </button>
                   </td>
@@ -197,14 +197,14 @@ export const PapersView: React.FC<PapersViewProps> = ({
                     {paper.erUrl ? (
                       <button
                         onClick={() => onOpenSingleDoc(`${paperTitle} — Examiner Report`, paper.erUrl!)}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#162932] hover:bg-[#244855] text-[#90AEAD] hover:text-[#FBE9D0] border border-[#90AEAD]/25 text-[11px] transition-colors"
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#2C2620] hover:bg-[#3E362E] text-[#AC8968] hover:text-[#FAF6F0] border border-[#93785B]/30 text-[11px] transition-colors"
                         title="Examiner Report"
                       >
                         <FileText size={11} />
                         <span>Report</span>
                       </button>
                     ) : (
-                      <span className="text-[#90AEAD]/50 text-[11px]">—</span>
+                      <span className="text-[#A69080]/60 text-[11px]">—</span>
                     )}
                   </td>
 
@@ -214,13 +214,13 @@ export const PapersView: React.FC<PapersViewProps> = ({
                       onClick={() => onToggleCompleted(paper.id)}
                       className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-medium border transition-colors ${
                         isDone
-                          ? 'bg-[#874F41] text-[#FBE9D0] border-[#874F41] font-semibold'
-                          : 'bg-[#162932] text-[#90AEAD] hover:text-[#FBE9D0] border-[#90AEAD]/25 hover:border-[#90AEAD]/50'
+                          ? 'bg-[#865D36] text-[#FAF6F0] border-[#865D36] font-semibold'
+                          : 'bg-[#2C2620] text-[#AC8968] hover:text-[#FAF6F0] border-[#93785B]/30 hover:border-[#93785B]/60'
                       }`}
                     >
                       {isDone ? (
                         <>
-                          <Check size={12} className="text-[#FBE9D0]" />
+                          <Check size={12} className="text-[#FAF6F0]" />
                           <span>Done</span>
                         </>
                       ) : (
