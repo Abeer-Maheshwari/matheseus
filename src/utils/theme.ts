@@ -57,3 +57,62 @@ export const applyTheme = (themeId: ThemeId) => {
     console.warn('Failed to save theme', e);
   }
 };
+
+/* ========================================================
+   Font Options
+   ======================================================== */
+export type FontId = 'libre' | 'garamond' | 'technical' | 'editorial';
+
+export interface FontOption {
+  id: FontId;
+  name: string;
+  subtitle: string;
+  sample: string;
+}
+
+export const FONTS: FontOption[] = [
+  {
+    id: 'libre',
+    name: 'Libre Classic',
+    subtitle: 'Baskerville + Franklin',
+    sample: 'Ag',
+  },
+  {
+    id: 'garamond',
+    name: 'Academic Garamond',
+    subtitle: 'EB Garamond + Newsreader',
+    sample: 'Ag',
+  },
+  {
+    id: 'technical',
+    name: 'Swiss Technical',
+    subtitle: 'Work Sans + Public Sans',
+    sample: 'Ag',
+  },
+  {
+    id: 'editorial',
+    name: 'Literary Editorial',
+    subtitle: 'Literata + Franklin',
+    sample: 'Ag',
+  },
+];
+
+export const getStoredFont = (): FontId => {
+  try {
+    const saved = localStorage.getItem('matheseus_font') as FontId;
+    if (saved && FONTS.some((f) => f.id === saved)) {
+      return saved;
+    }
+  } catch {}
+  return 'libre';
+};
+
+export const applyFont = (fontId: FontId) => {
+  try {
+    localStorage.setItem('matheseus_font', fontId);
+    document.documentElement.setAttribute('data-font', fontId);
+  } catch (e) {
+    console.warn('Failed to save font', e);
+  }
+};
+
