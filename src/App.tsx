@@ -170,6 +170,7 @@ export default function App() {
       {/* Interactive Question-by-Question Exam Runner (for papers with digitized questions) */}
       {activeInteractivePaper && (
         <InteractiveExamRunner
+          key={activeInteractivePaper.id}
           paper={activeInteractivePaper}
           onClose={() => setActiveInteractivePaper(null)}
           onSaveResult={handleSaveScore}
