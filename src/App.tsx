@@ -1,24 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import confetti from 'canvas-confetti';
-import { 
-  Sparkles, 
-  BookOpen, 
-  HelpCircle, 
-  Layers, 
-  Flame, 
-  ExternalLink,
-  GraduationCap,
-  ShieldCheck,
-  CheckCircle2,
-  FolderSync
-} from 'lucide-react';
-
 import { PAST_PAPERS_DATA } from './data/papersData';
 import { PastPaper, QualificationType, PaperProgress } from './types';
 
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { PaperCard } from './components/PaperCard';
+import { PaperTableView } from './components/PaperTableView';
 import { SplitPdfModal } from './components/SplitPdfModal';
 import { ExamTimerModal } from './components/ExamTimerModal';
 import { GradeBoundariesModal } from './components/GradeBoundariesModal';
@@ -26,13 +13,13 @@ import { FormulaBookletModal } from './components/FormulaBookletModal';
 import { ProgressTrackerModal } from './components/ProgressTrackerModal';
 
 export default function App() {
-  // Search & Filter State
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedQual, setSelectedQual] = useState<QualificationType | 'all'>('all');
   const [selectedYear, setSelectedYear] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<'all' | 'completed' | 'unattempted'>('all');
+  const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
 
-  // Modal States
+  // Modals
   const [activeSplitPaper, setActiveSplitPaper] = useState<{
     paper: PastPaper;
     initialMode: 'split' | 'qp' | 'ms' | 'er' | 'ma';
@@ -74,19 +61,14 @@ export default function App() {
   // Filtered papers
   const filteredPapers = useMemo(() => {
     return PAST_PAPERS_DATA.filter((p) => {
-      // Qualification filter
       if (selectedQual !== 'all' && p.qualification !== selectedQual) return false;
-
-      // Year filter
       if (selectedYear !== 'all' && String(p.year) !== selectedYear) return false;
 
-      // Status filter
       const prog = progressMap[p.id];
       const isDone = prog?.status === 'completed';
       if (statusFilter === 'completed' && !isDone) return false;
       if (statusFilter === 'unattempted' && isDone) return false;
 
-      // Text search
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase();
         const matchesCode = p.code.toLowerCase().includes(query);
@@ -105,7 +87,6 @@ export default function App() {
     });
   }, [selectedQual, selectedYear, statusFilter, searchQuery, progressMap]);
 
-  // Handler: Status toggle
   const handleToggleStatus = (paperId: string, currentStatus: string) => {
     setProgressMap((prev) => {
       const nextStatus = currentStatus === 'completed' 
@@ -113,14 +94,6 @@ export default function App() {
         : currentStatus === 'in_progress' 
           ? 'completed' 
           : 'in_progress';
-      
-      if (nextStatus === 'completed') {
-        confetti({
-          particleCount: 50,
-          spread: 50,
-          origin: { y: 0.8 }
-        });
-      }
 
       const existing = prev[paperId] || { paperId, maxScore: 100 };
       return {
@@ -134,7 +107,6 @@ export default function App() {
     });
   };
 
-  // Handler: Save score
   const handleSaveScore = (paperId: string, score: number, maxScore: number) => {
     setProgressMap((prev) => {
       const existing = prev[paperId] || { paperId, status: 'completed', maxScore };
@@ -154,8 +126,8 @@ export default function App() {
   const completedCount = Object.values(progressMap).filter((p) => p.status === 'completed').length;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-indigo-500/30 selection:text-indigo-200">
-      {/* Top Navbar */}
+    <div className="min-h-screen bg-black text-zinc-100 flex flex-col font-sans">
+      {/* Navigation */}
       <Navbar
         onOpenTimer={() => {
           setActiveTimerPaper(null);
@@ -168,7 +140,7 @@ export default function App() {
         totalPapers={PAST_PAPERS_DATA.length}
       />
 
-      {/* Hero Header with Search and Qualification selectors */}
+      {/* Header and Filter Controls */}
       <Hero
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
@@ -178,55 +150,46 @@ export default function App() {
         onSelectYear={setSelectedYear}
         yearsList={yearsList}
         totalPapersCount={PAST_PAPERS_DATA.length}
+        viewMode={viewMode}
+        onViewModeChange={setViewMode}
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Status filter & Count info */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Results count & status filter */}
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-4 text-xs">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-bold text-white">
-              {filteredPapers.length} {filteredPapers.length === 1 ? 'Paper' : 'Papers'} Found
+            <span className="font-semibold text-white">
+              {filteredPapers.length} {filteredPapers.length === 1 ? 'paper' : 'papers'}
             </span>
             {selectedQual !== 'all' && (
-              <span className="text-xs px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-medium">
-                {selectedQual === 'a-level-maths' && 'A Level Maths (9MA0)'}
-                {selectedQual === 'a-level-further-maths' && 'Further Maths (9FM0)'}
-                {selectedQual === 'as-maths' && 'AS Maths (8MA0)'}
-                {selectedQual === 'as-further-maths' && 'AS Further Maths (8FM0)'}
-                {selectedQual === 'legacy-modular' && 'Legacy Modular (C1-C4, M1, S1, FP1)'}
+              <span className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-300 font-mono text-[11px]">
+                {selectedQual}
               </span>
             )}
           </div>
 
-          {/* Quick status tabs */}
-          <div className="flex items-center bg-slate-900 p-1 rounded-xl border border-slate-800 text-xs">
+          <div className="flex items-center bg-zinc-900 p-0.5 rounded border border-zinc-800">
             <button
               onClick={() => setStatusFilter('all')}
-              className={`px-3 py-1 rounded-lg font-medium transition ${
-                statusFilter === 'all'
-                  ? 'bg-indigo-600 text-white shadow'
-                  : 'text-slate-400 hover:text-slate-200'
+              className={`px-2.5 py-1 rounded font-medium ${
+                statusFilter === 'all' ? 'bg-zinc-800 text-white' : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
               All
             </button>
             <button
               onClick={() => setStatusFilter('unattempted')}
-              className={`px-3 py-1 rounded-lg font-medium transition ${
-                statusFilter === 'unattempted'
-                  ? 'bg-indigo-600 text-white shadow'
-                  : 'text-slate-400 hover:text-slate-200'
+              className={`px-2.5 py-1 rounded font-medium ${
+                statusFilter === 'unattempted' ? 'bg-zinc-800 text-white' : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
-              To Do
+              Unattempted
             </button>
             <button
               onClick={() => setStatusFilter('completed')}
-              className={`px-3 py-1 rounded-lg font-medium transition ${
-                statusFilter === 'completed'
-                  ? 'bg-emerald-600 text-white shadow'
-                  : 'text-slate-400 hover:text-slate-200'
+              className={`px-2.5 py-1 rounded font-medium ${
+                statusFilter === 'completed' ? 'bg-zinc-800 text-white' : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
               Completed ({completedCount})
@@ -234,15 +197,10 @@ export default function App() {
           </div>
         </div>
 
-        {/* Papers Grid */}
+        {/* Papers View: Table or Grid */}
         {filteredPapers.length === 0 ? (
-          <div className="text-center py-20 rounded-3xl bg-slate-900/30 border border-slate-800/80 p-8">
-            <p className="text-slate-400 text-base mb-2 font-medium">
-              No past papers matched your criteria.
-            </p>
-            <p className="text-slate-400 text-xs mb-4">
-              Try adjusting your search query, selecting "All Years", or clearing the filters.
-            </p>
+          <div className="text-center py-16 rounded border border-zinc-800 bg-zinc-950 p-6 text-xs text-zinc-400">
+            <p className="mb-2 text-zinc-300 font-medium">No past papers match current filter criteria.</p>
             <button
               onClick={() => {
                 setSearchQuery('');
@@ -250,13 +208,25 @@ export default function App() {
                 setSelectedYear('all');
                 setStatusFilter('all');
               }}
-              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-xl transition"
+              className="px-3 py-1.5 bg-zinc-900 hover:bg-zinc-800 text-white rounded border border-zinc-700 font-medium"
             >
               Reset Filters
             </button>
           </div>
+        ) : viewMode === 'table' ? (
+          <PaperTableView
+            papers={filteredPapers}
+            progressMap={progressMap}
+            onOpenSplitView={(p) => setActiveSplitPaper({ paper: p, initialMode: 'split' })}
+            onOpenSingleDoc={(p, type) => setActiveSplitPaper({ paper: p, initialMode: type })}
+            onStartExam={(p) => {
+              setActiveTimerPaper(p);
+              setShowTimerModal(true);
+            }}
+            onToggleStatus={handleToggleStatus}
+          />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {filteredPapers.map((paper) => (
               <PaperCard
                 key={paper.id}
@@ -274,64 +244,30 @@ export default function App() {
             ))}
           </div>
         )}
-
-        {/* Informative Tip Cards Banner */}
-        <section className="mt-14 pt-10 border-t border-slate-900 grid grid-cols-1 md:grid-cols-3 gap-5 text-xs text-slate-400">
-          <div className="p-5 rounded-2xl bg-slate-900/40 border border-slate-800/80">
-            <div className="flex items-center gap-2 mb-2 text-indigo-400 font-bold">
-              <GraduationCap className="w-4 h-4" />
-              <span>Exam Technique Tip</span>
-            </div>
-            <p className="leading-relaxed">
-              In Edexcel Pure papers (9MA0/01 and 9MA0/02), questions often combine topics (e.g. calculus with trig identities or proof by contradiction with logarithms). Practice whole papers under timed conditions rather than isolated questions.
-            </p>
-          </div>
-
-          <div className="p-5 rounded-2xl bg-slate-900/40 border border-slate-800/80">
-            <div className="flex items-center gap-2 mb-2 text-cyan-400 font-bold">
-              <FolderSync className="w-4 h-4" />
-              <span>Side-by-Side Split View</span>
-            </div>
-            <p className="leading-relaxed">
-              Click the <strong className="text-slate-300">Split View</strong> button on any paper card to open the Question Paper alongside the official Mark Scheme. You can review your steps question-by-question without switching tabs.
-            </p>
-          </div>
-
-          <div className="p-5 rounded-2xl bg-slate-900/40 border border-slate-800/80">
-            <div className="flex items-center gap-2 mb-2 text-amber-400 font-bold">
-              <Flame className="w-4 h-4" />
-              <span>The Goldmine Legacy Vault</span>
-            </div>
-            <p className="leading-relaxed">
-              Running out of new-spec papers? Switch to <strong className="text-slate-300">Legacy Vault</strong>. Edexcel C3 and C4 contain some of the highest quality integration, vectors, and trigonometry questions ever written.
-            </p>
-          </div>
-        </section>
       </main>
 
-      {/* Footer */}
-      <footer className="mt-16 border-t border-slate-900 bg-slate-950 py-10 text-xs text-slate-400">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      {/* Clean, minimalist footer */}
+      <footer className="border-t border-zinc-800 bg-zinc-950 py-6 text-xs text-zinc-400">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-md bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center font-bold text-indigo-400 text-xs">
-              μ
-            </div>
-            <span className="font-bold text-slate-300">matheseus</span>
-            <span>— The open Edexcel A Level Maths portal</span>
+            <span className="font-semibold text-zinc-300">matheseus</span>
+            <span>·</span>
+            <span>Pearson Edexcel Mathematics archive</span>
           </div>
 
-          <div className="flex items-center gap-4 text-slate-400">
-            <button onClick={() => setShowFormulasModal(true)} className="hover:text-slate-200">
+          <div className="flex items-center gap-4 text-zinc-400">
+            <button onClick={() => setShowFormulasModal(true)} className="hover:text-zinc-200">
               Formulae
             </button>
-            <button onClick={() => setShowBoundariesModal(true)} className="hover:text-slate-200">
+            <button onClick={() => setShowBoundariesModal(true)} className="hover:text-zinc-200">
               Boundaries
             </button>
-            <button onClick={() => setShowTimerModal(true)} className="hover:text-slate-200">
-              Exam Timer
+            <button onClick={() => setShowTimerModal(true)} className="hover:text-zinc-200">
+              Timer
             </button>
-            <span>•</span>
-            <span className="text-slate-400">Designed for Maths Students</span>
+            <button onClick={() => setShowTrackerModal(true)} className="hover:text-zinc-200">
+              Tracker
+            </button>
           </div>
         </div>
       </footer>

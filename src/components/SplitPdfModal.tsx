@@ -1,17 +1,4 @@
 import React, { useState } from 'react';
-import { 
-  X, 
-  Columns, 
-  ExternalLink, 
-  Download, 
-  Maximize2, 
-  RotateCw, 
-  CheckCircle2, 
-  Award,
-  AlertTriangle,
-  FileText
-} from 'lucide-react';
-import confetti from 'canvas-confetti';
 import { PastPaper } from '../types';
 
 interface SplitPdfModalProps {
@@ -49,14 +36,7 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
     if (!isNaN(num) && num >= 0 && num <= paper.maxMarks) {
       onSaveScore(paper.id, num, paper.maxMarks);
       setSavedSuccess(true);
-      if (num >= paper.maxMarks * 0.7) {
-        confetti({
-          particleCount: 80,
-          spread: 60,
-          origin: { y: 0.8 }
-        });
-      }
-      setTimeout(() => setSavedSuccess(false), 3000);
+      setTimeout(() => setSavedSuccess(false), 2500);
     }
   };
 
@@ -64,202 +44,182 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
   const rightDoc = swapped ? 'qp' : 'ms';
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-slate-950/95 backdrop-blur-xl animate-fade-in text-slate-100">
+    <div className="fixed inset-0 z-50 flex flex-col bg-black text-zinc-100">
       {/* Top Bar Navigation */}
-      <div className="h-14 px-4 bg-slate-900 border-b border-slate-800 flex items-center justify-between gap-4 shrink-0">
+      <div className="h-12 px-4 bg-zinc-950 border-b border-zinc-800 flex items-center justify-between gap-4 shrink-0">
         <div className="flex items-center gap-3 min-w-0">
-          <span className="font-mono text-xs px-2.5 py-0.5 rounded font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+          <span className="font-mono text-xs px-2 py-0.5 rounded font-semibold bg-zinc-800 text-zinc-300">
             {paper.code}
           </span>
-          <h2 className="font-bold text-sm sm:text-base text-white truncate">
+          <span className="font-semibold text-sm text-white truncate">
             {paper.title} ({paper.season} {paper.year})
-          </h2>
+          </span>
         </div>
 
         {/* Center: View Switcher */}
-        <div className="hidden md:flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
+        <div className="hidden md:flex items-center bg-zinc-900 p-0.5 rounded border border-zinc-800 text-xs">
           <button
             onClick={() => setViewMode('split')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium transition ${
-              viewMode === 'split' 
-                ? 'bg-indigo-600 text-white shadow' 
-                : 'text-slate-400 hover:text-slate-200'
+            className={`px-3 py-1 rounded font-medium ${
+              viewMode === 'split' ? 'bg-zinc-800 text-white' : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
-            <Columns className="w-3.5 h-3.5" />
-            <span>Split View</span>
+            Split View
           </button>
           <button
             onClick={() => setViewMode('qp')}
-            className={`px-3 py-1.5 rounded-lg font-medium transition ${
-              viewMode === 'qp' 
-                ? 'bg-indigo-600 text-white shadow' 
-                : 'text-slate-400 hover:text-slate-200'
+            className={`px-3 py-1 rounded font-medium ${
+              viewMode === 'qp' ? 'bg-zinc-800 text-white' : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
-            QP Only
+            Question Paper
           </button>
           <button
             onClick={() => setViewMode('ms')}
-            className={`px-3 py-1.5 rounded-lg font-medium transition ${
-              viewMode === 'ms' 
-                ? 'bg-indigo-600 text-white shadow' 
-                : 'text-slate-400 hover:text-slate-200'
+            className={`px-3 py-1 rounded font-medium ${
+              viewMode === 'ms' ? 'bg-zinc-800 text-white' : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
-            MS Only
+            Mark Scheme
           </button>
           {paper.modelAnswersUrl && (
             <button
               onClick={() => setViewMode('ma')}
-              className={`px-3 py-1.5 rounded-lg font-medium transition ${
-                viewMode === 'ma' 
-                  ? 'bg-indigo-600 text-white shadow' 
-                  : 'text-slate-400 hover:text-slate-200'
+              className={`px-3 py-1 rounded font-medium ${
+                viewMode === 'ma' ? 'bg-zinc-800 text-white' : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
-              Model Ans
+              Model Answer
             </button>
           )}
           {paper.erUrl && (
             <button
               onClick={() => setViewMode('er')}
-              className={`px-3 py-1.5 rounded-lg font-medium transition ${
-                viewMode === 'er' 
-                  ? 'bg-indigo-600 text-white shadow' 
-                  : 'text-slate-400 hover:text-slate-200'
+              className={`px-3 py-1 rounded font-medium ${
+                viewMode === 'er' ? 'bg-zinc-800 text-white' : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
-              Report
+              Examiner Report
             </button>
           )}
         </div>
 
-        {/* Right side: Swap sides & Close button */}
-        <div className="flex items-center gap-2">
+        {/* Right side: Swap & Close */}
+        <div className="flex items-center gap-2 text-xs">
           {viewMode === 'split' && (
             <button
               onClick={() => setSwapped(!swapped)}
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition"
-              title="Swap Left & Right Documents"
+              className="px-2.5 py-1 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-800"
             >
-              <RotateCw className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Swap Sides</span>
+              Swap Left / Right
             </button>
           )}
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
-            title="Close Viewer"
+            className="px-2.5 py-1 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800"
           >
-            <X className="w-5 h-5" />
+            Close (Esc)
           </button>
         </div>
       </div>
 
-      {/* Notice bar for External Direct Open if browser PDF sandbox blocks iFrame */}
-      <div className="bg-slate-900/60 border-b border-slate-800/80 px-4 py-1.5 text-xs text-slate-400 flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
-          <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-          <span>If the preview doesn't render in your browser, open or download directly:</span>
-        </div>
-        <div className="flex items-center gap-3">
+      {/* External Direct Links bar */}
+      <div className="bg-zinc-900/90 border-b border-zinc-800 px-4 py-1.5 text-xs text-zinc-400 flex items-center justify-between">
+        <span>If embedded PDF preview is restricted by browser settings, use direct links:</span>
+        <div className="flex items-center gap-4">
           <a
             href={paper.qpUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-indigo-400 hover:text-indigo-300 flex items-center gap-1 underline font-medium"
+            className="text-zinc-300 hover:text-white underline"
           >
-            <ExternalLink className="w-3 h-3" /> Question Paper
+            Open Question Paper in Tab
           </a>
           <a
             href={paper.msUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-cyan-400 hover:text-cyan-300 flex items-center gap-1 underline font-medium"
+            className="text-zinc-300 hover:text-white underline"
           >
-            <ExternalLink className="w-3 h-3" /> Mark Scheme
+            Open Mark Scheme in Tab
           </a>
         </div>
       </div>
 
-      {/* Main PDF View Area */}
-      <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+      {/* PDF Viewports */}
+      <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
         {viewMode === 'split' ? (
           <>
-            {/* Left Frame */}
-            <div className="flex-1 flex flex-col h-1/2 md:h-full border-b md:border-b-0 md:border-r border-slate-800">
-              <div className="h-8 px-3 bg-slate-900/90 flex items-center justify-between text-xs font-semibold text-slate-300">
-                <span>{leftDoc === 'qp' ? '📄 Question Paper' : '📝 Mark Scheme'}</span>
+            <div className="flex-1 flex flex-col h-1/2 md:h-full border-b md:border-b-0 md:border-r border-zinc-800">
+              <div className="h-7 px-3 bg-zinc-900 border-b border-zinc-800 flex items-center justify-between text-xs font-medium text-zinc-300">
+                <span>{leftDoc === 'qp' ? 'Question Paper' : 'Mark Scheme'}</span>
                 <a
                   href={getDocUrl(leftDoc)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-white"
+                  className="text-zinc-400 hover:text-white text-[11px]"
                 >
-                  <ExternalLink className="w-3 h-3" /> Open In Tab
+                  Open in New Tab
                 </a>
               </div>
               <iframe
                 src={getDocUrl(leftDoc)}
-                className="w-full flex-1 bg-slate-900 border-none"
-                title={`${paper.code} ${leftDoc.toUpperCase()}`}
+                className="w-full flex-1 bg-zinc-950 border-none"
+                title={`${paper.code} Left`}
               />
             </div>
 
-            {/* Right Frame */}
             <div className="flex-1 flex flex-col h-1/2 md:h-full">
-              <div className="h-8 px-3 bg-slate-900/90 flex items-center justify-between text-xs font-semibold text-slate-300">
-                <span>{rightDoc === 'qp' ? '📄 Question Paper' : '📝 Mark Scheme'}</span>
+              <div className="h-7 px-3 bg-zinc-900 border-b border-zinc-800 flex items-center justify-between text-xs font-medium text-zinc-300">
+                <span>{rightDoc === 'qp' ? 'Question Paper' : 'Mark Scheme'}</span>
                 <a
                   href={getDocUrl(rightDoc)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-white"
+                  className="text-zinc-400 hover:text-white text-[11px]"
                 >
-                  <ExternalLink className="w-3 h-3" /> Open In Tab
+                  Open in New Tab
                 </a>
               </div>
               <iframe
                 src={getDocUrl(rightDoc)}
-                className="w-full flex-1 bg-slate-900 border-none"
-                title={`${paper.code} ${rightDoc.toUpperCase()}`}
+                className="w-full flex-1 bg-zinc-950 border-none"
+                title={`${paper.code} Right`}
               />
             </div>
           </>
         ) : (
           <div className="flex-1 flex flex-col h-full">
-            <div className="h-8 px-3 bg-slate-900/90 flex items-center justify-between text-xs font-semibold text-slate-300">
+            <div className="h-7 px-3 bg-zinc-900 border-b border-zinc-800 flex items-center justify-between text-xs font-medium text-zinc-300">
               <span>
-                {viewMode === 'qp' && '📄 Question Paper'}
-                {viewMode === 'ms' && '📝 Mark Scheme'}
-                {viewMode === 'er' && "📊 Examiner's Report"}
-                {viewMode === 'ma' && '💡 Model Answers & Worked Solutions'}
+                {viewMode === 'qp' && 'Question Paper'}
+                {viewMode === 'ms' && 'Mark Scheme'}
+                {viewMode === 'er' && 'Examiner Report'}
+                {viewMode === 'ma' && 'Model Answer'}
               </span>
               <a
                 href={getDocUrl(viewMode)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-white"
+                className="text-zinc-400 hover:text-white text-[11px]"
               >
-                <ExternalLink className="w-3 h-3" /> Open In Tab
+                Open in New Tab
               </a>
             </div>
             <iframe
               src={getDocUrl(viewMode)}
-              className="w-full flex-1 bg-slate-900 border-none"
-              title={`${paper.code} ${viewMode.toUpperCase()}`}
+              className="w-full flex-1 bg-zinc-950 border-none"
+              title={`${paper.code} ${viewMode}`}
             />
           </div>
         )}
       </div>
 
-      {/* Bottom Floating Bar: Quick Score Logger */}
-      <div className="bg-slate-900 border-t border-slate-800 px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-xs shrink-0">
+      {/* Bottom Bar: Score Logging */}
+      <div className="bg-zinc-950 border-t border-zinc-800 px-4 py-2 flex items-center justify-between text-xs shrink-0">
         <form onSubmit={handleSaveScore} className="flex items-center gap-2">
-          <Award className="w-4 h-4 text-amber-400 shrink-0" />
-          <span className="font-medium text-slate-300">Log Your Mark:</span>
+          <span className="text-zinc-400">Log Mark:</span>
           <input
             type="number"
             min="0"
@@ -267,24 +227,22 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
             value={userScore}
             onChange={(e) => setUserScore(e.target.value)}
             placeholder="Score"
-            className="w-16 px-2 py-1 bg-slate-950 border border-slate-700 rounded text-center text-white focus:outline-none focus:border-indigo-500 font-mono"
+            className="w-16 px-2 py-1 bg-zinc-900 border border-zinc-700 rounded text-center text-white font-mono"
           />
-          <span className="text-slate-400 font-mono">/ {paper.maxMarks}</span>
+          <span className="text-zinc-400 font-mono">/ {paper.maxMarks}</span>
           <button
             type="submit"
-            className="px-3 py-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded font-medium transition active:scale-95"
+            className="px-2.5 py-1 bg-white hover:bg-zinc-200 text-black font-semibold rounded"
           >
-            Save Result
+            Save Mark
           </button>
           {savedSuccess && (
-            <span className="text-emerald-400 flex items-center gap-1 font-semibold animate-pulse">
-              <CheckCircle2 className="w-3.5 h-3.5" /> Saved!
-            </span>
+            <span className="text-zinc-300 font-medium ml-2">Saved.</span>
           )}
         </form>
 
-        <div className="text-slate-400 hidden sm:block">
-          Duration: <span className="text-slate-200 font-semibold">{paper.durationMinutes} mins</span>
+        <div className="text-zinc-400">
+          Max Marks: <span className="text-zinc-200 font-mono">{paper.maxMarks}</span> | Duration: <span className="text-zinc-200 font-mono">{paper.durationMinutes}m</span>
         </div>
       </div>
     </div>

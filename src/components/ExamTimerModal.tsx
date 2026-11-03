@@ -1,17 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { 
-  X, 
-  Play, 
-  Pause, 
-  RotateCcw, 
-  Volume2, 
-  VolumeX, 
-  Maximize, 
-  Minimize,
-  Clock, 
-  CheckCircle,
-  FileText
-} from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 import { PastPaper } from '../types';
 import { playExamChime } from '../utils/audio';
 
@@ -26,7 +13,7 @@ export const ExamTimerModal: React.FC<ExamTimerModalProps> = ({
   onClose,
   onOpenPaper,
 }) => {
-  const initialDuration = paper ? paper.durationMinutes * 60 : 120 * 60; // in seconds
+  const initialDuration = paper ? paper.durationMinutes * 60 : 120 * 60;
   const [totalSeconds, setTotalSeconds] = useState<number>(initialDuration);
   const [secondsRemaining, setSecondsRemaining] = useState<number>(initialDuration);
   const [isRunning, setIsRunning] = useState<boolean>(false);
@@ -85,131 +72,81 @@ export const ExamTimerModal: React.FC<ExamTimerModalProps> = ({
     return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
-  const percentComplete = ((totalSeconds - secondsRemaining) / totalSeconds) * 100;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in">
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl relative flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
+      <div className="bg-zinc-950 border border-zinc-800 rounded-lg w-full max-w-md overflow-hidden text-zinc-100">
         {/* Header */}
-        <div className="p-5 border-b border-slate-800/80 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
-              <Clock className="w-4 h-4" />
-            </div>
-            <div>
-              <h3 className="font-bold text-white text-base">Exam Hall Timer</h3>
-              <p className="text-xs text-slate-400">
-                {paper ? `${paper.code} — ${paper.title}` : 'Strict Timed Conditions'}
-              </p>
-            </div>
+        <div className="px-5 py-3 border-b border-zinc-800 flex items-center justify-between">
+          <div>
+            <h3 className="font-semibold text-white text-sm">Exam Timer</h3>
+            <p className="text-xs text-zinc-400">
+              {paper ? `${paper.code} (${paper.title})` : 'Practice Timer'}
+            </p>
           </div>
-
           <div className="flex items-center gap-2">
             <button
               onClick={() => setSoundEnabled(!soundEnabled)}
-              className={`p-2 rounded-lg border transition ${
+              className={`px-2 py-1 text-xs rounded border ${
                 soundEnabled
-                  ? 'bg-slate-800 text-amber-400 border-slate-700'
-                  : 'bg-slate-950 text-slate-500 border-slate-800'
+                  ? 'bg-zinc-800 text-zinc-200 border-zinc-700'
+                  : 'bg-zinc-950 text-zinc-500 border-zinc-800'
               }`}
-              title={soundEnabled ? 'Sound is ON' : 'Sound is MUTED'}
             >
-              {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+              Sound: {soundEnabled ? 'On' : 'Off'}
             </button>
             <button
               onClick={onClose}
-              className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+              className="px-2 py-1 text-xs rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-800"
             >
-              <X className="w-4 h-4" />
+              Close
             </button>
           </div>
         </div>
 
-        {/* Timer Main Display */}
-        <div className="p-8 flex flex-col items-center justify-center text-center">
-          {/* Progress bar line */}
-          <div className="w-full bg-slate-950 h-2 rounded-full overflow-hidden mb-6 border border-slate-800">
-            <div 
-              className={`h-full transition-all duration-300 ${
-                isFinished 
-                  ? 'bg-red-500' 
-                  : percentComplete > 80 
-                    ? 'bg-amber-500' 
-                    : 'bg-indigo-500'
-              }`}
-              style={{ width: `${percentComplete}%` }}
-            />
-          </div>
-
-          {/* Huge Digits */}
-          <div className="font-mono text-5xl sm:text-6xl font-extrabold tracking-tight text-white mb-2 select-none">
+        {/* Display */}
+        <div className="p-8 text-center">
+          <div className="font-mono text-5xl font-bold tracking-tight text-white mb-2">
             {formatTime(secondsRemaining)}
           </div>
 
-          <div className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-8">
-            {isFinished ? (
-              <span className="text-red-400 font-bold animate-bounce">
-                Time is up! Pens down.
-              </span>
-            ) : isRunning ? (
-              <span className="text-emerald-400 flex items-center justify-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                Exam in progress
-              </span>
-            ) : (
-              'Paused'
-            )}
+          <div className="text-xs uppercase tracking-wider text-zinc-500 mb-6 font-mono">
+            {isFinished ? 'Time has expired' : isRunning ? 'Timer running' : 'Paused'}
           </div>
 
           {/* Controls */}
-          <div className="flex items-center gap-4 mb-8">
+          <div className="flex items-center justify-center gap-3 mb-6">
             <button
               onClick={handleStartPause}
-              className={`flex items-center gap-2 px-8 py-3.5 rounded-2xl font-bold text-sm shadow-lg transition active:scale-95 ${
-                isRunning
-                  ? 'bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-amber-500/20'
-                  : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-600/30'
-              }`}
+              className="px-6 py-2 rounded bg-white hover:bg-zinc-200 text-black font-semibold text-xs"
             >
-              {isRunning ? (
-                <>
-                  <Pause className="w-4 h-4" /> Pause
-                </>
-              ) : (
-                <>
-                  <Play className="w-4 h-4 fill-current" /> {secondsRemaining < totalSeconds ? 'Resume' : 'Start Timer'}
-                </>
-              )}
+              {isRunning ? 'Pause' : secondsRemaining < totalSeconds ? 'Resume' : 'Start'}
             </button>
 
             <button
               onClick={handleReset}
-              className="p-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition active:scale-95"
-              title="Reset Timer"
+              className="px-4 py-2 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-800 text-xs font-medium"
             >
-              <RotateCcw className="w-4 h-4" />
+              Reset
             </button>
           </div>
 
-          {/* Quick Preset Buttons */}
-          <div className="w-full pt-4 border-t border-slate-800/80">
-            <span className="text-xs text-slate-400 block mb-2.5">
-              Standard Exam Durations:
-            </span>
-            <div className="grid grid-cols-4 gap-2">
+          {/* Presets */}
+          <div className="pt-4 border-t border-zinc-800/80">
+            <div className="text-xs text-zinc-500 mb-2 font-medium">Standard Durations</div>
+            <div className="grid grid-cols-4 gap-1.5 text-xs">
               {[
-                { label: '2 Hours (Pure)', mins: 120 },
-                { label: '1.5 Hours (FM)', mins: 90 },
-                { label: '1h 15m (AS S/M)', mins: 75 },
-                { label: '45 Mins', mins: 45 },
+                { label: '120m (Pure)', mins: 120 },
+                { label: '90m (FM)', mins: 90 },
+                { label: '75m (AS)', mins: 75 },
+                { label: '45m', mins: 45 },
               ].map((p) => (
                 <button
                   key={p.mins}
                   onClick={() => handleSelectPreset(p.mins)}
-                  className={`px-2 py-2 rounded-xl text-xs font-medium border transition ${
+                  className={`py-1.5 px-1 rounded border text-[11px] font-mono ${
                     totalSeconds === p.mins * 60
-                      ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40'
-                      : 'bg-slate-950 hover:bg-slate-800/60 text-slate-400 border-slate-800'
+                      ? 'bg-zinc-800 text-white border-zinc-600 font-semibold'
+                      : 'bg-zinc-900 text-zinc-400 hover:text-zinc-200 border-zinc-800'
                   }`}
                 >
                   {p.label}
@@ -218,17 +155,13 @@ export const ExamTimerModal: React.FC<ExamTimerModalProps> = ({
             </div>
           </div>
 
-          {/* Shortcut to view paper */}
           {paper && onOpenPaper && (
-            <div className="mt-5 w-full">
-              <button
-                onClick={() => onOpenPaper(paper)}
-                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-800 text-slate-300 text-xs font-semibold border border-slate-700 transition"
-              >
-                <FileText className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Open {paper.code} Question Paper alongside timer</span>
-              </button>
-            </div>
+            <button
+              onClick={() => onOpenPaper(paper)}
+              className="mt-4 w-full py-2 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 rounded border border-zinc-800 text-xs font-medium"
+            >
+              Open Question Paper in Viewer
+            </button>
           )}
         </div>
       </div>
