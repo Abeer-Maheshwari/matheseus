@@ -15,13 +15,20 @@ export const HomePage: React.FC<HomePageProps> = ({
   return (
     <div className="max-w-4xl mx-auto px-4 py-10 space-y-8 animate-fadeIn">
       {/* Intro */}
-      <div className="text-center space-y-2">
-        <h1 className="text-3xl sm:text-4xl font-serif font-bold tracking-tight text-[#E8ECF4]">
-          matheseus.
-        </h1>
-        <p className="text-sm text-[#7B8FAD] max-w-xl mx-auto">
-          Edexcel A Level Maths and Further Maths past papers with mark schemes and practice mode.
-        </p>
+      <div className="text-center space-y-3 flex flex-col items-center">
+        <img
+          src="/logo.png"
+          alt="matheseus."
+          className="w-16 h-16 rounded-2xl shadow-xl ring-1 ring-white/15 object-cover"
+        />
+        <div>
+          <h1 className="text-3xl sm:text-4xl font-serif font-bold tracking-tight text-[#E8ECF4]">
+            matheseus.
+          </h1>
+          <p className="text-sm text-[#7B8FAD] max-w-xl mx-auto mt-1">
+            Edexcel A Level Maths and Further Maths past papers with mark schemes and practice mode.
+          </p>
+        </div>
       </div>
 
       {/* Main Subjects */}

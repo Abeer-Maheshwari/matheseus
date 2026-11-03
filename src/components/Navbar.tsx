@@ -29,9 +29,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => onNavigate('home')}
             className="flex items-center gap-2.5 text-[#E8ECF4] hover:opacity-90 transition-opacity"
           >
-            <span className="w-7 h-7 rounded-lg bg-[#4A7BF7] flex items-center justify-center text-xs font-bold text-white shadow-sm">
-              m
-            </span>
+            <img
+              src="/logo.png"
+              alt="matheseus."
+              className="w-7 h-7 rounded-lg object-cover shadow-sm ring-1 ring-white/15"
+            />
             <span className="font-serif font-bold text-lg tracking-tight text-[#E8ECF4]">matheseus.</span>
           </button>
 

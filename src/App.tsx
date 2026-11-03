@@ -143,7 +143,12 @@ export default function App() {
       {/* Footer */}
       <footer className="border-t border-[#6382BF]/20 bg-[#1A2540] py-6 text-xs text-[#7B8FAD]">
         <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
+            <img
+              src="/logo.png"
+              alt="matheseus."
+              className="w-5 h-5 rounded-md object-cover shadow-sm ring-1 ring-white/10"
+            />
             <span className="font-serif font-semibold text-[#E8ECF4]">matheseus.</span>
             <span className="text-[#6382BF]/50">·</span>
             <span>Edexcel A Level & Further Maths Past Papers Archive</span>
