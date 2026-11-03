@@ -1,92 +1,24 @@
 @import "tailwindcss";
 
-:root, [data-theme="espresso"] {
-  --theme-bg-page: #2C2620;
-  --theme-bg-card: #3E362E;
-  --theme-bg-inset: #241F1A;
-  --theme-border: rgba(147, 120, 91, 0.35);
-  --theme-border-strong: rgba(147, 120, 91, 0.6);
-  --theme-text-main: #FAF6F0;
-  --theme-text-muted: #AC8968;
-  --theme-text-subtle: #A69080;
-  --theme-accent: #865D36;
-  --theme-accent-hover: #93785B;
-  --theme-accent-text: #FAF6F0;
-  --theme-accent-light: rgba(134, 93, 54, 0.25);
-  --theme-signal: #C47D3B;
+:root, [data-theme="midnight"] {
+  --theme-bg-page: #0F1729;
+  --theme-bg-card: #1A2540;
+  --theme-bg-inset: #0A1020;
+  --theme-border: rgba(99, 130, 191, 0.25);
+  --theme-border-strong: rgba(99, 130, 191, 0.5);
+  --theme-text-main: #E8ECF4;
+  --theme-text-muted: #7B8FAD;
+  --theme-text-subtle: #5A6E8A;
+  --theme-accent: #4A7BF7;
+  --theme-accent-hover: #6B93F9;
+  --theme-accent-text: #FFFFFF;
+  --theme-accent-light: rgba(74, 123, 247, 0.18);
+  --theme-signal: #F59E42;
   color-scheme: dark;
-}
 
-[data-theme="academic"] {
-  --theme-bg-page: #F9F8F5;
-  --theme-bg-card: #FFFFFF;
-  --theme-bg-inset: #F1ECE1;
-  --theme-border: #E5E2DA;
-  --theme-border-strong: #1A365D;
-  --theme-text-main: #181B1F;
-  --theme-text-muted: #606870;
-  --theme-text-subtle: #8A929B;
-  --theme-accent: #1A365D;
-  --theme-accent-hover: #264A7E;
-  --theme-accent-text: #FFFFFF;
-  --theme-accent-light: rgba(26, 54, 93, 0.12);
-  --theme-signal: #8C2D19;
-  color-scheme: light;
-}
-
-[data-theme="botanical"] {
-  --theme-bg-page: #F4F5F1;
-  --theme-bg-card: #FFFFFF;
-  --theme-bg-inset: #EAEDE6;
-  --theme-border: #DDE2D8;
-  --theme-border-strong: #234739;
-  --theme-text-main: #1E2521;
-  --theme-text-muted: #636F67;
-  --theme-text-subtle: #87948B;
-  --theme-accent: #234739;
-  --theme-accent-hover: #32614E;
-  --theme-accent-text: #FFFFFF;
-  --theme-accent-light: rgba(35, 71, 57, 0.12);
-  --theme-signal: #B86B3E;
-  color-scheme: light;
-}
-
-[data-theme="swiss"] {
-  --theme-bg-page: #FAFAFA;
-  --theme-bg-card: #FFFFFF;
-  --theme-bg-inset: #F0F0F0;
-  --theme-border: #E2E2E2;
-  --theme-border-strong: #111111;
-  --theme-text-main: #0F0F0F;
-  --theme-text-muted: #6B6B6B;
-  --theme-text-subtle: #999999;
-  --theme-accent: #111111;
-  --theme-accent-hover: #2B2B2B;
-  --theme-accent-text: #FFFFFF;
-  --theme-accent-light: rgba(0, 0, 0, 0.08);
-  --theme-signal: #D13426;
-  color-scheme: light;
-}
-
-/* Typography Font Variations */
-:root, [data-font="libre"] {
-  --font-body: 'Libre Franklin', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-serif: 'Libre Baskerville', Georgia, serif;
-}
-
-[data-font="garamond"] {
-  --font-body: 'Newsreader', 'EB Garamond', Georgia, serif;
-  --font-serif: 'EB Garamond', Georgia, serif;
-}
-
-[data-font="technical"] {
-  --font-body: 'Public Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-serif: 'Work Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-}
-
-[data-font="editorial"] {
-  --font-body: 'Libre Franklin', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-serif: 'Literata', Georgia, serif;
+  /* Contemporary Font Theme (Space Grotesk + Fraunces) */
+  --font-body: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Fraunces', Georgia, serif;
 }
 
 @layer base {
@@ -94,7 +26,6 @@
     font-family: var(--font-body);
     background-color: var(--theme-bg-page);
     color: var(--theme-text-main);
-    transition: background-color 0.2s ease, color 0.2s ease;
   }
   
   h1, h2, h3, .font-serif {
@@ -145,11 +76,16 @@ body, [data-theme] {
   color: var(--theme-text-main) !important;
 }
 
+/* ── Background overrides (hardcoded hex → CSS vars) ── */
 [data-theme] .bg-\[\#2C2620\] {
   background-color: var(--theme-bg-inset) !important;
 }
 [data-theme] .bg-\[\#3E362E\] {
   background-color: var(--theme-bg-card) !important;
+}
+[data-theme] .bg-\[\#3E362E\]\/95,
+header {
+  background-color: color-mix(in srgb, var(--theme-bg-card) 95%, transparent) !important;
 }
 [data-theme] .bg-\[\#865D36\] {
   background-color: var(--theme-accent) !important;
@@ -165,6 +101,32 @@ body, [data-theme] {
   background-color: var(--theme-bg-inset) !important;
 }
 
+/* ── Zinc background overrides ── */
+[data-theme] .bg-zinc-950 {
+  background-color: var(--theme-bg-inset) !important;
+}
+[data-theme] .bg-zinc-900 {
+  background-color: var(--theme-bg-inset) !important;
+}
+[data-theme] .bg-zinc-800 {
+  background-color: var(--theme-bg-card) !important;
+}
+[data-theme] .bg-zinc-700 {
+  background-color: var(--theme-bg-card) !important;
+}
+[data-theme] .bg-zinc-200 {
+  background-color: var(--theme-accent) !important;
+  color: var(--theme-accent-text) !important;
+}
+[data-theme] .bg-white {
+  background-color: var(--theme-accent) !important;
+  color: var(--theme-accent-text) !important;
+}
+[data-theme] .bg-black\/80 {
+  background-color: color-mix(in srgb, var(--theme-bg-page) 80%, transparent) !important;
+}
+
+/* ── Hover background overrides (hex) ── */
 [data-theme] .hover\:bg-\[\#865D36\]\/40:hover,
 [data-theme] .hover\:bg-\[\#865D36\]\/30:hover {
   background-color: var(--theme-accent-light) !important;
@@ -188,10 +150,10 @@ body, [data-theme] {
 }
 
 .hover\:bg-\[\#865D36\]:hover svg {
-  color: #FAF6F0 !important;
+  color: var(--theme-accent-text, #E8ECF4) !important;
 }
 .hover\:bg-\[\#93785B\]:hover svg {
-  color: #FAF6F0 !important;
+  color: var(--theme-accent-text, #E8ECF4) !important;
 }
 [data-theme] .hover\:bg-\[\#2C2620\]\/50:hover,
 [data-theme] .hover\:bg-\[\#2C2620\]:hover {
@@ -201,6 +163,21 @@ body, [data-theme] {
   background-color: var(--theme-bg-card) !important;
 }
 
+/* ── Hover background overrides (zinc) ── */
+[data-theme] .hover\:bg-zinc-200:hover {
+  background-color: var(--theme-accent-light) !important;
+}
+[data-theme] .hover\:bg-zinc-700:hover {
+  background-color: var(--theme-bg-card) !important;
+}
+[data-theme] .hover\:bg-zinc-800:hover {
+  background-color: var(--theme-bg-card) !important;
+}
+[data-theme] .hover\:bg-zinc-900:hover {
+  background-color: var(--theme-bg-inset) !important;
+}
+
+/* ── Text overrides (hex) ── */
 [data-theme] .text-\[\#FAF6F0\] {
   color: var(--theme-text-main) !important;
 }
@@ -216,8 +193,56 @@ body, [data-theme] {
 [data-theme] .hover\:text-\[\#FAF6F0\]:hover {
   color: var(--theme-text-main) !important;
 }
+[data-theme] .text-\[\#93785B\] {
+  color: var(--theme-text-subtle) !important;
+}
 
-/* Borders */
+/* ── Text overrides (zinc + white/black) ── */
+[data-theme] .text-white {
+  color: var(--theme-text-main) !important;
+}
+[data-theme] .text-black {
+  color: var(--theme-accent-text) !important;
+}
+[data-theme] .text-zinc-100 {
+  color: var(--theme-text-main) !important;
+}
+[data-theme] .text-zinc-200 {
+  color: var(--theme-text-main) !important;
+}
+[data-theme] .text-zinc-300 {
+  color: var(--theme-text-main) !important;
+}
+[data-theme] .text-zinc-400 {
+  color: var(--theme-text-muted) !important;
+}
+[data-theme] .text-zinc-500 {
+  color: var(--theme-text-subtle) !important;
+}
+[data-theme] .hover\:text-zinc-200:hover {
+  color: var(--theme-text-main) !important;
+}
+[data-theme] .hover\:text-white:hover {
+  color: var(--theme-text-main) !important;
+}
+
+/* ── Selection colours ── */
+[data-theme] .selection\:bg-\[\#865D36\]\/40 ::selection {
+  background-color: var(--theme-accent-light) !important;
+}
+[data-theme] .selection\:text-\[\#FAF6F0\] ::selection {
+  color: var(--theme-text-main) !important;
+}
+
+/* ── Placeholder overrides ── */
+[data-theme] .placeholder-\[\#A69080\]::placeholder {
+  color: var(--theme-text-subtle) !important;
+}
+[data-theme] .placeholder-zinc-500::placeholder {
+  color: var(--theme-text-subtle) !important;
+}
+
+/* ── Border overrides (hex) ── */
 [data-theme] [class*="border-\[\#93785B\]"] {
   border-color: var(--theme-border) !important;
 }
@@ -236,24 +261,43 @@ body, [data-theme] {
   border-color: var(--theme-border) !important;
 }
 
-/* Modal Backdrops for light themes */
-[data-theme="academic"] .bg-\[\#2C2620\]\/85,
-[data-theme="botanical"] .bg-\[\#2C2620\]\/85,
-[data-theme="swiss"] .bg-\[\#2C2620\]\/85 {
-  background-color: rgba(24, 27, 31, 0.55) !important;
+/* ── Border overrides (zinc) ── */
+[data-theme] .border-zinc-800 {
+  border-color: var(--theme-border) !important;
+}
+[data-theme] .border-zinc-700 {
+  border-color: var(--theme-border-strong) !important;
+}
+[data-theme] .border-zinc-600 {
+  border-color: var(--theme-border-strong) !important;
+}
+[data-theme] .border-zinc-300 {
+  border-color: var(--theme-border) !important;
+}
+[data-theme] .hover\:border-zinc-700:hover {
+  border-color: var(--theme-border-strong) !important;
+}
+[data-theme] .focus\:border-zinc-500:focus {
+  border-color: var(--theme-accent) !important;
+}
+[data-theme] .divide-zinc-800 > * + * {
+  border-color: var(--theme-border) !important;
 }
 
-/* Inputs in light themes */
-[data-theme="academic"] input,
-[data-theme="botanical"] input,
-[data-theme="swiss"] input {
-  color: var(--theme-text-main) !important;
+/* ── Ring overrides ── */
+[data-theme] .ring-\[\#865D36\]\/40 {
+  --tw-ring-color: var(--theme-accent) !important;
 }
 
-/* KaTeX formula font color */
+/* ── KaTeX formula font color ── */
 [data-theme] .katex, 
 [data-theme] .katex-display {
   color: var(--theme-text-main) !important;
+}
+
+/* ── Error text (rose) → signal colour ── */
+[data-theme] .text-rose-300 {
+  color: var(--theme-signal) !important;
 }
 
 /* ========================================================
@@ -269,7 +313,7 @@ body, [data-theme] {
   font-size: 1.08em;
   text-rendering: auto;
   line-height: 1.25;
-  color: #FAF6F0;
+  color: var(--theme-text-main, #E8ECF4);
 }
 
 .katex .frac-line {
@@ -314,7 +358,7 @@ body, [data-theme] {
 
 /* ========================================================
    Text Countdown Flip Animation
-   (Libre font text counting down with smooth flip transition)
+   (Text counting down with smooth flip transition)
    ======================================================== */
 .flip-animate-up {
   animation: flipDigitUp 0.28s cubic-bezier(0.2, 0, 0.2, 1) forwards;

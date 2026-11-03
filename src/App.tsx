@@ -7,33 +7,18 @@ import { GradeBoundariesModal } from './components/GradeBoundariesModal';
 import { FormulaBookletModal } from './components/FormulaBookletModal';
 import { InteractiveExamRunner } from './components/InteractiveExamRunner';
 import { getInteractivePaper, InteractivePaper } from './data/interactiveQuestions';
-import { getStoredTheme, applyTheme, ThemeId, getStoredFont, applyFont, FontId } from './utils/theme';
+import { applyTheme, applyFont } from './utils/theme';
 import { Sigma, BarChart3 } from 'lucide-react';
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState<'home' | 'maths' | 'further-maths'>('home');
   const [activeModuleId, setActiveModuleId] = useState<string>('p1');
-  const [currentTheme, setCurrentTheme] = useState<ThemeId>(() => getStoredTheme());
-  const [currentFont, setCurrentFont] = useState<FontId>(() => getStoredFont());
 
-  // Initialize theme and font on mount
+  // Initialize Midnight theme and Contemporary font on mount
   useEffect(() => {
-    applyTheme(currentTheme);
-  }, [currentTheme]);
-
-  useEffect(() => {
-    applyFont(currentFont);
-  }, [currentFont]);
-
-  const handleSelectTheme = (theme: ThemeId) => {
-    setCurrentTheme(theme);
-    applyTheme(theme);
-  };
-
-  const handleSelectFont = (font: FontId) => {
-    setCurrentFont(font);
-    applyFont(font);
-  };
+    applyTheme('midnight');
+    applyFont('space');
+  }, []);
 
   // Modals
   const [pdfModal, setPdfModal] = useState<{
@@ -95,7 +80,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#2C2620] text-[#FAF6F0] flex flex-col font-sans selection:bg-[#865D36]/40 selection:text-[#FAF6F0]">
+    <div className="min-h-screen bg-[#0F1729] text-[#E8ECF4] flex flex-col font-sans selection:bg-[#4A7BF7]/30 selection:text-[#E8ECF4]">
       {/* Top Navbar */}
       <Navbar
         currentTab={currentTab}
@@ -106,10 +91,6 @@ export default function App() {
         }}
         onOpenBoundaries={() => setShowBoundariesModal(true)}
         onOpenFormulas={() => setShowFormulasModal(true)}
-        currentTheme={currentTheme}
-        onSelectTheme={handleSelectTheme}
-        currentFont={currentFont}
-        onSelectFont={handleSelectFont}
       />
 
       {/* Main View */}
@@ -140,26 +121,26 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-[#93785B]/25 bg-[#3E362E] py-6 text-xs text-[#AC8968]">
+      <footer className="border-t border-[#6382BF]/20 bg-[#1A2540] py-6 text-xs text-[#7B8FAD]">
         <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="font-serif font-semibold text-[#FAF6F0]">matheseus</span>
-            <span className="text-[#93785B]">·</span>
+            <span className="font-serif font-semibold text-[#E8ECF4]">matheseus</span>
+            <span className="text-[#6382BF]/50">·</span>
             <span>Edexcel A Level & Further Maths Past Papers Archive</span>
           </div>
           <div className="flex items-center gap-4">
             <button
               onClick={() => setShowFormulasModal(true)}
-              className="hover:text-[#FAF6F0] transition-colors flex items-center gap-1.5"
+              className="hover:text-[#E8ECF4] transition-colors flex items-center gap-1.5"
             >
-              <Sigma size={13} className="text-[#865D36]" />
+              <Sigma size={13} className="text-[#4A7BF7]" />
               <span>Formula Booklets</span>
             </button>
             <button
               onClick={() => setShowBoundariesModal(true)}
-              className="hover:text-[#FAF6F0] transition-colors flex items-center gap-1.5"
+              className="hover:text-[#E8ECF4] transition-colors flex items-center gap-1.5"
             >
-              <BarChart3 size={13} className="text-[#AC8968]" />
+              <BarChart3 size={13} className="text-[#7B8FAD]" />
               <span>Grade Boundaries</span>
             </button>
           </div>
