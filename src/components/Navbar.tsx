@@ -30,7 +30,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span className="w-7 h-7 rounded-lg bg-[#4A7BF7] flex items-center justify-center text-xs font-bold text-white shadow-sm">
               m
             </span>
-            <span className="font-serif font-bold text-lg tracking-tight text-[#E8ECF4]">matheseus</span>
+            <span className="font-serif font-bold text-lg tracking-tight text-[#E8ECF4]">matheseus.</span>
           </button>
 
           {/* Navigation Links: Replaced duplicate subject tabs with Past Papers */}

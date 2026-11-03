@@ -15,8 +15,9 @@ export default function App() {
   const [currentTab, setCurrentTab] = useState<'home' | 'maths' | 'further-maths'>('home');
   const [activeModuleId, setActiveModuleId] = useState<string>('p1');
 
-  // Initialize Midnight theme and Contemporary font on mount
+  // Initialize Midnight theme, Contemporary font, and tab title on mount
   useEffect(() => {
+    document.title = 'matheseus.';
     applyTheme('midnight');
     applyFont('space');
   }, []);
@@ -127,7 +128,7 @@ export default function App() {
       <footer className="border-t border-[#6382BF]/20 bg-[#1A2540] py-6 text-xs text-[#7B8FAD]">
         <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="font-serif font-semibold text-[#E8ECF4]">matheseus</span>
+            <span className="font-serif font-semibold text-[#E8ECF4]">matheseus.</span>
             <span className="text-[#6382BF]/50">·</span>
             <span>Edexcel A Level & Further Maths Past Papers Archive</span>
           </div>

@@ -17,7 +17,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* Intro */}
       <div className="text-center space-y-2">
         <h1 className="text-3xl sm:text-4xl font-serif font-bold tracking-tight text-[#FAF6F0]">
-          matheseus
+          matheseus.
         </h1>
         <p className="text-sm text-[#AC8968] max-w-xl mx-auto">
           Edexcel A Level Maths and Further Maths past papers with mark schemes and practice mode.
