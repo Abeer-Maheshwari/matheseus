@@ -215,68 +215,9 @@ export const INTERACTIVE_PAPERS: Record<string, InteractivePaper> = {
     ]
   }
 };
-export function getInteractivePaper(paperId: string, paperTitle: string, paperCode: string): InteractivePaper {
+export function getInteractivePaper(paperId: string): InteractivePaper | null {
   if (INTERACTIVE_PAPERS[paperId]) {
     return INTERACTIVE_PAPERS[paperId];
   }
-
-  // Generate dynamic 8-question digital paper template for this past paper
-  const questions: InteractiveQuestion[] = [
-    {
-      number: 1,
-      totalMarks: 5,
-      topic: 'Algebra & Proof',
-      contextText: 'A geometric sequence has first term $a = 12$ and common ratio $r = 0.8$.',
-      parts: [
-        { partLabel: '(a)', marks: 2, text: 'Find the 6th term of the sequence, giving your answer to 3 decimal places.', solution: '$$u_6 = ar^5 = 12(0.8)^5 = 12(0.32768) = 3.932$$' },
-        { partLabel: '(b)', marks: 3, text: 'Find the sum to infinity, $S_\\infty$, of the series.', solution: '$$S_\\infty = \\frac{a}{1 - r} = \\frac{12}{1 - 0.8} = \\frac{12}{0.2} = 60$$' }
-      ],
-      fullMarkScheme: '**M1**: Uses $ar^{n-1}$ with $a = 12$ and $r = 0.8$\n**A1**: $3.932$\n**M1**: Uses $\\frac{a}{1 - r}$\n**A1**: $60$',
-      finalAnswer: '$u_6 = 3.932; \\quad S_\\infty = 60$'
-    },
-    {
-      number: 2,
-      totalMarks: 7,
-      topic: 'Calculus - Differential Equations',
-      contextText: 'The rate of increase of a population $P$ at time $t$ years is modelled by $$\\frac{dP}{dt} = 0.05P$$ Given that at $t = 0$, $P = 2000$:',
-      parts: [
-        { partLabel: '(a)', marks: 4, text: 'Solve the differential equation to express $P$ in terms of $t$.', solution: 'Separate variables:\n$$\\int \\frac{1}{P}\\, dP = \\int 0.05\\, dt$$\n$$\\ln P = 0.05t + c$$\n$$P = A e^{0.05t}$$\nAt $t = 0$, $P = 2000 \\implies A = 2000$.\n$$P = 2000 e^{0.05t}$$' },
-        { partLabel: '(b)', marks: 3, text: 'Find the time taken for the population to double.', solution: 'Set $P = 4000$:\n$$4000 = 2000 e^{0.05t} \\implies e^{0.05t} = 2$$\n$$0.05t = \\ln 2 \\implies t = \\frac{\\ln 2}{0.05} = 20\\ln 2 \\approx 13.86\\text{ years}$$' }
-      ],
-      fullMarkScheme: '**M1**: Separates variables correctly\n**A1**: $\\ln P = 0.05t + c$\n**M1**: Applies initial conditions $P(0) = 2000$\n**A1**: $P = 2000e^{0.05t}$\n**M1**: Sets $P = 4000$ and takes natural logs\n**A1**: $t = 20\\ln 2 \\approx 13.9\\text{ years}$',
-      finalAnswer: '$P = 2000e^{0.05t}; \\quad t = 20\\ln 2 \\approx 13.9\\text{ years}$'
-    },
-    {
-      number: 3,
-      totalMarks: 8,
-      topic: 'Integration - Substitution & Area',
-      contextText: 'The diagram shows a sketch of part of the curve with equation $$y = x \\sqrt{4 - x^2}, \\quad 0 \\le x \\le 2$$',
-      parts: [
-        { partLabel: '(a)', marks: 8, text: 'Use the substitution $u = 4 - x^2$ to find the exact area enclosed by the curve, the $x$-axis, and the lines $x = 0$ and $x = 2$.', solution: 'Let $u = 4 - x^2 \\implies du = -2x\\, dx \\implies x\\, dx = -\\frac{1}{2}\\, du$.\nWhen $x = 0, u = 4$.\nWhen $x = 2, u = 0$.\n$$\\text{Area} = \\int_0^2 x\\sqrt{4 - x^2}\\, dx = \\int_4^0 u^{1/2} \\left(-\\frac{1}{2}\\, du\\right) = \\frac{1}{2} \\int_0^4 u^{1/2}\\, du$$\n$$= \\frac{1}{2} \\left[ \\frac{2}{3}u^{3/2} \\right]_0^4 = \\frac{1}{3} (4^{3/2} - 0) = \\frac{1}{3} (8) = \\frac{8}{3}$$' }
-      ],
-      fullMarkScheme: '**B1**: $du = -2x\\, dx$\n**M1**: Full substitution into terms of $u$\n**B1**: Correct limits $u = 4$ to $u = 0$\n**M1**: Integrates $u^{1/2} \\to \\frac{2}{3}u^{3/2}$\n**A1**: Exact area $= \\frac{8}{3}$',
-      finalAnswer: '$\\frac{8}{3}$'
-    },
-    {
-      number: 4,
-      totalMarks: 6,
-      topic: 'Trigonometry - Radians & Sectors',
-      contextText: 'A sector of a circle of radius $r$ cm has angle $\\theta$ radians. The perimeter of the sector is $24$ cm.',
-      parts: [
-        { partLabel: '(a)', marks: 3, text: 'Show that the area of the sector, $A$ cm$^2$, is given by $A = 12r - r^2$.', solution: 'Perimeter $= 2r + r\\theta = 24 \\implies r\\theta = 24 - 2r \\implies \\theta = \\frac{24 - 2r}{r}$.\n$$\\text{Area } A = \\frac{1}{2}r^2\\theta = \\frac{1}{2}r^2 \\left(\\frac{24 - 2r}{r}\\right) = \\frac{1}{2}r(24 - 2r) = 12r - r^2$$' },
-        { partLabel: '(b)', marks: 3, text: 'Find the maximum area of the sector and the corresponding value of $r$.', solution: 'Complete the square or differentiate:\n$$\\frac{dA}{dr} = 12 - 2r = 0 \\implies r = 6$$\n$$A_{\\max} = 12(6) - 6^2 = 72 - 36 = 36\\text{ cm}^2$$\n$\\frac{d^2A}{dr^2} = -2 < 0 \\implies$ Maximum.' }
-      ],
-      fullMarkScheme: '**B1**: $2r + r\\theta = 24$\n**M1**: Substitutes $\\theta$ into $A = \\frac{1}{2}r^2\\theta$\n**A1**: Reaches $A = 12r - r^2$ convincingly\n**M1**: Differentiates to $12 - 2r = 0$\n**A1**: $r = 6$\n**A1**: $A = 36\\text{ cm}^2$',
-      finalAnswer: '$r = 6\\text{ cm}, \\quad A_{\\max} = 36\\text{ cm}^2$'
-    }
-  ];
-
-  return {
-    id: paperId,
-    paperCode,
-    title: paperTitle,
-    durationMinutes: 120,
-    totalMarks: questions.reduce((acc, q) => acc + q.totalMarks, 0),
-    questions
-  };
+  return null;
 }

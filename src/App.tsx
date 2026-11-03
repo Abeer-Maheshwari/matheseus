@@ -8,6 +8,7 @@ import { FormulaBookletModal } from './components/FormulaBookletModal';
 import { InteractiveExamRunner } from './components/InteractiveExamRunner';
 import { ExamTimerModal } from './components/ExamTimerModal';
 import { getInteractivePaper, InteractivePaper } from './data/interactiveQuestions';
+import { PaperEntry, ModuleSection } from './data/papersData';
 import { applyTheme, applyFont } from './utils/theme';
 import { Sigma, BarChart3 } from 'lucide-react';
 
@@ -27,7 +28,11 @@ export default function App() {
     title: string;
     qpUrl: string;
     msUrl?: string;
-    mode: 'split' | 'single';
+    mode: 'split' | 'single' | 'qp' | 'ms';
+    isPractice?: boolean;
+    paperId?: string;
+    durationMinutes?: number;
+    totalMarks?: number;
   } | null>(null);
 
   const [activeInteractivePaper, setActiveInteractivePaper] = useState<InteractivePaper | null>(null);
@@ -70,12 +75,29 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
-  const handleLaunchInteractive = (paperId: string, title: string, code: string) => {
-    const paper = getInteractivePaper(paperId, title, code);
-    setActiveInteractivePaper(paper);
+  const handleLaunchPractice = (paper: PaperEntry, module: ModuleSection) => {
+    // If digitized interactive questions exist for this exact paper
+    const interactive = getInteractivePaper(paper.id);
+    if (interactive) {
+      setActiveInteractivePaper(interactive);
+      return;
+    }
+
+    // Launch authentic Exam Practice Mode with official paper PDF, timer, and self-marking
+    const isFM = module.subject === 'further-maths';
+    setPdfModal({
+      title: `${paper.season} ${paper.year} · ${module.title} (${module.code})`,
+      qpUrl: paper.qpUrl,
+      msUrl: paper.msUrl,
+      mode: 'qp',
+      isPractice: true,
+      paperId: paper.id,
+      durationMinutes: isFM ? 90 : 120,
+      totalMarks: isFM ? 75 : 100,
+    });
   };
 
-  const handleSaveInteractiveScore = (paperId: string, score: number, maxScore: number) => {
+  const handleSaveScore = (paperId: string) => {
     setCompletedMap((prev) => ({
       ...prev,
       [paperId]: true,
@@ -117,7 +139,7 @@ export default function App() {
             onOpenSingleDoc={(title, url) =>
               setPdfModal({ title, qpUrl: url, mode: 'single' })
             }
-            onOpenInteractive={handleLaunchInteractive}
+            onOpenPractice={handleLaunchPractice}
             completedMap={completedMap}
             onToggleCompleted={handleToggleCompleted}
           />
@@ -151,22 +173,27 @@ export default function App() {
         </div>
       </footer>
 
-      {/* Interactive Question-by-Question Exam Runner */}
+      {/* Interactive Question-by-Question Exam Runner (for papers with digitized questions) */}
       {activeInteractivePaper && (
         <InteractiveExamRunner
           paper={activeInteractivePaper}
           onClose={() => setActiveInteractivePaper(null)}
-          onSaveResult={handleSaveInteractiveScore}
+          onSaveResult={handleSaveScore}
         />
       )}
 
-      {/* PDF Modal (Split or Single View) */}
+      {/* PDF Modal (Split, Single, or Exam Practice View) */}
       {pdfModal && (
         <SplitPdfModal
           title={pdfModal.title}
           qpUrl={pdfModal.qpUrl}
           msUrl={pdfModal.msUrl}
           initialMode={pdfModal.mode}
+          isPractice={pdfModal.isPractice}
+          paperId={pdfModal.paperId}
+          durationMinutes={pdfModal.durationMinutes}
+          totalMarks={pdfModal.totalMarks}
+          onSaveScore={handleSaveScore}
           onClose={() => setPdfModal(null)}
         />
       )}
