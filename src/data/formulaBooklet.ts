@@ -1,127 +1,198 @@
-export interface FormulaSection {
+export interface FormulaItem {
+  name: string;
+  latex: string;
+  notes?: string;
+  category: string;
+}
+
+export interface FormulaCategory {
   title: string;
-  category: 'Pure Mathematics' | 'Further Pure Mathematics' | 'Mechanics' | 'Statistics';
-  formulas: {
-    name: string;
-    latex: string;
-    notes?: string;
+  qualification: 'A Level Mathematics' | 'Further Mathematics';
+  sections: {
+    sectionTitle: string;
+    items: FormulaItem[];
   }[];
 }
 
-export const FORMULA_BOOKLET_DATA: FormulaSection[] = [
+export const FORMULA_BOOKLET_CATEGORIES: FormulaCategory[] = [
+  // ==========================================
+  // PURE MATHEMATICS
+  // ==========================================
   {
-    category: 'Pure Mathematics',
-    title: 'Binomial Series',
-    formulas: [
+    title: 'Pure Mathematics',
+    qualification: 'A Level Mathematics',
+    sections: [
       {
-        name: 'Binomial Expansion (n in Q)',
-        latex: '(1 + x)^n = 1 + n x + \\frac{n(n-1)}{2!} x^2 + \\dots + \\frac{n(n-1)\\dots(n-r+1)}{r!} x^r + \\dots',
-        notes: 'Valid for |x| < 1, n in R'
+        sectionTitle: 'Binomial Series',
+        items: [
+          {
+            name: 'Binomial Expansion (n ∈ ℝ)',
+            latex: '(1 + x)^n = 1 + n x + \\frac{n(n-1)}{2!} x^2 + \\dots + \\frac{n(n-1)\\dots(n-r+1)}{r!} x^r + \\dots',
+            notes: 'Valid for |x| < 1, n ∈ ℝ',
+            category: 'Pure Mathematics'
+          },
+          {
+            name: 'Arithmetic Series',
+            latex: 'u_n = a + (n-1)d, \\quad S_n = \\frac{1}{2}n(2a + (n-1)d) = \\frac{1}{2}n(a + l)',
+            notes: 'a = first term, d = common difference, l = last term',
+            category: 'Pure Mathematics'
+          },
+          {
+            name: 'Geometric Series',
+            latex: 'u_n = a r^{n-1}, \\quad S_n = \\frac{a(1-r^n)}{1-r}, \\quad S_\\infty = \\frac{a}{1-r} \\text{ for } |r| < 1',
+            notes: 'Infinite sum exists if and only if |r| < 1',
+            category: 'Pure Mathematics'
+          }
+        ]
       },
       {
-        name: 'Arithmetic Series',
-        latex: 'u_n = a + (n-1)d, \\quad S_n = \\frac{1}{2}n(2a + (n-1)d) = \\frac{1}{2}n(a + l)',
-        notes: 'Sum of first n terms'
+        sectionTitle: 'Trigonometric Identities',
+        items: [
+          {
+            name: 'Compound Angle Formulae',
+            latex: '\\begin{aligned} \\sin(A \\pm B) &= \\sin A \\cos B \\pm \\cos A \\sin B \\\\ \\cos(A \\pm B) &= \\cos A \\cos B \\mp \\sin A \\sin B \\\\ \\tan(A \\pm B) &= \\frac{\\tan A \\pm \\tan B}{1 \\mp \\tan A \\tan B} \\end{aligned}',
+            notes: 'Exact identities for sum/difference of angles',
+            category: 'Pure Mathematics'
+          },
+          {
+            name: 'Small Angle Approximations',
+            latex: '\\sin\\theta \\approx \\theta, \\quad \\cos\\theta \\approx 1 - \\frac{\\theta^2}{2}, \\quad \\tan\\theta \\approx \\theta',
+            notes: 'θ must be in radians, θ ≪ 1',
+            category: 'Pure Mathematics'
+          }
+        ]
       },
       {
-        name: 'Geometric Series',
-        latex: 'u_n = a r^{n-1}, \\quad S_n = \\frac{a(1-r^n)}{1-r}, \\quad S_\\infty = \\frac{a}{1-r} \\text{ for } |r| < 1',
-        notes: 'Infinite sum exists if |r| < 1'
+        sectionTitle: 'Differentiation & Integration',
+        items: [
+          {
+            name: 'Quotient Rule',
+            latex: '\\frac{d}{dx}\\left(\\frac{u}{v}\\right) = \\frac{v \\frac{du}{dx} - u \\frac{dv}{dx}}{v^2}',
+            notes: 'Where u and v are functions of x, v ≠ 0',
+            category: 'Pure Mathematics'
+          },
+          {
+            name: 'Integration by Parts',
+            latex: '\\int u \\frac{dv}{dx}\\, dx = u v - \\int v \\frac{du}{dx}\\, dx',
+            notes: 'L-I-A-T-E rule of thumb for choice of u',
+            category: 'Pure Mathematics'
+          },
+          {
+            name: 'Standard Integrals',
+            latex: '\\begin{aligned} \\int \\tan x\\, dx &= \\ln|\\sec x| + C \\\\ \\int \\sec x\\, dx &= \\ln|\\sec x + \\tan x| + C \\\\ \\int \\cot x\\, dx &= \\ln|\\sin x| + C \\\\ \\int \\csc x\\, dx &= -\\ln|\\csc x + \\cot x| + C \\end{aligned}',
+            notes: 'Standard trigonometric anti-derivatives',
+            category: 'Pure Mathematics'
+          }
+        ]
       }
     ]
   },
+  // ==========================================
+  // FURTHER MATHEMATICS
+  // ==========================================
   {
-    category: 'Pure Mathematics',
-    title: 'Trigonometry & Identities',
-    formulas: [
+    title: 'Further Mathematics',
+    qualification: 'Further Mathematics',
+    sections: [
       {
-        name: 'Compound Angle Formulas',
-        latex: '\\sin(A \\pm B) = \\sin A \\cos B \\pm \\cos A \\sin B\n\\cos(A \\pm B) = \\cos A \\cos B \\mp \\sin A \\sin B\n\\tan(A \\pm B) = \\frac{\\tan A \\pm \\tan B}{1 \\mp \\tan A \\tan B}',
-        notes: 'For angles A and B'
+        sectionTitle: 'Hyperbolic Functions',
+        items: [
+          {
+            name: 'Definitions of Hyperbolic Functions',
+            latex: '\\sinh x = \\frac{e^x - e^{-x}}{2}, \\quad \\cosh x = \\frac{e^x + e^{-x}}{2}, \\quad \\tanh x = \\frac{\\sinh x}{\\cosh x}',
+            notes: 'Fundamental definitions in exponential form',
+            category: 'Further Mathematics'
+          },
+          {
+            name: 'Inverse Hyperbolic Functions',
+            latex: '\\begin{aligned} \\operatorname{arcosh} x &= \\ln(x + \\sqrt{x^2 - 1}) \\quad (x \\ge 1) \\\\ \\operatorname{arsinh} x &= \\ln(x + \\sqrt{x^2 + 1}) \\\\ \\operatorname{artanh} x &= \\frac{1}{2}\\ln\\left(\\frac{1+x}{1-x}\\right) \\quad (|x| < 1) \\end{aligned}',
+            notes: 'Logarithmic equivalents',
+            category: 'Further Mathematics'
+          }
+        ]
       },
       {
-        name: 'Double Angle Formulas',
-        latex: '\\sin(2A) = 2 \\sin A \\cos A\n\\cos(2A) = \\cos^2 A - \\sin^2 A = 2\\cos^2 A - 1 = 1 - 2\\sin^2 A\n\\tan(2A) = \\frac{2\\tan A}{1 - \\tan^2 A}',
-        notes: 'Fundamental for integration'
+        sectionTitle: 'Complex Numbers & Series',
+        items: [
+          {
+            name: "De Moivre's Theorem",
+            latex: '[r(\\cos\\theta + i\\sin\\theta)]^n = r^n(\\cos n\\theta + i\\sin n\\theta) = r^n e^{i n\\theta}',
+            notes: 'Valid for all rational n',
+            category: 'Further Mathematics'
+          },
+          {
+            name: 'Maclaurin and Taylor Series',
+            latex: 'f(x) = f(0) + f\'(0)x + \\frac{f\'\'(0)}{2!}x^2 + \\dots + \\frac{f^{(r)}(0)}{r!}x^r + \\dots',
+            notes: 'Series expansion about x = 0',
+            category: 'Further Mathematics'
+          },
+          {
+            name: 'Standard Series Expansions',
+            latex: '\\begin{aligned} e^x &= 1 + x + \\frac{x^2}{2!} + \\dots + \\frac{x^r}{r!} + \\dots \\quad (\\text{all } x) \\\\ \\ln(1+x) &= x - \\frac{x^2}{2} + \\frac{x^3}{3} - \\dots + (-1)^{r+1}\\frac{x^r}{r} + \\dots \\quad (-1 < x \\le 1) \\\\ \\sin x &= x - \\frac{x^3}{3!} + \\frac{x^5}{5!} - \\dots \\quad (\\text{all } x) \\\\ \\cos x &= 1 - \\frac{x^2}{2!} + \\frac{x^4}{4!} - \\dots \\quad (\\text{all } x) \\end{aligned}',
+            notes: 'Valid ranges as specified',
+            category: 'Further Mathematics'
+          }
+        ]
       },
       {
-        name: 'Small Angle Approximations',
-        latex: '\\sin \\theta \\approx \\theta, \\quad \\cos \\theta \\approx 1 - \\frac{\\theta^2}{2}, \\quad \\tan \\theta \\approx \\theta',
-        notes: 'theta must be in radians, theta << 1'
+        sectionTitle: 'Matrices & Vectors',
+        items: [
+          {
+            name: 'Matrix Inversion (2×2 and 3×3)',
+            latex: 'A = \\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix} \\implies A^{-1} = \\frac{1}{ad - bc} \\begin{pmatrix} d & -b \\\\ -c & a \\end{pmatrix}',
+            notes: 'Determinant det(A) = ad - bc ≠ 0',
+            category: 'Further Mathematics'
+          },
+          {
+            name: 'Vector Cross Product',
+            latex: '\\mathbf{a} \\times \\mathbf{b} = |\\mathbf{a}||\\mathbf{b}|\\sin\\theta\\, \\mathbf{\\hat{n}} = \\begin{vmatrix} \\mathbf{i} & \\mathbf{j} & \\mathbf{k} \\\\ a_1 & a_2 & a_3 \\\\ b_1 & b_2 & b_3 \\end{vmatrix}',
+            notes: 'Perpendicular to both a and b',
+            category: 'Further Mathematics'
+          }
+        ]
       }
     ]
   },
+  // ==========================================
+  // STATISTICS & MECHANICS
+  // ==========================================
   {
-    category: 'Pure Mathematics',
-    title: 'Differentiation & Integration',
-    formulas: [
+    title: 'Statistics & Mechanics',
+    qualification: 'A Level Mathematics',
+    sections: [
       {
-        name: 'Quotient Rule',
-        latex: '\\frac{d}{dx}\\left(\\frac{u}{v}\\right) = \\frac{v\\frac{du}{dx} - u\\frac{dv}{dx}}{v^2}',
-        notes: 'Function v != 0'
+        sectionTitle: 'Statistical Distributions',
+        items: [
+          {
+            name: 'Discrete Probability & Expectation',
+            latex: 'E(X) = \\mu = \\sum x P(X = x), \\quad \\operatorname{Var}(X) = \\sigma^2 = \\sum (x - \\mu)^2 P(X = x) = E(X^2) - [E(X)]^2',
+            notes: 'Discrete random variable X',
+            category: 'Statistics & Mechanics'
+          },
+          {
+            name: 'Binomial & Normal Distributions',
+            latex: 'X \\sim B(n, p) \\implies E(X) = np, \\; \\operatorname{Var}(X) = np(1-p) \\\\ Z = \\frac{X - \\mu}{\\sigma} \\sim N(0, 1) \\quad \\text{or} \\quad Z = \\frac{\\bar{X} - \\mu}{\\sigma / \\sqrt{n}}',
+            notes: 'Standardised normal variable Z',
+            category: 'Statistics & Mechanics'
+          }
+        ]
       },
       {
-        name: 'Integration by Parts',
-        latex: '\\int u \\frac{dv}{dx}\\, dx = u v - \\int v \\frac{du}{dx}\\, dx',
-        notes: 'L-I-A-T-E priority order for u'
-      },
-      {
-        name: 'Standard Integrals',
-        latex: '\\int \\tan x\\, dx = \\ln|\\sec x|\n\\int \\sec x\\, dx = \\ln|\\sec x + \\tan x|\n\\int \\cot x\\, dx = \\ln|\\sin x|\n\\int \\csc x\\, dx = -\\ln|\\csc x + \\cot x|',
-        notes: 'All with + C'
-      }
-    ]
-  },
-  {
-    category: 'Further Pure Mathematics',
-    title: 'Hyperbolic Functions & Series',
-    formulas: [
-      {
-        name: 'Hyperbolic Definitions',
-        latex: '\\sinh x = \\frac{e^x - e^{-x}}{2}, \\quad \\cosh x = \\frac{e^x + e^{-x}}{2}, \\quad \\tanh x = \\frac{\\sinh x}{\\cosh x}',
-        notes: 'Osborns Rule: replace cos with cosh, sin with sinh (and sin*sin with -sinh*sinh)'
-      },
-      {
-        name: 'Maclaurin Series',
-        latex: 'f(x) = f(0) + f\'(0)x + \\frac{f\'\'(0)}{2!}x^2 + \\dots + \\frac{f^{(r)}(0)}{r!}x^r + \\dots',
-        notes: 'Taylor series expanded around zero'
-      },
-      {
-        name: 'De Moivre\'s Theorem',
-        latex: '(\\cos \\theta + i \\sin \\theta)^n = \\cos(n\\theta) + i \\sin(n\\theta)',
-        notes: 'Valid for all rational n'
-      }
-    ]
-  },
-  {
-    category: 'Mechanics',
-    title: 'Kinematics & Dynamics',
-    formulas: [
-      {
-        name: 'Constant Acceleration (SUVAT)',
-        latex: 'v = u + at, \\quad s = \\frac{u+v}{2}t, \\quad s = ut + \\frac{1}{2}at^2, \\quad v^2 = u^2 + 2as, \\quad s = vt - \\frac{1}{2}at^2',
-        notes: 'Valid only for constant acceleration a'
-      },
-      {
-        name: 'Center of Mass & Work Energy',
-        latex: 'W = F s, \\quad P = F v, \\quad E_k = \\frac{1}{2} m v^2, \\quad E_p = m g h',
-        notes: 'g = 9.8 m/s^2'
-      }
-    ]
-  },
-  {
-    category: 'Statistics',
-    title: 'Probability Distributions',
-    formulas: [
-      {
-        name: 'Binomial Distribution',
-        latex: 'X \\sim B(n, p) \\implies P(X = r) = \\binom{n}{r} p^r (1-p)^{n-r}, \\quad E(X) = n p, \\quad \\mathrm{Var}(X) = n p (1-p)',
-        notes: 'Independent trials with constant probability p'
-      },
-      {
-        name: 'Normal Distribution Standardisation',
-        latex: 'Z = \\frac{X - \\mu}{\\sigma} \\sim N(0, 1)',
-        notes: 'For sample mean: Z = (X_bar - mu) / (sigma / sqrt(n))'
+        sectionTitle: 'Mechanics Formulae',
+        items: [
+          {
+            name: 'Constant Acceleration (SUVAT)',
+            latex: '\\begin{aligned} v &= u + at \\\\ s &= ut + \\frac{1}{2}at^2 \\\\ s &= \\frac{1}{2}(u + v)t \\\\ v^2 &= u^2 + 2as \\\\ s &= vt - \\frac{1}{2}at^2 \\end{aligned}',
+            notes: 'Applicable when acceleration a is constant',
+            category: 'Statistics & Mechanics'
+          },
+          {
+            name: 'Dynamics & Work-Energy',
+            latex: '\\mathbf{F} = m\\mathbf{a}, \\quad W = \\mathbf{F} \\cdot \\mathbf{s}, \\quad E_k = \\frac{1}{2}mv^2, \\quad E_p = mgh, \\quad P = \\mathbf{F} \\cdot \\mathbf{v}',
+            notes: 'g = 9.8 m/s²',
+            category: 'Statistics & Mechanics'
+          }
+        ]
       }
     ]
   }

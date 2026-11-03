@@ -5,6 +5,8 @@ import { PapersView } from './components/PapersView';
 import { SplitPdfModal } from './components/SplitPdfModal';
 import { GradeBoundariesModal } from './components/GradeBoundariesModal';
 import { FormulaBookletModal } from './components/FormulaBookletModal';
+import { InteractiveExamRunner } from './components/InteractiveExamRunner';
+import { getInteractivePaper, InteractivePaper } from './data/interactiveQuestions';
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState<'home' | 'maths' | 'further-maths'>('home');
@@ -18,6 +20,7 @@ export default function App() {
     mode: 'split' | 'single';
   } | null>(null);
 
+  const [activeInteractivePaper, setActiveInteractivePaper] = useState<InteractivePaper | null>(null);
   const [showBoundariesModal, setShowBoundariesModal] = useState(false);
   const [showFormulasModal, setShowFormulasModal] = useState(false);
 
@@ -56,6 +59,18 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
+  const handleLaunchInteractive = (paperId: string, title: string, code: string) => {
+    const paper = getInteractivePaper(paperId, title, code);
+    setActiveInteractivePaper(paper);
+  };
+
+  const handleSaveInteractiveScore = (paperId: string, score: number, maxScore: number) => {
+    setCompletedMap((prev) => ({
+      ...prev,
+      [paperId]: true,
+    }));
+  };
+
   return (
     <div className="min-h-screen bg-black text-zinc-100 flex flex-col font-sans">
       {/* Top Navbar */}
@@ -90,6 +105,7 @@ export default function App() {
             onOpenSingleDoc={(title, url) =>
               setPdfModal({ title, qpUrl: url, mode: 'single' })
             }
+            onOpenInteractive={handleLaunchInteractive}
             completedMap={completedMap}
             onToggleCompleted={handleToggleCompleted}
           />
@@ -115,7 +131,16 @@ export default function App() {
         </div>
       </footer>
 
-      {/* PDF Modal */}
+      {/* Interactive Question-by-Question Exam Runner */}
+      {activeInteractivePaper && (
+        <InteractiveExamRunner
+          paper={activeInteractivePaper}
+          onClose={() => setActiveInteractivePaper(null)}
+          onSaveResult={handleSaveInteractiveScore}
+        />
+      )}
+
+      {/* PDF Modal (Split or Single View) */}
       {pdfModal && (
         <SplitPdfModal
           title={pdfModal.title}

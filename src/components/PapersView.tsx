@@ -8,6 +8,7 @@ interface PapersViewProps {
   onSelectModule: (moduleId: string) => void;
   onOpenSplitView: (title: string, qpUrl: string, msUrl: string) => void;
   onOpenSingleDoc: (title: string, url: string) => void;
+  onOpenInteractive: (paperId: string, title: string, code: string) => void;
   completedMap: Record<string, boolean>;
   onToggleCompleted: (paperId: string) => void;
 }
@@ -19,6 +20,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
   onSelectModule,
   onOpenSplitView,
   onOpenSingleDoc,
+  onOpenInteractive,
   completedMap,
   onToggleCompleted,
 }) => {
@@ -27,7 +29,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      {/* Subject Header Tabs */}
+      {/* Subject Selector */}
       <div className="flex items-center gap-2 border-b border-zinc-800 pb-3 mb-6">
         <button
           onClick={() => {
@@ -58,7 +60,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
         </button>
       </div>
 
-      {/* Subsections: Module Selection */}
+      {/* Subsections: Module Navigation */}
       <div className="mb-6">
         <div className="text-xs text-zinc-400 font-medium mb-2 uppercase tracking-wider">
           Select Module:
@@ -84,7 +86,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
         </div>
       </div>
 
-      {/* Module Paper List Table */}
+      {/* Paper List */}
       <div className="border border-zinc-800 rounded-lg overflow-hidden bg-zinc-950">
         <div className="px-4 py-3 border-b border-zinc-800 bg-zinc-900 flex items-center justify-between">
           <div>
@@ -92,7 +94,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
             <p className="text-xs text-zinc-400 font-mono">{activeModule.code} past examination papers</p>
           </div>
           <span className="text-xs text-zinc-400 font-mono">
-            {activeModule.papers.length} papers available
+            {activeModule.papers.length} papers
           </span>
         </div>
 
@@ -100,9 +102,9 @@ export const PapersView: React.FC<PapersViewProps> = ({
           <thead>
             <tr className="border-b border-zinc-800 bg-zinc-900/60 text-zinc-400 text-[11px] font-semibold uppercase tracking-wider">
               <th className="py-2.5 px-4">Series</th>
-              <th className="py-2.5 px-4 text-center">Question Paper</th>
-              <th className="py-2.5 px-4 text-center">Mark Scheme</th>
-              <th className="py-2.5 px-4 text-center">Review</th>
+              <th className="py-2.5 px-4 text-center">Interactive (Web Mode)</th>
+              <th className="py-2.5 px-4 text-center">PDF Version</th>
+              <th className="py-2.5 px-4 text-center">Split View</th>
               <th className="py-2.5 px-4 text-right">Status</th>
             </tr>
           </thead>
@@ -118,37 +120,49 @@ export const PapersView: React.FC<PapersViewProps> = ({
                     {paper.season} {paper.year}
                   </td>
 
-                  {/* Question Paper Button */}
+                  {/* Website Version: Question by Question mode */}
                   <td className="py-3 px-4 text-center">
                     <button
-                      onClick={() => onOpenSingleDoc(`${paperTitle} — QP`, paper.qpUrl)}
-                      className="px-2.5 py-1 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 font-medium"
+                      onClick={() => onOpenInteractive(paper.id, paperTitle, activeModule.code)}
+                      className="px-3 py-1 rounded bg-zinc-100 hover:bg-white text-black font-semibold border border-zinc-200"
+                      title="Launch Question-by-Question Website Mode"
                     >
-                      QP
+                      Web Mode
                     </button>
                   </td>
 
-                  {/* Mark Scheme Button */}
+                  {/* PDF Version: QP & MS */}
                   <td className="py-3 px-4 text-center">
-                    <button
-                      onClick={() => onOpenSingleDoc(`${paperTitle} — MS`, paper.msUrl)}
-                      className="px-2.5 py-1 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 font-medium"
-                    >
-                      MS
-                    </button>
+                    <div className="inline-flex items-center gap-1.5">
+                      <button
+                        onClick={() => onOpenSingleDoc(`${paperTitle} — QP`, paper.qpUrl)}
+                        className="px-2.5 py-1 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-800 font-medium"
+                        title="View Question Paper PDF"
+                      >
+                        QP
+                      </button>
+                      <button
+                        onClick={() => onOpenSingleDoc(`${paperTitle} — MS`, paper.msUrl)}
+                        className="px-2.5 py-1 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-800 font-medium"
+                        title="View Mark Scheme PDF"
+                      >
+                        MS
+                      </button>
+                    </div>
                   </td>
 
-                  {/* Split Screen Button */}
+                  {/* Split Screen PDF Button */}
                   <td className="py-3 px-4 text-center">
                     <button
                       onClick={() => onOpenSplitView(paperTitle, paper.qpUrl, paper.msUrl)}
-                      className="px-3 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-white font-medium border border-zinc-700"
+                      className="px-2.5 py-1 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white font-medium border border-zinc-800"
+                      title="View Question Paper and Mark Scheme side-by-side"
                     >
                       Split View
                     </button>
                   </td>
 
-                  {/* Done Checkbox */}
+                  {/* Done status */}
                   <td className="py-3 px-4 text-right">
                     <button
                       onClick={() => onToggleCompleted(paper.id)}
@@ -158,7 +172,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
                           : 'bg-zinc-950 text-zinc-400 hover:text-zinc-200 border-zinc-800'
                       }`}
                     >
-                      {isDone ? 'Completed' : 'Mark Done'}
+                      {isDone ? 'Done' : 'Mark Done'}
                     </button>
                   </td>
                 </tr>
