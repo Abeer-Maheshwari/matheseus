@@ -63,35 +63,35 @@ export const Navbar: React.FC<NavbarProps> = ({
           <nav className="flex items-center gap-1.5 text-xs font-medium">
             <button
               onClick={() => onNavigate('home')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors ${
+              className={`group flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors ${
                 currentTab === 'home'
                   ? 'bg-[#2C2620] text-[#FAF6F0] font-semibold border border-[#93785B]/50 shadow-sm'
                   : 'text-[#AC8968] hover:text-[#FAF6F0] hover:bg-[#2C2620]/50'
               }`}
             >
-              <Home size={14} className={currentTab === 'home' ? 'text-[#865D36]' : 'text-[#A69080]'} />
+              <Home size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100" />
               <span>Home</span>
             </button>
             <button
               onClick={() => onNavigate('maths')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors ${
+              className={`group flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors ${
                 currentTab === 'maths'
                   ? 'bg-[#2C2620] text-[#FAF6F0] font-semibold border border-[#93785B]/50 shadow-sm'
                   : 'text-[#AC8968] hover:text-[#FAF6F0] hover:bg-[#2C2620]/50'
               }`}
             >
-              <GraduationCap size={14} className={currentTab === 'maths' ? 'text-[#865D36]' : 'text-[#A69080]'} />
+              <GraduationCap size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100" />
               <span>A Level Maths</span>
             </button>
             <button
               onClick={() => onNavigate('further-maths')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors ${
+              className={`group flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors ${
                 currentTab === 'further-maths'
                   ? 'bg-[#2C2620] text-[#FAF6F0] font-semibold border border-[#93785B]/50 shadow-sm'
                   : 'text-[#AC8968] hover:text-[#FAF6F0] hover:bg-[#2C2620]/50'
               }`}
             >
-              <Layers size={14} className={currentTab === 'further-maths' ? 'text-[#865D36]' : 'text-[#A69080]'} />
+              <Layers size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100" />
               <span>Further Maths</span>
             </button>
           </nav>
@@ -101,17 +101,17 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="flex items-center gap-2 text-xs">
           <button
             onClick={onOpenFormulas}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[#FAF6F0] bg-[#2C2620] hover:bg-[#865D36] border border-[#93785B]/40 font-medium transition-colors"
+            className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[#FAF6F0] bg-[#2C2620] hover:bg-[#865D36] border border-[#93785B]/40 font-medium transition-colors"
           >
-            <Sigma size={14} className="text-[#AC8968]" />
+            <Sigma size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100" />
             <span className="hidden sm:inline">Formulae</span>
           </button>
 
           <button
             onClick={onOpenBoundaries}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[#FAF6F0] bg-[#2C2620] hover:bg-[#865D36] border border-[#93785B]/40 font-medium transition-colors"
+            className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[#FAF6F0] bg-[#2C2620] hover:bg-[#865D36] border border-[#93785B]/40 font-medium transition-colors"
           >
-            <BarChart3 size={14} className="text-[#865D36]" />
+            <BarChart3 size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100" />
             <span className="hidden sm:inline">Boundaries</span>
           </button>
 
@@ -122,10 +122,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setShowThemeMenu(!showThemeMenu);
                 setShowFontMenu(false);
               }}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[#FAF6F0] bg-[#2C2620] hover:bg-[#865D36] border border-[#93785B]/40 font-medium transition-colors"
+              className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[#FAF6F0] bg-[#2C2620] hover:bg-[#865D36] border border-[#93785B]/40 font-medium transition-colors"
               title="Change theme palette"
             >
-              <Palette size={14} className="text-[#865D36]" />
+              <Palette size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100" />
               <span className="hidden lg:inline text-[11px]">{activeThemeMeta.name}</span>
             </button>
 
@@ -174,10 +174,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setShowFontMenu(!showFontMenu);
                 setShowThemeMenu(false);
               }}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[#FAF6F0] bg-[#2C2620] hover:bg-[#865D36] border border-[#93785B]/40 font-medium transition-colors"
+              className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[#FAF6F0] bg-[#2C2620] hover:bg-[#865D36] border border-[#93785B]/40 font-medium transition-colors"
               title="Change typography font"
             >
-              <Type size={14} className="text-[#AC8968]" />
+              <Type size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100" />
               <span className="hidden lg:inline text-[11px]">{activeFontMeta.name}</span>
             </button>
 

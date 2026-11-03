@@ -173,9 +173,25 @@ body, [data-theme] {
   background-color: var(--theme-accent) !important;
   color: var(--theme-accent-text) !important;
 }
+[data-theme] .hover\:bg-\[\#865D36\]:hover svg,
+[data-theme] .hover\:bg-\[\#865D36\]:hover * {
+  color: var(--theme-accent-text) !important;
+}
+
 [data-theme] .hover\:bg-\[\#93785B\]:hover {
   background-color: var(--theme-accent-hover) !important;
   color: var(--theme-accent-text) !important;
+}
+[data-theme] .hover\:bg-\[\#93785B\]:hover svg,
+[data-theme] .hover\:bg-\[\#93785B\]:hover * {
+  color: var(--theme-accent-text) !important;
+}
+
+.hover\:bg-\[\#865D36\]:hover svg {
+  color: #FAF6F0 !important;
+}
+.hover\:bg-\[\#93785B\]:hover svg {
+  color: #FAF6F0 !important;
 }
 [data-theme] .hover\:bg-\[\#2C2620\]\/50:hover,
 [data-theme] .hover\:bg-\[\#2C2620\]:hover {
