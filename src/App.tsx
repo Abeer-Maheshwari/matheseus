@@ -7,7 +7,7 @@ import { GradeBoundariesModal } from './components/GradeBoundariesModal';
 import { FormulaBookletModal } from './components/FormulaBookletModal';
 import { InteractiveExamRunner } from './components/InteractiveExamRunner';
 import { getInteractivePaper, InteractivePaper } from './data/interactiveQuestions';
-import { Sigma, BarChart3, GraduationCap } from 'lucide-react';
+import { Sigma, BarChart3 } from 'lucide-react';
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState<'home' | 'maths' | 'further-maths'>('home');
@@ -73,7 +73,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-sky-500/30 selection:text-white">
+    <div className="min-h-screen bg-[#162932] text-[#FBE9D0] flex flex-col font-sans selection:bg-[#E64833]/30 selection:text-[#FBE9D0]">
       {/* Top Navbar */}
       <Navbar
         currentTab={currentTab}
@@ -114,26 +114,26 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-800/80 bg-slate-950 py-6 text-xs text-slate-500">
+      <footer className="border-t border-[#90AEAD]/20 bg-[#244855] py-6 text-xs text-[#90AEAD]">
         <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-slate-300">matheseus</span>
-            <span className="text-slate-600">·</span>
-            <span>Edexcel A Level & Further Maths Past Papers</span>
+            <span className="font-semibold text-[#FBE9D0]">matheseus</span>
+            <span className="text-[#90AEAD]/60">·</span>
+            <span>Edexcel A Level & Further Maths Past Papers Archive</span>
           </div>
           <div className="flex items-center gap-4">
             <button
               onClick={() => setShowFormulasModal(true)}
-              className="hover:text-slate-300 transition-colors flex items-center gap-1.5"
+              className="hover:text-[#FBE9D0] transition-colors flex items-center gap-1.5"
             >
-              <Sigma size={13} className="text-sky-400" />
+              <Sigma size={13} className="text-[#E64833]" />
               <span>Formula Booklets</span>
             </button>
             <button
               onClick={() => setShowBoundariesModal(true)}
-              className="hover:text-slate-300 transition-colors flex items-center gap-1.5"
+              className="hover:text-[#FBE9D0] transition-colors flex items-center gap-1.5"
             >
-              <BarChart3 size={13} className="text-amber-400" />
+              <BarChart3 size={13} className="text-[#90AEAD]" />
               <span>Grade Boundaries</span>
             </button>
           </div>

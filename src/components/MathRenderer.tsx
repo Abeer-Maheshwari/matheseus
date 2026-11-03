@@ -48,8 +48,8 @@ const RenderTextWithMarkdown: React.FC<{ content: string }> = ({ content }) => {
             key={i}
             className={
               isMarkCode
-                ? 'font-bold font-mono text-sky-400 bg-sky-950/60 px-1 py-0.5 rounded border border-sky-800/60 mr-1 text-[11px]'
-                : 'font-bold text-white'
+                ? 'font-bold font-mono text-[#FBE9D0] bg-[#874F41] px-1.5 py-0.5 rounded border border-[#90AEAD]/30 mr-1 text-[11px]'
+                : 'font-bold text-[#FBE9D0]'
             }
           >
             {inner}
@@ -58,13 +58,13 @@ const RenderTextWithMarkdown: React.FC<{ content: string }> = ({ content }) => {
       }
       if (token.startsWith('`') && token.endsWith('`')) {
         return (
-          <code key={i} className="px-1.5 py-0.5 rounded bg-slate-800 text-sky-300 font-mono text-xs border border-slate-700">
+          <code key={i} className="px-1.5 py-0.5 rounded bg-[#162932] text-[#E64833] font-mono text-xs border border-[#90AEAD]/30">
             {token.slice(1, -1)}
           </code>
         );
       }
       if (token.startsWith('*') && token.endsWith('*')) {
-        return <em key={i} className="italic text-slate-300">{token.slice(1, -1)}</em>;
+        return <em key={i} className="italic text-[#90AEAD]">{token.slice(1, -1)}</em>;
       }
       return <span key={i}>{token}</span>;
     });
