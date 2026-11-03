@@ -10,6 +10,26 @@
   code, kbd, samp, pre {
     font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   }
+
+  button, 
+  [role="button"], 
+  a, 
+  input[type="button"], 
+  input[type="submit"], 
+  select, 
+  summary {
+    cursor: pointer !important;
+  }
+}
+
+/* Force pointer cursor on all interactive elements */
+button, 
+[role="button"], 
+a, 
+input[type="button"], 
+input[type="submit"], 
+select {
+  cursor: pointer !important;
 }
 
 /* Sharp, minimal scrollbars */
