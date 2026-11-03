@@ -34,6 +34,7 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
 
   // PDF Viewer state
   const [activePdfQual, setActivePdfQual] = useState<'maths' | 'fm'>('maths');
+  const [fitMode, setFitMode] = useState<'FitH' | 'Fit'>('FitH');
 
   const filteredCategories = FORMULA_BOOKLET_CATEGORIES.filter((cat) => {
     if (activeQual === 'maths' && cat.qualification !== 'A Level Mathematics') return false;
@@ -62,7 +63,7 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
 
   const cardClasses = mode === 'drawer'
     ? 'flex flex-col h-full w-full overflow-hidden'
-    : 'bg-[#1A2540] border border-[#6382BF]/30 rounded-xl w-full max-w-4xl overflow-hidden flex flex-col max-h-[92vh] shadow-2xl animate-modalFadeIn';
+    : 'bg-[#1A2540] border border-[#6382BF]/30 rounded-2xl w-full max-w-5xl md:max-w-6xl h-[88vh] md:h-[92vh] overflow-hidden flex flex-col shadow-2xl animate-modalFadeIn';
 
   return (
     <div className={containerClasses}>
@@ -125,26 +126,28 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
             </button>
           </div>
 
-          <div className="hidden sm:flex items-center gap-2">
-            <a
-              href={FORMULA_BOOKLET_PDF_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#1A2540] hover:bg-[#4A7BF7] hover:text-white text-[#7B8FAD] border border-[#6382BF]/30 rounded-md text-[11px] transition-colors"
-            >
-              <span>Maths PDF</span>
-              <ExternalLink size={10} />
-            </a>
-            <a
-              href={FURTHER_MATHS_FORMULA_BOOKLET_PDF_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#1A2540] hover:bg-[#4A7BF7] hover:text-white text-[#7B8FAD] border border-[#6382BF]/30 rounded-md text-[11px] transition-colors"
-            >
-              <span>FM PDF</span>
-              <ExternalLink size={10} />
-            </a>
-          </div>
+          {activeTab !== 'pdf' && (
+            <div className="hidden sm:flex items-center gap-2">
+              <a
+                href={FORMULA_BOOKLET_PDF_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#1A2540] hover:bg-[#4A7BF7] hover:text-white text-[#7B8FAD] border border-[#6382BF]/30 rounded-md text-[11px] transition-colors"
+              >
+                <span>Maths PDF</span>
+                <ExternalLink size={10} />
+              </a>
+              <a
+                href={FURTHER_MATHS_FORMULA_BOOKLET_PDF_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#1A2540] hover:bg-[#4A7BF7] hover:text-white text-[#7B8FAD] border border-[#6382BF]/30 rounded-md text-[11px] transition-colors"
+              >
+                <span>FM PDF</span>
+                <ExternalLink size={10} />
+              </a>
+            </div>
+          )}
         </div>
 
         {/* TAB 1: FORMULAS LIST */}
@@ -334,51 +337,86 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
 
         {/* TAB 3: EMBEDDED OFFICIAL PDF BOOKLET */}
         {activeTab === 'pdf' && (
-          <div className="flex-1 flex flex-col overflow-hidden animate-fadeIn">
-            {/* Qualification Selector for PDF */}
-            <div className="p-3 border-b border-[#6382BF]/20 bg-[#1A2540] flex items-center justify-between gap-3 shrink-0">
+          <div className="flex-1 flex flex-col h-full overflow-hidden animate-fadeIn">
+            {/* Qualification Selector & Controls for PDF */}
+            <div className="px-4 py-2.5 border-b border-[#6382BF]/20 bg-[#1A2540] flex flex-wrap items-center justify-between gap-2.5 shrink-0">
               <div className="flex items-center gap-1.5 text-xs">
                 <button
                   onClick={() => setActivePdfQual('maths')}
-                  className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium transition-colors ${
                     activePdfQual === 'maths'
-                      ? 'bg-[#4A7BF7] text-white font-semibold'
-                      : 'bg-[#0A1020] text-[#7B8FAD] hover:text-[#E8ECF4]'
+                      ? 'bg-[#4A7BF7] text-white font-semibold shadow-sm'
+                      : 'bg-[#0A1020] text-[#7B8FAD] hover:text-[#E8ECF4] border border-[#6382BF]/30'
                   }`}
                 >
                   <GraduationCap size={14} />
-                  <span>A Level Mathematics PDF</span>
+                  <span>A Level Mathematics</span>
                 </button>
                 <button
                   onClick={() => setActivePdfQual('fm')}
-                  className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium transition-colors ${
                     activePdfQual === 'fm'
-                      ? 'bg-[#4A7BF7] text-white font-semibold'
-                      : 'bg-[#0A1020] text-[#7B8FAD] hover:text-[#E8ECF4]'
+                      ? 'bg-[#4A7BF7] text-white font-semibold shadow-sm'
+                      : 'bg-[#0A1020] text-[#7B8FAD] hover:text-[#E8ECF4] border border-[#6382BF]/30'
                   }`}
                 >
                   <Layers size={14} />
-                  <span>Further Mathematics PDF</span>
+                  <span>Further Mathematics</span>
                 </button>
               </div>
 
-              <a
-                href={activePdfQual === 'maths' ? FORMULA_BOOKLET_PDF_URL : FURTHER_MATHS_FORMULA_BOOKLET_PDF_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-xs text-[#4A7BF7] hover:underline"
-              >
-                <span>Open in Tab</span>
-                <ExternalLink size={11} />
-              </a>
+              <div className="flex items-center gap-2 text-xs">
+                {/* Fit Mode Toggle */}
+                <div className="flex items-center bg-[#0A1020] p-0.5 rounded-lg border border-[#6382BF]/30 text-[11px]">
+                  <button
+                    onClick={() => setFitMode('FitH')}
+                    className={`px-2 py-0.5 rounded font-medium transition-colors ${
+                      fitMode === 'FitH'
+                        ? 'bg-[#4A7BF7] text-white font-semibold'
+                        : 'text-[#7B8FAD] hover:text-[#E8ECF4]'
+                    }`}
+                    title="Fit to page width"
+                  >
+                    Fit Width
+                  </button>
+                  <button
+                    onClick={() => setFitMode('Fit')}
+                    className={`px-2 py-0.5 rounded font-medium transition-colors ${
+                      fitMode === 'Fit'
+                        ? 'bg-[#4A7BF7] text-white font-semibold'
+                        : 'text-[#7B8FAD] hover:text-[#E8ECF4]'
+                    }`}
+                    title="Fit entire page"
+                  >
+                    Fit Page
+                  </button>
+                </div>
+
+                <a
+                  href={activePdfQual === 'maths' ? FORMULA_BOOKLET_PDF_URL : FURTHER_MATHS_FORMULA_BOOKLET_PDF_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#0A1020] hover:bg-[#4A7BF7]/20 text-[#E8ECF4] border border-[#6382BF]/30 text-xs font-medium transition-colors"
+                >
+                  <span>Open in Tab</span>
+                  <ExternalLink size={11} />
+                </a>
+              </div>
             </div>
 
-            {/* Iframe Viewport */}
-            <iframe
-              src={activePdfQual === 'maths' ? FORMULA_BOOKLET_PDF_URL : FURTHER_MATHS_FORMULA_BOOKLET_PDF_URL}
-              className="w-full flex-1 bg-[#0F1729] border-none"
-              title="Official Formula Booklet PDF"
-            />
+            {/* Iframe Viewport: Solid full-height container */}
+            <div className="relative flex-1 w-full h-full min-h-[450px] bg-white">
+              <iframe
+                key={`${activePdfQual}-${fitMode}`}
+                src={`${
+                  activePdfQual === 'maths'
+                    ? FORMULA_BOOKLET_PDF_URL
+                    : FURTHER_MATHS_FORMULA_BOOKLET_PDF_URL
+                }#view=${fitMode}&toolbar=0&navpanes=0`}
+                className="absolute inset-0 w-full h-full border-0"
+                title="Official Formula Booklet PDF"
+              />
+            </div>
           </div>
         )}
       </div>
