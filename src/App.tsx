@@ -120,7 +120,7 @@ export default function App() {
       />
 
       {/* Main View */}
-      <main className="flex-1">
+      <main key={currentTab} className="flex-1 animate-fadeIn">
         {currentTab === 'home' ? (
           <HomePage
             onSelectSubject={handleSelectSubject}

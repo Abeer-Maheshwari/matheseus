@@ -4,8 +4,19 @@ import {
   FORMULA_BOOKLET_PDF_URL, 
   FURTHER_MATHS_FORMULA_BOOKLET_PDF_URL 
 } from '../data/formulaBooklet';
+import { STATISTICAL_TABLES, StatisticalTable } from '../data/statisticalTables';
 import { MathRenderer } from './MathRenderer';
-import { BookOpen, FileText, Search, X, ExternalLink, Sigma } from 'lucide-react';
+import { 
+  BookOpen, 
+  FileText, 
+  Search, 
+  X, 
+  ExternalLink, 
+  Sigma, 
+  Table as TableIcon,
+  Layers,
+  GraduationCap
+} from 'lucide-react';
 
 interface FormulaBookletModalProps {
   onClose: () => void;
@@ -13,8 +24,16 @@ interface FormulaBookletModalProps {
 }
 
 export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClose, mode = 'modal' }) => {
+  const [activeTab, setActiveTab] = useState<'formulas' | 'tables' | 'pdf'>('formulas');
   const [search, setSearch] = useState('');
   const [activeQual, setActiveQual] = useState<'all' | 'maths' | 'fm'>('all');
+
+  // Tables state
+  const [activeTableId, setActiveTableId] = useState<string>('pmcc');
+  const activeTable = STATISTICAL_TABLES.find((t) => t.id === activeTableId) || STATISTICAL_TABLES[0];
+
+  // PDF Viewer state
+  const [activePdfQual, setActivePdfQual] = useState<'maths' | 'fm'>('maths');
 
   const filteredCategories = FORMULA_BOOKLET_CATEGORIES.filter((cat) => {
     if (activeQual === 'maths' && cat.qualification !== 'A Level Mathematics') return false;
@@ -38,163 +57,330 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
   }).filter((cat) => cat.sections.length > 0);
 
   const containerClasses = mode === 'drawer'
-    ? 'w-full md:w-[440px] border-l border-[#93785B]/35 bg-[#3E362E] flex flex-col h-full shadow-2xl shrink-0 z-30 transition-all'
-    : 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2C2620]/85 backdrop-blur-sm text-[#FAF6F0]';
+    ? 'w-full md:w-[460px] border-l border-[#6382BF]/30 bg-[#1A2540] flex flex-col h-full shadow-2xl shrink-0 z-30 animate-fadeIn'
+    : 'fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#0A1020]/80 backdrop-blur-sm text-[#E8ECF4] animate-fadeIn';
 
   const cardClasses = mode === 'drawer'
     ? 'flex flex-col h-full w-full overflow-hidden'
-    : 'bg-[#3E362E] border border-[#93785B]/40 rounded-xl w-full max-w-3xl overflow-hidden flex flex-col max-h-[90vh] shadow-2xl';
+    : 'bg-[#1A2540] border border-[#6382BF]/30 rounded-xl w-full max-w-4xl overflow-hidden flex flex-col max-h-[92vh] shadow-2xl animate-modalFadeIn';
 
   return (
     <div className={containerClasses}>
       <div className={cardClasses}>
         {/* Header */}
-        <div className="px-5 py-3.5 border-b border-[#93785B]/25 flex items-center justify-between shrink-0 bg-[#2C2620]">
+        <div className="px-5 py-3 border-b border-[#6382BF]/25 flex items-center justify-between shrink-0 bg-[#0A1020]">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-[#3E362E] border border-[#93785B]/40 flex items-center justify-center text-[#865D36]">
+            <div className="w-8 h-8 rounded-lg bg-[#1A2540] border border-[#6382BF]/40 flex items-center justify-center text-[#4A7BF7]">
               <Sigma size={18} />
             </div>
             <div>
-              <h3 className="font-serif font-semibold text-[#FAF6F0] text-sm">Formula Booklet</h3>
-              <p className="text-xs text-[#AC8968]">Official Edexcel formulas and tables</p>
+              <h3 className="font-bold text-[#E8ECF4] text-sm">Formula Booklet & Tables</h3>
+              <p className="text-xs text-[#7B8FAD]">Official Pearson Edexcel formulas, PMCC & statistical tables</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg bg-[#3E362E] hover:bg-[#865D36] text-[#AC8968] hover:text-[#FAF6F0] border border-[#93785B]/40 transition-colors"
+            className="p-1.5 rounded-lg bg-[#1A2540] hover:bg-[#4A7BF7] hover:text-white text-[#7B8FAD] border border-[#6382BF]/40 transition-colors"
             title="Close"
           >
             <X size={16} />
           </button>
         </div>
 
-        {/* Official PDFs direct links */}
-        <div className="px-5 py-2.5 bg-[#2C2620]/70 border-b border-[#93785B]/25 flex flex-wrap items-center justify-between gap-2 text-xs shrink-0">
-          <span className="text-[#AC8968] flex items-center gap-1.5 font-medium">
-            <FileText size={14} className="text-[#865D36]" />
-            PDFs:
-          </span>
-          <div className="flex items-center gap-2">
+        {/* Navigation Tabs: Formulas | Tables | Official PDF */}
+        <div className="px-5 py-2 bg-[#0A1020]/70 border-b border-[#6382BF]/20 flex items-center justify-between gap-2 text-xs shrink-0">
+          <div className="flex items-center gap-1.5 bg-[#1A2540] p-1 rounded-lg border border-[#6382BF]/30">
+            <button
+              onClick={() => setActiveTab('formulas')}
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
+                activeTab === 'formulas'
+                  ? 'bg-[#4A7BF7] text-white font-semibold shadow-sm'
+                  : 'text-[#7B8FAD] hover:text-[#E8ECF4]'
+              }`}
+            >
+              <Sigma size={13} />
+              <span>Formulas</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('tables')}
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
+                activeTab === 'tables'
+                  ? 'bg-[#4A7BF7] text-white font-semibold shadow-sm'
+                  : 'text-[#7B8FAD] hover:text-[#E8ECF4]'
+              }`}
+            >
+              <TableIcon size={13} />
+              <span>Statistical Tables</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('pdf')}
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
+                activeTab === 'pdf'
+                  ? 'bg-[#4A7BF7] text-white font-semibold shadow-sm'
+                  : 'text-[#7B8FAD] hover:text-[#E8ECF4]'
+              }`}
+            >
+              <FileText size={13} />
+              <span>Official PDF</span>
+            </button>
+          </div>
+
+          <div className="hidden sm:flex items-center gap-2">
             <a
               href={FORMULA_BOOKLET_PDF_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#3E362E] hover:bg-[#865D36] text-[#FAF6F0] border border-[#93785B]/40 rounded-md font-medium text-[11px] transition-colors"
+              className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#1A2540] hover:bg-[#4A7BF7] hover:text-white text-[#7B8FAD] border border-[#6382BF]/30 rounded-md text-[11px] transition-colors"
             >
-              <span>Maths Booklet PDF</span>
-              <ExternalLink size={12} className="text-[#AC8968]" />
+              <span>Maths PDF</span>
+              <ExternalLink size={10} />
             </a>
             <a
               href={FURTHER_MATHS_FORMULA_BOOKLET_PDF_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#3E362E] hover:bg-[#865D36] text-[#FAF6F0] border border-[#93785B]/40 rounded-md font-medium text-[11px] transition-colors"
+              className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#1A2540] hover:bg-[#4A7BF7] hover:text-white text-[#7B8FAD] border border-[#6382BF]/30 rounded-md text-[11px] transition-colors"
             >
-              <span>Further Maths Booklet PDF</span>
-              <ExternalLink size={12} className="text-[#AC8968]" />
+              <span>FM PDF</span>
+              <ExternalLink size={10} />
             </a>
           </div>
         </div>
 
-        {/* Filter & Search */}
-        <div className="p-4 border-b border-[#93785B]/25 space-y-3 bg-[#3E362E] shrink-0">
-          <div className="relative">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#AC8968]" />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search formula by name, section, or notation..."
-              className="w-full pl-9 pr-3 py-2 bg-[#2C2620] border border-[#93785B]/40 rounded-lg text-xs text-[#FAF6F0] placeholder-[#A69080] focus:outline-none focus:border-[#865D36]"
-            />
-          </div>
+        {/* TAB 1: FORMULAS LIST */}
+        {activeTab === 'formulas' && (
+          <div className="flex-1 flex flex-col overflow-hidden animate-fadeIn">
+            {/* Filter & Search */}
+            <div className="p-3.5 border-b border-[#6382BF]/20 space-y-2.5 bg-[#1A2540] shrink-0">
+              <div className="relative">
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#7B8FAD]" />
+                <input
+                  type="text"
+                  placeholder="Search formulas (e.g. binomial, integration, normal)..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="w-full pl-9 pr-3 py-1.5 bg-[#0A1020] border border-[#6382BF]/30 rounded-lg text-xs text-[#E8ECF4] placeholder-[#5A6E8A] focus:outline-none focus:border-[#4A7BF7]"
+                />
+              </div>
 
-          <div className="flex items-center gap-2 text-xs">
-            <button
-              onClick={() => setActiveQual('all')}
-              className={`px-3 py-1 rounded-md text-[11px] font-medium border transition-colors ${
-                activeQual === 'all'
-                  ? 'bg-[#865D36] text-[#FAF6F0] border-[#865D36] font-semibold'
-                  : 'text-[#AC8968] hover:text-[#FAF6F0] bg-[#2C2620] border-[#93785B]/30'
-              }`}
-            >
-              All Formulae
-            </button>
-            <button
-              onClick={() => setActiveQual('maths')}
-              className={`px-3 py-1 rounded-md text-[11px] font-medium border transition-colors ${
-                activeQual === 'maths'
-                  ? 'bg-[#865D36] text-[#FAF6F0] border-[#865D36] font-semibold'
-                  : 'text-[#AC8968] hover:text-[#FAF6F0] bg-[#2C2620] border-[#93785B]/30'
-              }`}
-            >
-              A Level Maths
-            </button>
-            <button
-              onClick={() => setActiveQual('fm')}
-              className={`px-3 py-1 rounded-md text-[11px] font-medium border transition-colors ${
-                activeQual === 'fm'
-                  ? 'bg-[#865D36] text-[#FAF6F0] border-[#865D36] font-semibold'
-                  : 'text-[#AC8968] hover:text-[#FAF6F0] bg-[#2C2620] border-[#93785B]/30'
-              }`}
-            >
-              Further Maths
-            </button>
-          </div>
-        </div>
-
-        {/* Formulae Content List */}
-        <div className="p-5 overflow-y-auto space-y-6">
-          {filteredCategories.length === 0 ? (
-            <div className="text-center py-12 text-[#AC8968] text-xs">
-              No matching formulae found.
+              <div className="flex items-center gap-1.5 text-xs">
+                <button
+                  onClick={() => setActiveQual('all')}
+                  className={`px-2.5 py-1 rounded-md transition-colors border ${
+                    activeQual === 'all'
+                      ? 'bg-[#4A7BF7] text-white border-[#4A7BF7] font-semibold'
+                      : 'text-[#7B8FAD] hover:text-[#E8ECF4] bg-[#0A1020] border-[#6382BF]/20'
+                  }`}
+                >
+                  All Formulas
+                </button>
+                <button
+                  onClick={() => setActiveQual('maths')}
+                  className={`px-2.5 py-1 rounded-md transition-colors border ${
+                    activeQual === 'maths'
+                      ? 'bg-[#4A7BF7] text-white border-[#4A7BF7] font-semibold'
+                      : 'text-[#7B8FAD] hover:text-[#E8ECF4] bg-[#0A1020] border-[#6382BF]/20'
+                  }`}
+                >
+                  A Level Maths
+                </button>
+                <button
+                  onClick={() => setActiveQual('fm')}
+                  className={`px-2.5 py-1 rounded-md transition-colors border ${
+                    activeQual === 'fm'
+                      ? 'bg-[#4A7BF7] text-white border-[#4A7BF7] font-semibold'
+                      : 'text-[#7B8FAD] hover:text-[#E8ECF4] bg-[#0A1020] border-[#6382BF]/20'
+                  }`}
+                >
+                  Further Maths
+                </button>
+              </div>
             </div>
-          ) : (
-            filteredCategories.map((cat, idx) => (
-              <div key={idx} className="space-y-4">
-                <div className="border-b border-[#93785B]/25 pb-1.5 flex items-center justify-between">
-                  <h4 className="text-xs font-serif font-bold uppercase tracking-wider text-[#FAF6F0] flex items-center gap-2">
-                    <BookOpen size={14} className="text-[#865D36]" />
-                    {cat.title}
-                  </h4>
-                  <span className="text-[11px] text-[#AC8968] px-2 py-0.5 rounded bg-[#2C2620] border border-[#93785B]/30 font-medium">
-                    {cat.qualification}
-                  </span>
-                </div>
 
-                {cat.sections.map((sec, sIdx) => (
-                  <div key={sIdx} className="space-y-2.5">
-                    <h5 className="text-[11px] font-bold text-[#AC8968] tracking-wide">
-                      {sec.sectionTitle}
-                    </h5>
-                    <div className="grid grid-cols-1 gap-2.5">
-                      {sec.items.map((item, iIdx) => (
-                        <div
-                          key={iIdx}
-                          className="p-3.5 rounded-lg bg-[#2C2620] border border-[#93785B]/30 hover:border-[#93785B]/60 transition-colors space-y-1.5"
-                        >
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs font-semibold text-[#FAF6F0]">
-                              {item.name}
-                            </span>
-                            {item.notes && (
-                              <span className="text-[10px] text-[#A69080] italic">
-                                {item.notes}
-                              </span>
-                            )}
-                          </div>
-                          <div className="p-2.5 rounded bg-[#3E362E] border border-[#93785B]/25 text-center overflow-x-auto text-[#FAF6F0]">
-                            <MathRenderer math={item.latex} displayMode={true} />
+            {/* Content List */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-5">
+              {filteredCategories.length === 0 ? (
+                <div className="text-center py-12 text-[#7B8FAD] text-xs">
+                  No formulas match your search query.
+                </div>
+              ) : (
+                filteredCategories.map((category) => (
+                  <div key={category.title} className="space-y-3">
+                    <div className="border-b border-[#6382BF]/20 pb-1.5 flex items-center justify-between">
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-[#E8ECF4] flex items-center gap-2">
+                        <BookOpen size={14} className="text-[#4A7BF7]" />
+                        <span>{category.title}</span>
+                      </h4>
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-[#0A1020] text-[#7B8FAD] border border-[#6382BF]/30 font-medium">
+                        {category.qualification}
+                      </span>
+                    </div>
+
+                    <div className="space-y-3">
+                      {category.sections.map((section) => (
+                        <div key={section.sectionTitle} className="space-y-2">
+                          <h5 className="text-[11px] font-semibold text-[#7B8FAD] uppercase tracking-wide">
+                            {section.sectionTitle}
+                          </h5>
+                          <div className="grid grid-cols-1 gap-2">
+                            {section.items.map((item) => (
+                              <div
+                                key={item.name}
+                                className="p-3 bg-[#0A1020] border border-[#6382BF]/25 rounded-lg space-y-1.5 hover:border-[#4A7BF7]/40 transition-colors"
+                              >
+                                <div className="text-xs font-semibold text-[#E8ECF4]">
+                                  {item.name}
+                                </div>
+                                <div className="py-1 px-2 rounded bg-[#1A2540] border border-[#6382BF]/20 text-xs overflow-x-auto text-[#E8ECF4]">
+                                  <MathRenderer math={item.latex} displayMode={true} />
+                                </div>
+                                {item.notes && (
+                                  <div className="text-[11px] text-[#7B8FAD]">
+                                    {item.notes}
+                                  </div>
+                                )}
+                              </div>
+                            ))}
                           </div>
                         </div>
                       ))}
                     </div>
                   </div>
-                ))}
+                ))
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* TAB 2: STATISTICAL & MECHANICS TABLES */}
+        {activeTab === 'tables' && (
+          <div className="flex-1 flex flex-col overflow-hidden animate-fadeIn">
+            {/* Table Selector Sub-Bar */}
+            <div className="p-3 border-b border-[#6382BF]/20 bg-[#1A2540] flex flex-wrap items-center gap-1.5 shrink-0 overflow-x-auto">
+              {STATISTICAL_TABLES.map((table) => {
+                const isSelected = table.id === activeTable.id;
+                return (
+                  <button
+                    key={table.id}
+                    onClick={() => setActiveTableId(table.id)}
+                    className={`px-3 py-1 rounded-md text-xs font-medium border transition-colors shrink-0 ${
+                      isSelected
+                        ? 'bg-[#4A7BF7] text-white border-[#4A7BF7] font-semibold shadow-sm'
+                        : 'bg-[#0A1020] text-[#7B8FAD] hover:text-[#E8ECF4] border-[#6382BF]/20'
+                    }`}
+                  >
+                    {table.id === 'pmcc' && 'PMCC (r)'}
+                    {table.id === 'spearman' && "Spearman's (r_s)"}
+                    {table.id === 'normal-points' && 'Normal Points'}
+                    {table.id === 'normal-cdf' && 'Normal Φ(z)'}
+                    {table.id === 'chi-squared' && 'Chi-Squared (χ²)'}
+                    {table.id === 't-distribution' && 'Student t'}
+                    {table.id === 'centers-of-mass' && 'Centers of Mass'}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Table Details Banner */}
+            <div className="px-5 py-2.5 bg-[#0A1020]/90 border-b border-[#6382BF]/20 flex items-center justify-between gap-3 shrink-0">
+              <div>
+                <h4 className="text-xs font-bold text-[#E8ECF4]">{activeTable.title}</h4>
+                <p className="text-[11px] text-[#7B8FAD]">{activeTable.description}</p>
               </div>
-            ))
-          )}
-        </div>
+              <span className="text-[10px] px-2 py-0.5 rounded bg-[#1A2540] text-[#4A7BF7] border border-[#6382BF]/30 font-semibold shrink-0">
+                {activeTable.qualification}
+              </span>
+            </div>
+
+            {/* Rendered Table */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-3">
+              <div className="border border-[#6382BF]/25 rounded-xl overflow-x-auto bg-[#0A1020] shadow-sm">
+                <table className="w-full text-left text-xs border-collapse">
+                  <thead>
+                    <tr className="border-b border-[#6382BF]/25 bg-[#1A2540] text-[#7B8FAD] text-[11px] font-semibold uppercase tracking-wider">
+                      {activeTable.headers.map((header, idx) => (
+                        <th key={idx} className="py-2.5 px-3 whitespace-pre-line">
+                          {header}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#6382BF]/15 font-mono text-[11px]">
+                    {activeTable.rows.map((row, idx) => (
+                      <tr key={idx} className="hover:bg-[#1A2540]/60 transition-colors">
+                        <td className="py-2 px-3 font-semibold text-[#E8ECF4] whitespace-nowrap">
+                          {row.label}
+                        </td>
+                        {row.values.map((val, vIdx) => (
+                          <td key={vIdx} className="py-2 px-3 text-[#E8ECF4]/90 whitespace-nowrap">
+                            {val}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {activeTable.notes && (
+                <div className="p-3 rounded-lg bg-[#0A1020] border border-[#6382BF]/20 text-[11px] text-[#7B8FAD]">
+                  <span className="font-semibold text-[#E8ECF4]">Notes: </span>
+                  {activeTable.notes}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* TAB 3: EMBEDDED OFFICIAL PDF BOOKLET */}
+        {activeTab === 'pdf' && (
+          <div className="flex-1 flex flex-col overflow-hidden animate-fadeIn">
+            {/* Qualification Selector for PDF */}
+            <div className="p-3 border-b border-[#6382BF]/20 bg-[#1A2540] flex items-center justify-between gap-3 shrink-0">
+              <div className="flex items-center gap-1.5 text-xs">
+                <button
+                  onClick={() => setActivePdfQual('maths')}
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
+                    activePdfQual === 'maths'
+                      ? 'bg-[#4A7BF7] text-white font-semibold'
+                      : 'bg-[#0A1020] text-[#7B8FAD] hover:text-[#E8ECF4]'
+                  }`}
+                >
+                  <GraduationCap size={14} />
+                  <span>A Level Mathematics PDF</span>
+                </button>
+                <button
+                  onClick={() => setActivePdfQual('fm')}
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
+                    activePdfQual === 'fm'
+                      ? 'bg-[#4A7BF7] text-white font-semibold'
+                      : 'bg-[#0A1020] text-[#7B8FAD] hover:text-[#E8ECF4]'
+                  }`}
+                >
+                  <Layers size={14} />
+                  <span>Further Mathematics PDF</span>
+                </button>
+              </div>
+
+              <a
+                href={activePdfQual === 'maths' ? FORMULA_BOOKLET_PDF_URL : FURTHER_MATHS_FORMULA_BOOKLET_PDF_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-xs text-[#4A7BF7] hover:underline"
+              >
+                <span>Open in Tab</span>
+                <ExternalLink size={11} />
+              </a>
+            </div>
+
+            {/* Iframe Viewport */}
+            <iframe
+              src={activePdfQual === 'maths' ? FORMULA_BOOKLET_PDF_URL : FURTHER_MATHS_FORMULA_BOOKLET_PDF_URL}
+              className="w-full flex-1 bg-[#0F1729] border-none"
+              title="Official Formula Booklet PDF"
+            />
+          </div>
+        )}
       </div>
     </div>
   );

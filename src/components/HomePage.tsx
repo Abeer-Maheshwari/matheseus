@@ -13,7 +13,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   onOpenBoundaries,
 }) => {
   return (
-    <div className="max-w-4xl mx-auto px-4 py-10 space-y-8">
+    <div className="max-w-4xl mx-auto px-4 py-10 space-y-8 animate-fadeIn">
       {/* Intro */}
       <div className="text-center space-y-2">
         <h1 className="text-3xl sm:text-4xl font-serif font-bold tracking-tight text-[#E8ECF4]">
@@ -34,7 +34,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <div className="w-8 h-8 rounded-lg bg-[#0A1020] border border-[#6382BF]/30 flex items-center justify-center text-[#4A7BF7]">
                   <GraduationCap size={18} />
                 </div>
-                <h2 className="text-base font-serif font-bold text-[#E8ECF4]">A Level Maths</h2>
+                <h2 className="text-base font-bold text-[#E8ECF4]">A Level Maths</h2>
               </div>
               <span className="text-xs px-2.5 py-0.5 rounded bg-[#0A1020] text-[#E8ECF4] border border-[#6382BF]/40 font-semibold">
                 9MA0
@@ -86,7 +86,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <div className="w-8 h-8 rounded-lg bg-[#0A1020] border border-[#6382BF]/30 flex items-center justify-center text-[#4A7BF7]">
                   <Layers size={18} />
                 </div>
-                <h2 className="text-base font-serif font-bold text-[#E8ECF4]">Further Maths</h2>
+                <h2 className="text-base font-bold text-[#E8ECF4]">Further Maths</h2>
               </div>
               <span className="text-xs px-2.5 py-0.5 rounded bg-[#4A7BF7] text-white border border-[#4A7BF7]/50 font-semibold shadow-sm">
                 9FM0
@@ -148,7 +148,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             <BarChart3 size={18} />
           </div>
           <div>
-            <div className="font-serif font-bold text-[#E8ECF4] group-hover:text-[#4A7BF7] transition-colors">
+            <div className="font-bold text-[#E8ECF4] group-hover:text-[#4A7BF7] transition-colors">
               Grade Boundaries
             </div>
             <div className="text-[#7B8FAD] text-[11px] mt-0.5">
@@ -165,7 +165,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             <Sigma size={18} />
           </div>
           <div>
-            <div className="font-serif font-bold text-[#E8ECF4] group-hover:text-[#4A7BF7] transition-colors">
+            <div className="font-bold text-[#E8ECF4] group-hover:text-[#4A7BF7] transition-colors">
               Formula Booklet
             </div>
             <div className="text-[#7B8FAD] text-[11px] mt-0.5">

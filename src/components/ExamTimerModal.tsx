@@ -73,12 +73,12 @@ export const ExamTimerModal: React.FC<ExamTimerModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0F1729]/80 backdrop-blur-sm">
-      <div className="bg-[#1A2540] border border-[#6382BF]/30 rounded-xl w-full max-w-md overflow-hidden text-[#E8ECF4] shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0F1729]/80 backdrop-blur-sm animate-fadeIn">
+      <div className="bg-[#1A2540] border border-[#6382BF]/30 rounded-xl w-full max-w-md overflow-hidden text-[#E8ECF4] shadow-2xl animate-modalFadeIn">
         {/* Header */}
         <div className="px-5 py-3.5 border-b border-[#6382BF]/20 flex items-center justify-between bg-[#0A1020]/60">
           <div>
-            <h3 className="font-serif font-semibold text-[#E8ECF4] text-sm">Exam Countdown Timer</h3>
+            <h3 className="font-bold text-[#E8ECF4] text-sm">Exam Countdown Timer</h3>
             <p className="text-xs text-[#7B8FAD]">
               {paper ? `${paper.code} (${paper.title})` : 'Timed exam practice'}
             </p>

@@ -125,7 +125,7 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-[#0F1729] text-[#E8ECF4]">
+    <div className="fixed inset-0 z-50 flex flex-col bg-[#0F1729] text-[#E8ECF4] animate-fadeIn">
       {/* Top Header */}
       <div className="h-14 px-4 bg-[#1A2540] border-b border-[#6382BF]/25 flex items-center justify-between gap-3 shrink-0 shadow-md">
         {/* Paper Title & Badges */}
@@ -134,7 +134,7 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
             {isPractice ? <Clock size={15} /> : <Columns size={15} />}
           </div>
           <div className="min-w-0">
-            <div className="font-serif font-semibold text-sm text-[#E8ECF4] truncate">
+            <div className="font-bold text-sm text-[#E8ECF4] truncate">
               {title}
             </div>
             {isPractice && (

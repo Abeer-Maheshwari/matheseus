@@ -87,7 +87,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
   });
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-6">
+    <div className="max-w-5xl mx-auto px-4 py-8 space-y-6 animate-fadeIn">
       {/* Subject Selector Tabs */}
       <div className="flex items-center gap-3 border-b border-[#6382BF]/20 pb-3">
         <button
@@ -190,7 +190,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
       </div>
 
       {/* Papers Table */}
-      <div className="border border-[#6382BF]/25 rounded-xl overflow-hidden bg-[#1A2540] shadow-md">
+      <div key={activeModule.id} className="border border-[#6382BF]/25 rounded-xl overflow-hidden bg-[#1A2540] shadow-md animate-fadeIn">
         <table className="w-full text-left text-xs border-collapse">
           <thead>
             <tr className="border-b border-[#6382BF]/20 bg-[#0A1020]/90 text-[#7B8FAD] text-[11px] font-semibold uppercase tracking-wider">
