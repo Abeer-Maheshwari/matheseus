@@ -6,7 +6,8 @@ interface NavbarProps {
   onNavigate: (tab: 'home' | 'maths' | 'further-maths') => void;
   onOpenBoundaries: () => void;
   onOpenFormulas: () => void;
-  onOpenTimer: () => void;
+  isExamMode?: boolean;
+  onOpenTimer?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -14,6 +15,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onNavigate,
   onOpenBoundaries,
   onOpenFormulas,
+  isExamMode = false,
   onOpenTimer,
 }) => {
   const isPapersActive = currentTab === 'maths' || currentTab === 'further-maths';
@@ -63,14 +65,16 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Header Right Actions */}
         <div className="flex items-center gap-2 text-xs">
-          <button
-            onClick={onOpenTimer}
-            className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[#E8ECF4] bg-[#0A1020] hover:bg-[#4A7BF7] hover:text-white border border-[#6382BF]/30 font-medium transition-colors"
-            title="Exam countdown timer"
-          >
-            <Clock size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100" />
-            <span className="hidden sm:inline">Timer</span>
-          </button>
+          {isExamMode && onOpenTimer && (
+            <button
+              onClick={onOpenTimer}
+              className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[#E8ECF4] bg-[#0A1020] hover:bg-[#4A7BF7] hover:text-white border border-[#6382BF]/30 font-medium transition-colors"
+              title="Exam countdown timer"
+            >
+              <Clock size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100" />
+              <span className="hidden sm:inline">Timer</span>
+            </button>
+          )}
 
           <button
             onClick={onOpenFormulas}
