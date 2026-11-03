@@ -1,11 +1,12 @@
 import React from 'react';
-import { Home, GraduationCap, Layers, Sigma, BarChart3 } from 'lucide-react';
+import { Home, BookOpen, Sigma, BarChart3, Clock } from 'lucide-react';
 
 interface NavbarProps {
   currentTab: 'home' | 'maths' | 'further-maths';
   onNavigate: (tab: 'home' | 'maths' | 'further-maths') => void;
   onOpenBoundaries: () => void;
   onOpenFormulas: () => void;
+  onOpenTimer: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -13,11 +14,14 @@ export const Navbar: React.FC<NavbarProps> = ({
   onNavigate,
   onOpenBoundaries,
   onOpenFormulas,
+  onOpenTimer,
 }) => {
+  const isPapersActive = currentTab === 'maths' || currentTab === 'further-maths';
+
   return (
     <header className="border-b border-[#6382BF]/25 bg-[#1A2540]/95 backdrop-blur-md sticky top-0 z-40 transition-colors">
       <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
-        {/* Brand */}
+        {/* Brand & Left Navigation */}
         <div className="flex items-center gap-6">
           <button
             onClick={() => onNavigate('home')}
@@ -29,7 +33,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span className="font-serif font-bold text-lg tracking-tight text-[#E8ECF4]">matheseus</span>
           </button>
 
-          {/* Navigation Links */}
+          {/* Navigation Links: Replaced duplicate subject tabs with Past Papers */}
           <nav className="flex items-center gap-1.5 text-xs font-medium">
             <button
               onClick={() => onNavigate('home')}
@@ -42,36 +46,36 @@ export const Navbar: React.FC<NavbarProps> = ({
               <Home size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100" />
               <span>Home</span>
             </button>
+
             <button
-              onClick={() => onNavigate('maths')}
+              onClick={() => onNavigate(currentTab === 'further-maths' ? 'further-maths' : 'maths')}
               className={`group flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors ${
-                currentTab === 'maths'
+                isPapersActive
                   ? 'bg-[#0A1020] text-[#E8ECF4] font-semibold border border-[#6382BF]/40 shadow-sm'
                   : 'text-[#7B8FAD] hover:text-[#E8ECF4] hover:bg-[#0A1020]/50'
               }`}
             >
-              <GraduationCap size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100" />
-              <span>A Level Maths</span>
-            </button>
-            <button
-              onClick={() => onNavigate('further-maths')}
-              className={`group flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors ${
-                currentTab === 'further-maths'
-                  ? 'bg-[#0A1020] text-[#E8ECF4] font-semibold border border-[#6382BF]/40 shadow-sm'
-                  : 'text-[#7B8FAD] hover:text-[#E8ECF4] hover:bg-[#0A1020]/50'
-              }`}
-            >
-              <Layers size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100" />
-              <span>Further Maths</span>
+              <BookOpen size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100" />
+              <span>Past Papers</span>
             </button>
           </nav>
         </div>
 
-        {/* Resources Controls */}
+        {/* Header Right Actions */}
         <div className="flex items-center gap-2 text-xs">
+          <button
+            onClick={onOpenTimer}
+            className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[#E8ECF4] bg-[#0A1020] hover:bg-[#4A7BF7] hover:text-white border border-[#6382BF]/30 font-medium transition-colors"
+            title="Exam countdown timer"
+          >
+            <Clock size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100" />
+            <span className="hidden sm:inline">Timer</span>
+          </button>
+
           <button
             onClick={onOpenFormulas}
             className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[#E8ECF4] bg-[#0A1020] hover:bg-[#4A7BF7] hover:text-white border border-[#6382BF]/30 font-medium transition-colors"
+            title="Formula booklet reference"
           >
             <Sigma size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100" />
             <span className="hidden sm:inline">Formulae</span>
@@ -80,6 +84,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             onClick={onOpenBoundaries}
             className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[#E8ECF4] bg-[#0A1020] hover:bg-[#4A7BF7] hover:text-white border border-[#6382BF]/30 font-medium transition-colors"
+            title="Grade boundaries thresholds"
           >
             <BarChart3 size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100" />
             <span className="hidden sm:inline">Boundaries</span>

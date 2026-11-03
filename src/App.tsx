@@ -6,6 +6,7 @@ import { SplitPdfModal } from './components/SplitPdfModal';
 import { GradeBoundariesModal } from './components/GradeBoundariesModal';
 import { FormulaBookletModal } from './components/FormulaBookletModal';
 import { InteractiveExamRunner } from './components/InteractiveExamRunner';
+import { ExamTimerModal } from './components/ExamTimerModal';
 import { getInteractivePaper, InteractivePaper } from './data/interactiveQuestions';
 import { applyTheme, applyFont } from './utils/theme';
 import { Sigma, BarChart3 } from 'lucide-react';
@@ -31,6 +32,7 @@ export default function App() {
   const [activeInteractivePaper, setActiveInteractivePaper] = useState<InteractivePaper | null>(null);
   const [showBoundariesModal, setShowBoundariesModal] = useState(false);
   const [showFormulasModal, setShowFormulasModal] = useState(false);
+  const [showTimerModal, setShowTimerModal] = useState(false);
 
   // Completed tracking
   const [completedMap, setCompletedMap] = useState<Record<string, boolean>>(() => {
@@ -91,6 +93,7 @@ export default function App() {
         }}
         onOpenBoundaries={() => setShowBoundariesModal(true)}
         onOpenFormulas={() => setShowFormulasModal(true)}
+        onOpenTimer={() => setShowTimerModal(true)}
       />
 
       {/* Main View */}
@@ -175,6 +178,11 @@ export default function App() {
       {/* Formula Booklet Modal */}
       {showFormulasModal && (
         <FormulaBookletModal onClose={() => setShowFormulasModal(false)} />
+      )}
+
+      {/* Standalone Exam Timer Modal */}
+      {showTimerModal && (
+        <ExamTimerModal onClose={() => setShowTimerModal(false)} />
       )}
     </div>
   );
