@@ -291,38 +291,38 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
     const paperAttempts = pastAttempts.filter((a) => a.paperId === paper.id);
 
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2C2620]/90 backdrop-blur-sm text-[#FAF6F0]">
-        <div className="bg-[#3E362E] border border-[#93785B]/40 rounded-xl max-w-lg w-full p-6 space-y-5 shadow-2xl">
-          <div className="border-b border-[#93785B]/25 pb-4">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0A1020]/90 backdrop-blur-sm text-[#E8ECF4] animate-fadeIn">
+        <div className="bg-[#1A2540] border border-[#6382BF]/40 rounded-xl max-w-lg w-full p-6 space-y-5 shadow-2xl animate-modalFadeIn">
+          <div className="border-b border-[#6382BF]/25 pb-4">
             <div className="flex items-center justify-between">
-              <span className="text-xs px-2.5 py-1 rounded bg-[#2C2620] border border-[#93785B]/40 text-[#865D36] font-semibold">
+              <span className="text-xs px-2.5 py-1 rounded bg-[#0A1020] border border-[#6382BF]/40 text-[#4A7BF7] font-semibold">
                 {paper.paperCode}
               </span>
               {paperAttempts.length > 0 && (
                 <button
                   onClick={() => setShowAttemptsModal(true)}
-                  className="flex items-center gap-1.5 text-xs text-[#AC8968] hover:text-[#FAF6F0] transition-colors"
+                  className="flex items-center gap-1.5 text-xs text-[#7B8FAD] hover:text-[#E8ECF4] transition-colors"
                 >
-                  <History size={13} className="text-[#865D36]" />
+                  <History size={13} className="text-[#4A7BF7]" />
                   <span>{paperAttempts.length} Past {paperAttempts.length === 1 ? 'Attempt' : 'Attempts'}</span>
                 </button>
               )}
             </div>
-            <h2 className="text-xl font-serif font-bold text-[#FAF6F0] mt-2.5">{paper.title}</h2>
-            <p className="text-xs text-[#AC8968] mt-1">
+            <h2 className="text-xl font-bold text-[#E8ECF4] mt-2.5">{paper.title}</h2>
+            <p className="text-xs text-[#7B8FAD] mt-1">
               {paper.questions.length} questions · {paperMaxMarks} marks
             </p>
           </div>
 
           {/* Session Draft Recovery Banner */}
           {savedDraft && (
-            <div className="p-3.5 rounded-xl bg-[#2C2620] border border-[#865D36]/60 flex items-center justify-between text-xs shadow-sm">
+            <div className="p-3.5 rounded-xl bg-[#0A1020] border border-[#4A7BF7]/60 flex items-center justify-between text-xs shadow-sm">
               <div>
-                <div className="font-semibold text-[#FAF6F0] flex items-center gap-1.5">
-                  <Clock size={13} className="text-[#865D36]" />
+                <div className="font-semibold text-[#E8ECF4] flex items-center gap-1.5">
+                  <Clock size={13} className="text-[#4A7BF7]" />
                   <span>Resume In-Progress Attempt?</span>
                 </div>
-                <div className="text-[11px] text-[#AC8968] mt-0.5">
+                <div className="text-[11px] text-[#7B8FAD] mt-0.5">
                   {Object.keys(savedDraft.scores || {}).length} questions marked · Q{(savedDraft.currentIndex || 0) + 1} of {paper.questions.length}
                 </div>
               </div>
@@ -335,7 +335,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                     } catch {}
                     setSavedDraft(null);
                   }}
-                  className="px-2 py-1 text-[11px] text-[#A69080] hover:text-[#FAF6F0] transition-colors"
+                  className="px-2 py-1 text-[11px] text-[#7B8FAD] hover:text-[#E8ECF4] transition-colors"
                 >
                   Discard
                 </button>
@@ -353,7 +353,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                     if (savedDraft.timingMode) setTimingMode(savedDraft.timingMode);
                     setIsStarted(true);
                   }}
-                  className="px-3 py-1.5 rounded-lg bg-[#865D36] hover:bg-[#93785B] text-[#FAF6F0] font-semibold text-xs transition-colors shadow-sm"
+                  className="px-3 py-1.5 rounded-lg bg-[#4A7BF7] hover:bg-[#6382BF] text-[#E8ECF4] font-semibold text-xs transition-colors shadow-sm"
                 >
                   Resume
                 </button>
@@ -363,7 +363,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
 
           {/* Option: Feedback Mode */}
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-[#FAF6F0] block uppercase tracking-wider">
+            <label className="text-xs font-semibold text-[#E8ECF4] block uppercase tracking-wider">
               Mark Scheme Display
             </label>
             <div className="grid grid-cols-2 gap-2.5 text-xs">
@@ -372,15 +372,15 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                 onClick={() => setFeedbackMode('immediate')}
                 className={`p-3 rounded-lg border text-left transition-colors ${
                   feedbackMode === 'immediate'
-                    ? 'bg-[#2C2620] border-[#865D36] text-[#FAF6F0] font-medium shadow-sm'
-                    : 'bg-[#2C2620]/50 border-[#93785B]/25 text-[#AC8968] hover:text-[#FAF6F0]'
+                    ? 'bg-[#0A1020] border-[#4A7BF7] text-[#E8ECF4] font-medium shadow-sm'
+                    : 'bg-[#0A1020]/50 border-[#6382BF]/25 text-[#7B8FAD] hover:text-[#E8ECF4]'
                 }`}
               >
-                <div className="font-semibold text-[#FAF6F0] mb-0.5 flex items-center gap-1.5">
-                  <Eye size={13} className="text-[#865D36]" />
+                <div className="font-semibold text-[#E8ECF4] mb-0.5 flex items-center gap-1.5">
+                  <Eye size={13} className="text-[#4A7BF7]" />
                   <span>After Each Question</span>
                 </div>
-                <div className="text-[11px] text-[#A69080]">Show answers and marking guidance as you go.</div>
+                <div className="text-[11px] text-[#7B8FAD]">Show answers and marking guidance as you go.</div>
               </button>
 
               <button
@@ -388,22 +388,22 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                 onClick={() => setFeedbackMode('end')}
                 className={`p-3 rounded-lg border text-left transition-colors ${
                   feedbackMode === 'end'
-                    ? 'bg-[#2C2620] border-[#865D36] text-[#FAF6F0] font-medium shadow-sm'
-                    : 'bg-[#2C2620]/50 border-[#93785B]/25 text-[#AC8968] hover:text-[#FAF6F0]'
+                    ? 'bg-[#0A1020] border-[#4A7BF7] text-[#E8ECF4] font-medium shadow-sm'
+                    : 'bg-[#0A1020]/50 border-[#6382BF]/25 text-[#7B8FAD] hover:text-[#E8ECF4]'
                 }`}
               >
-                <div className="font-semibold text-[#FAF6F0] mb-0.5 flex items-center gap-1.5">
-                  <EyeOff size={13} className="text-[#A69080]" />
+                <div className="font-semibold text-[#E8ECF4] mb-0.5 flex items-center gap-1.5">
+                  <EyeOff size={13} className="text-[#7B8FAD]" />
                   <span>At the End</span>
                 </div>
-                <div className="text-[11px] text-[#A69080]">Show answers after submitting all questions.</div>
+                <div className="text-[11px] text-[#7B8FAD]">Show answers after submitting all questions.</div>
               </button>
             </div>
           </div>
 
           {/* Option: Timing */}
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-[#FAF6F0] block uppercase tracking-wider">
+            <label className="text-xs font-semibold text-[#E8ECF4] block uppercase tracking-wider">
               Timer
             </label>
             <div className="grid grid-cols-2 gap-2.5 text-xs">
@@ -412,15 +412,15 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                 onClick={() => setTimingMode('timed')}
                 className={`p-3 rounded-lg border text-left transition-colors ${
                   timingMode === 'timed'
-                    ? 'bg-[#2C2620] border-[#865D36] text-[#FAF6F0] font-medium shadow-sm'
-                    : 'bg-[#2C2620]/50 border-[#93785B]/25 text-[#AC8968] hover:text-[#FAF6F0]'
+                    ? 'bg-[#0A1020] border-[#4A7BF7] text-[#E8ECF4] font-medium shadow-sm'
+                    : 'bg-[#0A1020]/50 border-[#6382BF]/25 text-[#7B8FAD] hover:text-[#E8ECF4]'
                 }`}
               >
-                <div className="font-semibold text-[#FAF6F0] mb-0.5 flex items-center gap-1.5">
-                  <Clock size={13} className="text-[#865D36]" />
+                <div className="font-semibold text-[#E8ECF4] mb-0.5 flex items-center gap-1.5">
+                  <Clock size={13} className="text-[#4A7BF7]" />
                   <span>Timed ({paper.durationMinutes} mins)</span>
                 </div>
-                <div className="text-[11px] text-[#A69080]">Countdown with sound alert.</div>
+                <div className="text-[11px] text-[#7B8FAD]">Countdown with sound alert.</div>
               </button>
 
               <button
@@ -428,22 +428,22 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                 onClick={() => setTimingMode('untimed')}
                 className={`p-3 rounded-lg border text-left transition-colors ${
                   timingMode === 'untimed'
-                    ? 'bg-[#2C2620] border-[#865D36] text-[#FAF6F0] font-medium shadow-sm'
-                    : 'bg-[#2C2620]/50 border-[#93785B]/25 text-[#AC8968] hover:text-[#FAF6F0]'
+                    ? 'bg-[#0A1020] border-[#4A7BF7] text-[#E8ECF4] font-medium shadow-sm'
+                    : 'bg-[#0A1020]/50 border-[#6382BF]/25 text-[#7B8FAD] hover:text-[#E8ECF4]'
                 }`}
               >
-                <div className="font-semibold text-[#FAF6F0] mb-0.5 flex items-center gap-1.5">
-                  <Sparkles size={13} className="text-[#AC8968]" />
+                <div className="font-semibold text-[#E8ECF4] mb-0.5 flex items-center gap-1.5">
+                  <Sparkles size={13} className="text-[#7B8FAD]" />
                   <span>Untimed</span>
                 </div>
-                <div className="text-[11px] text-[#A69080]">Practice with no time limit.</div>
+                <div className="text-[11px] text-[#7B8FAD]">Practice with no time limit.</div>
               </button>
             </div>
           </div>
 
           {/* Formula Booklet Access notice */}
-          <div className="p-3 rounded-lg bg-[#2C2620] border border-[#93785B]/30 text-xs text-[#AC8968] flex items-center gap-2.5">
-            <BookOpen size={16} className="text-[#865D36] shrink-0" />
+          <div className="p-3 rounded-lg bg-[#0A1020] border border-[#6382BF]/30 text-xs text-[#7B8FAD] flex items-center gap-2.5">
+            <BookOpen size={16} className="text-[#4A7BF7] shrink-0" />
             <span>Formula booklet is available throughout the test.</span>
           </div>
 
@@ -451,13 +451,13 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
           <div className="flex items-center justify-between pt-2">
             <button
               onClick={onClose}
-              className="px-4 py-2 text-xs rounded-lg bg-[#2C2620] hover:bg-[#2C2620]/80 text-[#AC8968] hover:text-[#FAF6F0] border border-[#93785B]/30 transition-colors"
+              className="px-4 py-2 text-xs rounded-lg bg-[#0A1020] hover:bg-[#0A1020]/80 text-[#7B8FAD] hover:text-[#E8ECF4] border border-[#6382BF]/30 transition-colors"
             >
               Cancel
             </button>
             <button
               onClick={() => setIsStarted(true)}
-              className="px-5 py-2 text-xs font-semibold rounded-lg bg-[#865D36] hover:bg-[#93785B] text-[#FAF6F0] transition-colors flex items-center gap-1.5 shadow-sm"
+              className="px-5 py-2 text-xs font-semibold rounded-lg bg-[#4A7BF7] hover:bg-[#6382BF] text-[#E8ECF4] transition-colors flex items-center gap-1.5 shadow-sm"
             >
               <span>Start</span>
               <ChevronRight size={14} />
@@ -468,15 +468,15 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
         {/* Past Attempts Modal */}
         {showAttemptsModal && (
           <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-            <div className="bg-[#3E362E] border border-[#93785B]/40 rounded-xl max-w-md w-full p-5 space-y-4 shadow-2xl">
-              <div className="flex items-center justify-between border-b border-[#93785B]/25 pb-2.5">
-                <h3 className="font-serif font-semibold text-[#FAF6F0] text-sm flex items-center gap-2">
-                  <History size={16} className="text-[#865D36]" />
+            <div className="bg-[#1A2540] border border-[#6382BF]/40 rounded-xl max-w-md w-full p-5 space-y-4 shadow-2xl">
+              <div className="flex items-center justify-between border-b border-[#6382BF]/25 pb-2.5">
+                <h3 className="font-semibold text-[#E8ECF4] text-sm flex items-center gap-2">
+                  <History size={16} className="text-[#4A7BF7]" />
                   Past Attempts for {paper.paperCode}
                 </h3>
                 <button
                   onClick={() => setShowAttemptsModal(false)}
-                  className="p-1 rounded text-[#AC8968] hover:text-[#FAF6F0]"
+                  className="p-1 rounded text-[#7B8FAD] hover:text-[#E8ECF4]"
                 >
                   <X size={16} />
                 </button>
@@ -484,20 +484,20 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
 
               <div className="max-h-72 overflow-y-auto space-y-2">
                 {paperAttempts.map((att) => (
-                  <div key={att.id} className="p-3 rounded-lg bg-[#2C2620] border border-[#93785B]/30 flex items-center justify-between text-xs">
+                  <div key={att.id} className="p-3 rounded-lg bg-[#0A1020] border border-[#6382BF]/30 flex items-center justify-between text-xs">
                     <div>
-                      <div className="font-semibold text-[#FAF6F0]">
+                      <div className="font-semibold text-[#E8ECF4]">
                         {new Date(att.completedAt).toLocaleDateString()} {new Date(att.completedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </div>
-                      <div className="text-[11px] text-[#A69080]">
+                      <div className="text-[11px] text-[#7B8FAD]">
                         {att.timingMode === 'timed' ? 'Timed' : 'Untimed'} · {att.feedbackMode === 'immediate' ? 'Immediate' : 'Exam Mode'}
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="font-bold text-[#FAF6F0] text-sm tabular-nums">
+                      <div className="font-bold text-[#E8ECF4] text-sm tabular-nums">
                         {att.achievedScore} / {att.maxScore}
                       </div>
-                      <span className="inline-block px-1.5 py-0.2 rounded bg-[#865D36] text-[#FAF6F0] font-bold text-[10px]">
+                      <span className="inline-block px-1.5 py-0.2 rounded bg-[#4A7BF7] text-[#E8ECF4] font-bold text-[10px]">
                         Grade {att.predictedGrade} ({att.percentage}%)
                       </span>
                     </div>
@@ -516,33 +516,33 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
     const grade = calculateGrade(percent);
 
     return (
-      <div className="fixed inset-0 z-50 flex flex-col bg-[#2C2620] text-[#FAF6F0] overflow-y-auto">
+      <div className="fixed inset-0 z-50 flex flex-col bg-[#0A1020] text-[#E8ECF4] overflow-y-auto">
         <div className="max-w-4xl mx-auto w-full px-4 py-8 space-y-6">
           {/* Top Banner */}
-          <div className="border-b border-[#93785B]/30 pb-4 flex items-center justify-between flex-wrap gap-4">
+          <div className="border-b border-[#6382BF]/30 pb-4 flex items-center justify-between flex-wrap gap-4">
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs px-2.5 py-0.5 rounded bg-[#3E362E] border border-[#93785B]/40 text-[#865D36] font-semibold">
+                <span className="text-xs px-2.5 py-0.5 rounded bg-[#1A2540] border border-[#6382BF]/40 text-[#4A7BF7] font-semibold">
                   {paper.paperCode}
                 </span>
-                <span className="text-xs text-[#AC8968] font-medium flex items-center gap-1">
-                  <CheckCircle2 size={13} className="text-[#865D36]" />
+                <span className="text-xs text-[#7B8FAD] font-medium flex items-center gap-1">
+                  <CheckCircle2 size={13} className="text-[#4A7BF7]" />
                   Saved
                 </span>
               </div>
-              <h2 className="text-2xl font-serif font-bold text-[#FAF6F0] mt-1.5">{paper.title} — Summary</h2>
+              <h2 className="text-2xl font-bold text-[#E8ECF4] mt-1.5">{paper.title} — Summary</h2>
             </div>
             <div className="flex items-center gap-2.5">
               <button
                 onClick={handleRestart}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#3E362E] hover:bg-[#865D36] text-[#FAF6F0] border border-[#93785B]/40 text-xs font-medium transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#1A2540] hover:bg-[#4A7BF7] text-[#E8ECF4] border border-[#6382BF]/40 text-xs font-medium transition-colors"
               >
                 <RotateCcw size={13} />
                 <span>Retake</span>
               </button>
               <button
                 onClick={onClose}
-                className="px-4 py-1.5 rounded-lg bg-[#865D36] hover:bg-[#93785B] text-[#FAF6F0] font-semibold text-xs transition-colors shadow-sm"
+                className="px-4 py-1.5 rounded-lg bg-[#4A7BF7] hover:bg-[#6382BF] text-[#E8ECF4] font-semibold text-xs transition-colors shadow-sm"
               >
                 Done
               </button>
@@ -550,27 +550,27 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
           </div>
 
           {/* Performance Summary Card */}
-          <div className="p-6 rounded-xl border border-[#93785B]/30 bg-[#3E362E] flex flex-wrap items-center justify-between gap-6 shadow-md">
+          <div className="p-6 rounded-xl border border-[#6382BF]/30 bg-[#1A2540] flex flex-wrap items-center justify-between gap-6 shadow-md">
             <div className="space-y-1">
-              <div className="text-xs text-[#AC8968] uppercase tracking-wider font-semibold">Score</div>
-              <div className="text-4xl font-serif font-extrabold text-[#FAF6F0] tabular-nums flex items-baseline gap-2">
+              <div className="text-xs text-[#7B8FAD] uppercase tracking-wider font-semibold">Score</div>
+              <div className="text-4xl font-serif font-extrabold text-[#E8ECF4] tabular-nums flex items-baseline gap-2">
                 <span>{totalAchievedScore}</span>
-                <span className="text-lg text-[#AC8968] font-normal">/ {paperMaxMarks}</span>
-                <span className="text-xl text-[#865D36] font-bold ml-2">({percent}%)</span>
+                <span className="text-lg text-[#7B8FAD] font-normal">/ {paperMaxMarks}</span>
+                <span className="text-xl text-[#4A7BF7] font-bold ml-2">({percent}%)</span>
               </div>
-              <div className="text-xs text-[#A69080]">
-                Time: <span className="text-[#FAF6F0] tabular-nums">{Math.floor(timeSpent / 60)}m {timeSpent % 60}s</span>
+              <div className="text-xs text-[#7B8FAD]">
+                Time: <span className="text-[#E8ECF4] tabular-nums">{Math.floor(timeSpent / 60)}m {timeSpent % 60}s</span>
               </div>
             </div>
 
             <div className="flex items-center gap-4">
-              <div className="text-center p-3.5 rounded-xl bg-[#2C2620] border border-[#93785B]/30 min-w-28">
-                <div className="text-[11px] text-[#AC8968] uppercase tracking-wider">Projected Grade</div>
-                <div className="text-3xl font-serif font-black text-[#865D36] mt-0.5">{grade}</div>
+              <div className="text-center p-3.5 rounded-xl bg-[#0A1020] border border-[#6382BF]/30 min-w-28">
+                <div className="text-[11px] text-[#7B8FAD] uppercase tracking-wider">Projected Grade</div>
+                <div className="text-3xl font-serif font-black text-[#4A7BF7] mt-0.5">{grade}</div>
               </div>
-              <div className="text-center p-3.5 rounded-xl bg-[#2C2620] border border-[#93785B]/30 min-w-28">
-                <div className="text-[11px] text-[#AC8968] uppercase tracking-wider">Answered</div>
-                <div className="text-2xl font-bold text-[#FAF6F0] tabular-nums mt-0.5">
+              <div className="text-center p-3.5 rounded-xl bg-[#0A1020] border border-[#6382BF]/30 min-w-28">
+                <div className="text-[11px] text-[#7B8FAD] uppercase tracking-wider">Answered</div>
+                <div className="text-2xl font-bold text-[#E8ECF4] tabular-nums mt-0.5">
                   {Object.keys(scores).length} / {paper.questions.length}
                 </div>
               </div>
@@ -580,40 +580,40 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
           {/* Question-by-Question Full Mark Scheme Review */}
           <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-serif font-bold text-[#FAF6F0] uppercase tracking-wider flex items-center gap-2">
-                <Award size={16} className="text-[#865D36]" />
+              <h3 className="text-sm font-bold text-[#E8ECF4] uppercase tracking-wider flex items-center gap-2">
+                <Award size={16} className="text-[#4A7BF7]" />
                 Questions & Mark Scheme
               </h3>
-              <span className="text-xs text-[#AC8968]">Marks can be updated below</span>
+              <span className="text-xs text-[#7B8FAD]">Marks can be updated below</span>
             </div>
 
             {paper.questions.map((q) => {
               return (
-                <div key={q.number} className="border border-[#93785B]/30 rounded-xl p-5 bg-[#3E362E] space-y-4 shadow-sm">
-                  <div className="flex items-center justify-between border-b border-[#93785B]/25 pb-3">
+                <div key={q.number} className="border border-[#6382BF]/30 rounded-xl p-5 bg-[#1A2540] space-y-4 shadow-sm">
+                  <div className="flex items-center justify-between border-b border-[#6382BF]/25 pb-3">
                     <div className="flex items-center gap-2.5">
-                      <span className="font-serif font-bold text-[#FAF6F0] text-base">Question {q.number}</span>
-                      <span className="text-xs text-[#FAF6F0] font-medium px-2 py-0.5 rounded bg-[#2C2620] border border-[#93785B]/40">
+                      <span className="font-bold text-[#E8ECF4] text-base">Question {q.number}</span>
+                      <span className="text-xs text-[#E8ECF4] font-medium px-2 py-0.5 rounded bg-[#0A1020] border border-[#6382BF]/40">
                         {q.topic}
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-xs">
-                      <span className="text-[#AC8968]">Score:</span>
+                      <span className="text-[#7B8FAD]">Score:</span>
                       <input
                         type="number"
                         min="0"
                         max={q.totalMarks}
                         value={scores[q.number] !== undefined ? String(scores[q.number]) : ''}
                         onChange={(e) => handleScoreChange(q.number, e.target.value, q.totalMarks)}
-                        className="w-14 px-2 py-1 bg-[#2C2620] border border-[#93785B]/40 rounded text-center text-[#FAF6F0] font-bold text-xs tabular-nums focus:outline-none focus:border-[#865D36]"
+                        className="w-14 px-2 py-1 bg-[#0A1020] border border-[#6382BF]/40 rounded text-center text-[#E8ECF4] font-bold text-xs tabular-nums focus:outline-none focus:border-[#4A7BF7]"
                       />
-                      <span className="text-[#AC8968]">/ {q.totalMarks} marks</span>
+                      <span className="text-[#7B8FAD]">/ {q.totalMarks} marks</span>
                     </div>
                   </div>
 
                   {/* Question context */}
                   {q.contextText && (
-                    <div className="text-sm text-[#FAF6F0] bg-[#2C2620] p-3.5 rounded-lg border border-[#93785B]/25 leading-relaxed font-sans">
+                    <div className="text-sm text-[#E8ECF4] bg-[#0A1020] p-3.5 rounded-lg border border-[#6382BF]/25 leading-relaxed font-sans">
                       <FormattedMathText text={q.contextText} />
                     </div>
                   )}
@@ -621,18 +621,18 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                   {/* Parts */}
                   <div className="space-y-3.5">
                     {q.parts.map((part, pIdx) => (
-                      <div key={pIdx} className="text-xs pl-3 border-l-2 border-[#865D36] space-y-2">
+                      <div key={pIdx} className="text-xs pl-3 border-l-2 border-[#4A7BF7] space-y-2">
                         <div className="flex items-center justify-between">
-                          <span className="font-bold text-[#FAF6F0] text-xs">
+                          <span className="font-bold text-[#E8ECF4] text-xs">
                             Part {part.partLabel}
                           </span>
-                          <span className="text-[#A69080]">[{part.marks} {part.marks === 1 ? 'mark' : 'marks'}]</span>
+                          <span className="text-[#7B8FAD]">[{part.marks} {part.marks === 1 ? 'mark' : 'marks'}]</span>
                         </div>
-                        <FormattedMathText text={part.text} className="text-[#FAF6F0] text-sm" />
+                        <FormattedMathText text={part.text} className="text-[#E8ECF4] text-sm" />
                         
                         {part.solution && (
-                          <div className="mt-2 p-3 rounded-lg bg-[#2C2620] border border-[#93785B]/25 text-xs text-[#FAF6F0] space-y-1">
-                            <span className="text-[11px] font-semibold text-[#865D36] block">Worked Solution:</span>
+                          <div className="mt-2 p-3 rounded-lg bg-[#0A1020] border border-[#6382BF]/25 text-xs text-[#E8ECF4] space-y-1">
+                            <span className="text-[11px] font-semibold text-[#4A7BF7] block">Worked Solution:</span>
                             <FormattedMathText text={part.solution} />
                           </div>
                         )}
@@ -641,29 +641,29 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                   </div>
 
                   {/* Official Marking Guidance */}
-                  <div className="pt-3 border-t border-[#93785B]/25 space-y-2">
-                    <span className="text-xs font-semibold text-[#AC8968] uppercase tracking-wider block">
+                  <div className="pt-3 border-t border-[#6382BF]/25 space-y-2">
+                    <span className="text-xs font-semibold text-[#7B8FAD] uppercase tracking-wider block">
                       Marking Guidance:
                     </span>
-                    <div className="p-3.5 rounded-lg bg-[#2C2620] border border-[#93785B]/25 text-[#FAF6F0] text-xs leading-relaxed">
+                    <div className="p-3.5 rounded-lg bg-[#0A1020] border border-[#6382BF]/25 text-[#E8ECF4] text-xs leading-relaxed">
                       <FormattedMathText text={q.fullMarkScheme} />
                     </div>
                   </div>
 
                   {/* Final Answer */}
-                  <div className="p-2.5 rounded-lg bg-[#2C2620] border border-[#865D36]/40 text-xs flex items-baseline gap-2">
-                    <span className="text-[#865D36] font-semibold">Final Answer:</span>
-                    <FormattedMathText text={q.finalAnswer} className="font-semibold text-[#FAF6F0]" />
+                  <div className="p-2.5 rounded-lg bg-[#0A1020] border border-[#4A7BF7]/40 text-xs flex items-baseline gap-2">
+                    <span className="text-[#4A7BF7] font-semibold">Final Answer:</span>
+                    <FormattedMathText text={q.finalAnswer} className="font-semibold text-[#E8ECF4]" />
                   </div>
                 </div>
               );
             })}
           </div>
 
-          <div className="pt-4 border-t border-[#93785B]/25 flex justify-end">
+          <div className="pt-4 border-t border-[#6382BF]/25 flex justify-end">
             <button
               onClick={onClose}
-              className="px-6 py-2.5 rounded-lg bg-[#865D36] hover:bg-[#93785B] text-[#FAF6F0] font-semibold text-xs transition-colors shadow-sm"
+              className="px-6 py-2.5 rounded-lg bg-[#4A7BF7] hover:bg-[#6382BF] text-[#E8ECF4] font-semibold text-xs transition-colors shadow-sm"
             >
               Finish & Return to Papers
             </button>
@@ -681,17 +681,17 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
   });
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-[#2C2620] text-[#FAF6F0]">
+    <div className="fixed inset-0 z-50 flex flex-col bg-[#0A1020] text-[#E8ECF4]">
       {/* Top Exam Header */}
-      <div className="h-14 px-4 bg-[#3E362E] border-b border-[#93785B]/30 flex items-center justify-between gap-4 shrink-0 shadow-md">
+      <div className="h-14 px-4 bg-[#1A2540] border-b border-[#6382BF]/30 flex items-center justify-between gap-4 shrink-0 shadow-md">
         <div className="flex items-center gap-3 min-w-0">
-          <span className="text-xs px-2.5 py-0.5 rounded bg-[#2C2620] border border-[#93785B]/40 text-[#865D36] font-semibold">
+          <span className="text-xs px-2.5 py-0.5 rounded bg-[#0A1020] border border-[#6382BF]/40 text-[#4A7BF7] font-semibold">
             {paper.paperCode}
           </span>
-          <span className="font-serif font-bold text-sm text-[#FAF6F0] truncate hidden md:inline">
+          <span className="font-bold text-sm text-[#E8ECF4] truncate hidden md:inline">
             {paper.title}
           </span>
-          <span className="text-[#AC8968] text-xs">
+          <span className="text-[#7B8FAD] text-xs">
             Q{currentQ.number} of {paper.questions.length}
           </span>
         </div>
@@ -703,12 +703,12 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
             onClick={() => setShowFormulaDrawer(!showFormulaDrawer)}
             className={`flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg border font-medium transition-colors ${
               showFormulaDrawer
-                ? 'bg-[#2C2620] border-[#865D36] text-[#FAF6F0]'
-                : 'bg-[#2C2620] hover:bg-[#865D36] text-[#FAF6F0] border-[#93785B]/40'
+                ? 'bg-[#0A1020] border-[#4A7BF7] text-[#E8ECF4]'
+                : 'bg-[#0A1020] hover:bg-[#4A7BF7] text-[#E8ECF4] border-[#6382BF]/40'
             }`}
             title="Toggle Formula Booklet Dock (Key: B)"
           >
-            <BookOpen size={13} className="text-[#AC8968]" />
+            <BookOpen size={13} className="text-[#7B8FAD]" />
             <span className="hidden sm:inline">Formula Booklet</span>
           </button>
 
@@ -717,18 +717,18 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
             onClick={() => setShowNavDrawer(!showNavDrawer)}
             className={`flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg border font-medium transition-colors ${
               showNavDrawer 
-                ? 'bg-[#2C2620] border-[#865D36] text-[#FAF6F0]' 
-                : 'bg-[#2C2620] hover:bg-[#865D36]/40 border-[#93785B]/40 text-[#FAF6F0]'
+                ? 'bg-[#0A1020] border-[#4A7BF7] text-[#E8ECF4]' 
+                : 'bg-[#0A1020] hover:bg-[#4A7BF7]/40 border-[#6382BF]/40 text-[#E8ECF4]'
             }`}
           >
-            <Layers size={13} className="text-[#865D36]" />
+            <Layers size={13} className="text-[#4A7BF7]" />
             <span>Questions</span>
           </button>
 
           {/* Finish & Review */}
           <button
             onClick={handleFinishExam}
-            className="px-3.5 py-1.5 text-xs rounded-lg bg-[#865D36] hover:bg-[#93785B] text-[#FAF6F0] font-semibold transition-colors shadow-sm"
+            className="px-3.5 py-1.5 text-xs rounded-lg bg-[#4A7BF7] hover:bg-[#6382BF] text-[#E8ECF4] font-semibold transition-colors shadow-sm"
           >
             Finish
           </button>
@@ -737,16 +737,16 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
 
       {/* Review & Navigation Section (Drawer / Panel) */}
       {showNavDrawer && (
-        <div className="bg-[#3E362E] border-b border-[#93785B]/35 p-4 shrink-0 transition-all shadow-xl">
+        <div className="bg-[#1A2540] border-b border-[#6382BF]/35 p-4 shrink-0 transition-all shadow-xl">
           <div className="max-w-4xl mx-auto space-y-3">
             <div className="flex items-center justify-between text-xs">
               <div className="flex items-center gap-4">
-                <span className="font-semibold text-[#FAF6F0]">Status:</span>
-                <span className="text-[#AC8968]">
-                  Answered: <strong className="text-[#FAF6F0] tabular-nums">{Object.keys(scores).length}</strong> / {paper.questions.length}
+                <span className="font-semibold text-[#E8ECF4]">Status:</span>
+                <span className="text-[#7B8FAD]">
+                  Answered: <strong className="text-[#E8ECF4] tabular-nums">{Object.keys(scores).length}</strong> / {paper.questions.length}
                 </span>
-                <span className="text-[#AC8968]">
-                  Flagged: <strong className="text-[#865D36] tabular-nums">{Object.values(flagged).filter(Boolean).length}</strong>
+                <span className="text-[#7B8FAD]">
+                  Flagged: <strong className="text-[#4A7BF7] tabular-nums">{Object.values(flagged).filter(Boolean).length}</strong>
                 </span>
               </div>
 
@@ -756,8 +756,8 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                   onClick={() => setNavFilter('all')}
                   className={`px-2 py-0.5 rounded text-[11px] font-medium border ${
                     navFilter === 'all'
-                      ? 'bg-[#2C2620] border-[#865D36] text-[#FAF6F0]'
-                      : 'bg-[#2C2620]/60 border-[#93785B]/30 text-[#AC8968] hover:text-[#FAF6F0]'
+                      ? 'bg-[#0A1020] border-[#4A7BF7] text-[#E8ECF4]'
+                      : 'bg-[#0A1020]/60 border-[#6382BF]/30 text-[#7B8FAD] hover:text-[#E8ECF4]'
                   }`}
                 >
                   All ({paper.questions.length})
@@ -766,8 +766,8 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                   onClick={() => setNavFilter('flagged')}
                   className={`px-2 py-0.5 rounded text-[11px] font-medium border ${
                     navFilter === 'flagged'
-                      ? 'bg-[#865D36] border-[#865D36] text-[#FAF6F0]'
-                      : 'bg-[#2C2620]/60 border-[#93785B]/30 text-[#AC8968] hover:text-[#FAF6F0]'
+                      ? 'bg-[#4A7BF7] border-[#4A7BF7] text-[#E8ECF4]'
+                      : 'bg-[#0A1020]/60 border-[#6382BF]/30 text-[#7B8FAD] hover:text-[#E8ECF4]'
                   }`}
                 >
                   Flagged
@@ -776,8 +776,8 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                   onClick={() => setNavFilter('unanswered')}
                   className={`px-2 py-0.5 rounded text-[11px] font-medium border ${
                     navFilter === 'unanswered'
-                      ? 'bg-[#2C2620] border-[#865D36] text-[#FAF6F0]'
-                      : 'bg-[#2C2620]/60 border-[#93785B]/30 text-[#AC8968] hover:text-[#FAF6F0]'
+                      ? 'bg-[#0A1020] border-[#4A7BF7] text-[#E8ECF4]'
+                      : 'bg-[#0A1020]/60 border-[#6382BF]/30 text-[#7B8FAD] hover:text-[#E8ECF4]'
                   }`}
                 >
                   Unanswered
@@ -802,15 +802,15 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                     }}
                     className={`w-9 h-9 rounded-lg text-xs font-semibold transition-all relative flex flex-col items-center justify-center ${
                       isCurrent
-                        ? 'bg-[#865D36] text-[#FAF6F0] ring-2 ring-[#FAF6F0]'
+                        ? 'bg-[#4A7BF7] text-[#E8ECF4] ring-2 ring-[#E8ECF4]'
                         : hasScore
-                          ? 'bg-[#93785B] border border-[#93785B]/50 text-[#FAF6F0]'
-                          : 'bg-[#2C2620] border border-[#93785B]/30 text-[#AC8968] hover:text-[#FAF6F0]'
+                          ? 'bg-[#6382BF] border border-[#6382BF]/50 text-[#E8ECF4]'
+                          : 'bg-[#0A1020] border border-[#6382BF]/30 text-[#7B8FAD] hover:text-[#E8ECF4]'
                     }`}
                   >
                     <span className="tabular-nums">{q.number}</span>
                     {isFlag && (
-                      <span className="w-2 h-2 rounded-full bg-[#865D36] absolute top-1 right-1" />
+                      <span className="w-2 h-2 rounded-full bg-[#4A7BF7] absolute top-1 right-1" />
                     )}
                   </button>
                 );
@@ -826,16 +826,16 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
         <div className="max-w-3xl mx-auto space-y-6">
           {/* Question Header Card with INLINE COUNTDOWN CLOCK in Libre Font */}
-          <div className="p-4 sm:p-5 rounded-xl bg-[#3E362E] border border-[#93785B]/30 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="p-4 sm:p-5 rounded-xl bg-[#1A2540] border border-[#6382BF]/30 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-lg sm:text-xl font-serif font-bold text-[#FAF6F0]">Question {currentQ.number}</h2>
-                <span className="text-xs font-semibold px-2.5 py-0.5 rounded bg-[#2C2620] border border-[#93785B]/40 text-[#865D36]">
+                <h2 className="text-lg sm:text-xl font-bold text-[#E8ECF4]">Question {currentQ.number}</h2>
+                <span className="text-xs font-semibold px-2.5 py-0.5 rounded bg-[#0A1020] border border-[#6382BF]/40 text-[#4A7BF7]">
                   {currentQ.topic}
                 </span>
               </div>
-              <div className="text-xs text-[#AC8968] mt-1">
-                Total marks: <strong className="text-[#FAF6F0] tabular-nums">{currentQ.totalMarks}</strong>
+              <div className="text-xs text-[#7B8FAD] mt-1">
+                Total marks: <strong className="text-[#E8ECF4] tabular-nums">{currentQ.totalMarks}</strong>
               </div>
             </div>
 
@@ -855,12 +855,12 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                 onClick={() => setFlagged({ ...flagged, [currentQ.number]: !flagged[currentQ.number] })}
                 className={`p-2 rounded-lg border text-xs font-medium transition-colors flex items-center gap-1.5 ${
                   flagged[currentQ.number]
-                    ? 'bg-[#865D36] border-[#865D36] text-[#FAF6F0]'
-                    : 'bg-[#2C2620] border-[#93785B]/30 text-[#AC8968] hover:text-[#FAF6F0]'
+                    ? 'bg-[#4A7BF7] border-[#4A7BF7] text-[#E8ECF4]'
+                    : 'bg-[#0A1020] border-[#6382BF]/30 text-[#7B8FAD] hover:text-[#E8ECF4]'
                 }`}
                 title="Flag question for review"
               >
-                <Flag size={14} className={flagged[currentQ.number] ? 'fill-[#FAF6F0] text-[#FAF6F0]' : ''} />
+                <Flag size={14} className={flagged[currentQ.number] ? 'fill-[#E8ECF4] text-[#E8ECF4]' : ''} />
                 <span className="hidden sm:inline">Flag</span>
               </button>
             </div>
@@ -868,7 +868,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
 
           {/* Context Statement */}
           {currentQ.contextText && (
-            <div className="p-4 rounded-xl bg-[#3E362E] border border-[#93785B]/30 text-sm text-[#FAF6F0] leading-relaxed font-sans shadow-sm">
+            <div className="p-4 rounded-xl bg-[#1A2540] border border-[#6382BF]/30 text-sm text-[#E8ECF4] leading-relaxed font-sans shadow-sm">
               <FormattedMathText text={currentQ.contextText} />
             </div>
           )}
@@ -876,12 +876,12 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
           {/* Parts (a), (b), (c) */}
           <div className="space-y-4">
             {currentQ.parts.map((part, pIdx) => (
-              <div key={pIdx} className="p-4 rounded-xl bg-[#3E362E] border border-[#93785B]/30 space-y-2.5 shadow-sm">
-                <div className="flex items-center justify-between text-xs font-bold text-[#FAF6F0] border-b border-[#93785B]/25 pb-2">
-                  <span className="text-[#865D36]">Part {part.partLabel}</span>
-                  <span className="text-[#A69080]">[{part.marks} {part.marks === 1 ? 'mark' : 'marks'}]</span>
+              <div key={pIdx} className="p-4 rounded-xl bg-[#1A2540] border border-[#6382BF]/30 space-y-2.5 shadow-sm">
+                <div className="flex items-center justify-between text-xs font-bold text-[#E8ECF4] border-b border-[#6382BF]/25 pb-2">
+                  <span className="text-[#4A7BF7]">Part {part.partLabel}</span>
+                  <span className="text-[#7B8FAD]">[{part.marks} {part.marks === 1 ? 'mark' : 'marks'}]</span>
                 </div>
-                <div className="text-sm text-[#FAF6F0] leading-relaxed">
+                <div className="text-sm text-[#E8ECF4] leading-relaxed">
                   <FormattedMathText text={part.text} />
                 </div>
               </div>
@@ -898,25 +898,25 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                     [currentQ.number]: !revealedSolutions[currentQ.number],
                   })
                 }
-                className="w-full py-2.5 rounded-lg bg-[#3E362E] hover:bg-[#865D36]/40 text-[#FAF6F0] border border-[#93785B]/40 text-xs font-semibold transition-colors flex items-center justify-center gap-2"
+                className="w-full py-2.5 rounded-lg bg-[#1A2540] hover:bg-[#4A7BF7]/40 text-[#E8ECF4] border border-[#6382BF]/40 text-xs font-semibold transition-colors flex items-center justify-center gap-2"
               >
                 {revealedSolutions[currentQ.number] ? (
                   <>
-                    <EyeOff size={14} className="text-[#AC8968]" />
+                    <EyeOff size={14} className="text-[#7B8FAD]" />
                     <span>Hide Mark Scheme</span>
                   </>
                 ) : (
                   <>
-                    <Eye size={14} className="text-[#865D36]" />
+                    <Eye size={14} className="text-[#4A7BF7]" />
                     <span>Show Mark Scheme</span>
                   </>
                 )}
               </button>
 
               {revealedSolutions[currentQ.number] && (
-                <div className="p-5 rounded-xl bg-[#3E362E] border border-[#93785B]/40 space-y-4 shadow-md">
-                  <div className="font-serif font-semibold text-xs text-[#FAF6F0] border-b border-[#93785B]/25 pb-2 flex items-center gap-2">
-                    <CheckCircle2 size={14} className="text-[#865D36]" />
+                <div className="p-5 rounded-xl bg-[#1A2540] border border-[#6382BF]/40 space-y-4 shadow-md">
+                  <div className="font-semibold text-xs text-[#E8ECF4] border-b border-[#6382BF]/25 pb-2 flex items-center gap-2">
+                    <CheckCircle2 size={14} className="text-[#4A7BF7]" />
                     Mark Scheme & Solutions
                   </div>
 
@@ -924,8 +924,8 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                   {currentQ.parts.map((p, i) => (
                     p.solution ? (
                       <div key={i} className="text-xs space-y-1.5">
-                        <span className="font-semibold text-[#865D36]">Part {p.partLabel} Solution:</span>
-                        <div className="p-3 rounded-lg bg-[#2C2620] border border-[#93785B]/30 text-[#FAF6F0]">
+                        <span className="font-semibold text-[#4A7BF7]">Part {p.partLabel} Solution:</span>
+                        <div className="p-3 rounded-lg bg-[#0A1020] border border-[#6382BF]/30 text-[#E8ECF4]">
                           <FormattedMathText text={p.solution} />
                         </div>
                       </div>
@@ -934,21 +934,21 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
 
                   {/* Marking guidance */}
                   <div className="text-xs pt-1 space-y-1.5">
-                    <span className="font-semibold text-[#AC8968] uppercase tracking-wider block">Marking Guidance:</span>
-                    <div className="p-3.5 rounded-lg bg-[#2C2620] border border-[#93785B]/30 text-[#FAF6F0] leading-relaxed text-xs">
+                    <span className="font-semibold text-[#7B8FAD] uppercase tracking-wider block">Marking Guidance:</span>
+                    <div className="p-3.5 rounded-lg bg-[#0A1020] border border-[#6382BF]/30 text-[#E8ECF4] leading-relaxed text-xs">
                       <FormattedMathText text={currentQ.fullMarkScheme} />
                     </div>
                   </div>
 
                   {/* Final answer rendered via KaTeX */}
-                  <div className="p-3 rounded-lg bg-[#2C2620] border border-[#865D36]/50 text-xs flex items-baseline gap-2">
-                    <span className="font-semibold text-[#865D36]">Final Answer:</span>
-                    <FormattedMathText text={currentQ.finalAnswer} className="font-semibold text-[#FAF6F0]" />
+                  <div className="p-3 rounded-lg bg-[#0A1020] border border-[#4A7BF7]/50 text-xs flex items-baseline gap-2">
+                    <span className="font-semibold text-[#4A7BF7]">Final Answer:</span>
+                    <FormattedMathText text={currentQ.finalAnswer} className="font-semibold text-[#E8ECF4]" />
                   </div>
 
                   {/* SELF-MARKING INPUT: AFTER THE SOLUTION & MARK SCHEME */}
-                  <div className="p-4 rounded-xl bg-[#2C2620] border border-[#93785B]/40 flex items-center justify-between text-xs mt-3">
-                    <span className="font-semibold text-[#FAF6F0]">
+                  <div className="p-4 rounded-xl bg-[#0A1020] border border-[#6382BF]/40 flex items-center justify-between text-xs mt-3">
+                    <span className="font-semibold text-[#E8ECF4]">
                       Question {currentQ.number} mark:
                     </span>
                     <div className="flex items-center gap-2">
@@ -959,9 +959,9 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                         value={scores[currentQ.number] !== undefined ? String(scores[currentQ.number]) : ''}
                         onChange={(e) => handleScoreChange(currentQ.number, e.target.value, currentQ.totalMarks)}
                         placeholder="0"
-                        className="w-16 px-2.5 py-1.5 bg-[#3E362E] border border-[#93785B]/50 rounded-lg text-center text-[#FAF6F0] font-bold text-sm tabular-nums focus:outline-none focus:border-[#865D36]"
+                        className="w-16 px-2.5 py-1.5 bg-[#1A2540] border border-[#6382BF]/50 rounded-lg text-center text-[#E8ECF4] font-bold text-sm tabular-nums focus:outline-none focus:border-[#4A7BF7]"
                       />
-                      <span className="text-[#AC8968] text-xs">/ {currentQ.totalMarks}</span>
+                      <span className="text-[#7B8FAD] text-xs">/ {currentQ.totalMarks}</span>
                     </div>
                   </div>
                 </div>
@@ -969,14 +969,14 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
             </div>
           ) : (
             <div className="space-y-3 pt-2">
-              <div className="p-4 rounded-xl bg-[#3E362E] border border-[#93785B]/30 text-xs text-[#AC8968] text-center flex items-center justify-center gap-2">
-                <Clock size={14} className="text-[#865D36]" />
+              <div className="p-4 rounded-xl bg-[#1A2540] border border-[#6382BF]/30 text-xs text-[#7B8FAD] text-center flex items-center justify-center gap-2">
+                <Clock size={14} className="text-[#4A7BF7]" />
                 <span>Answers will be shown after submitting.</span>
               </div>
 
               {/* Self marking in exam mode */}
-              <div className="p-4 rounded-xl bg-[#3E362E] border border-[#93785B]/30 flex items-center justify-between text-xs">
-                <span className="font-semibold text-[#FAF6F0]">
+              <div className="p-4 rounded-xl bg-[#1A2540] border border-[#6382BF]/30 flex items-center justify-between text-xs">
+                <span className="font-semibold text-[#E8ECF4]">
                   Question {currentQ.number} mark:
                 </span>
                 <div className="flex items-center gap-2">
@@ -987,9 +987,9 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                     value={scores[currentQ.number] !== undefined ? String(scores[currentQ.number]) : ''}
                     onChange={(e) => handleScoreChange(currentQ.number, e.target.value, currentQ.totalMarks)}
                     placeholder="0"
-                    className="w-16 px-2.5 py-1.5 bg-[#2C2620] border border-[#93785B]/50 rounded-lg text-center text-[#FAF6F0] font-bold text-sm tabular-nums focus:outline-none focus:border-[#865D36]"
+                    className="w-16 px-2.5 py-1.5 bg-[#0A1020] border border-[#6382BF]/50 rounded-lg text-center text-[#E8ECF4] font-bold text-sm tabular-nums focus:outline-none focus:border-[#4A7BF7]"
                   />
-                  <span className="text-[#AC8968] text-xs">/ {currentQ.totalMarks}</span>
+                  <span className="text-[#7B8FAD] text-xs">/ {currentQ.totalMarks}</span>
                 </div>
               </div>
             </div>
@@ -1007,38 +1007,38 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
       </div>
 
       {/* Bottom Navigation Toolbar */}
-      <div className="h-14 px-4 bg-[#3E362E] border-t border-[#93785B]/30 flex items-center justify-between gap-4 shrink-0 shadow-lg">
+      <div className="h-14 px-4 bg-[#1A2540] border-t border-[#6382BF]/30 flex items-center justify-between gap-4 shrink-0 shadow-lg">
         <div className="flex items-center gap-3">
           <button
             onClick={() => setCurrentIndex(Math.max(0, currentIndex - 1))}
             disabled={currentIndex === 0}
             className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-semibold border transition-colors ${
               currentIndex === 0
-                ? 'opacity-40 cursor-not-allowed bg-[#2C2620] text-[#A69080]/40 border-transparent'
-                : 'bg-[#2C2620] hover:bg-[#865D36] text-[#FAF6F0] border-[#93785B]/40'
+                ? 'opacity-40 cursor-not-allowed bg-[#0A1020] text-[#7B8FAD]/40 border-transparent'
+                : 'bg-[#0A1020] hover:bg-[#4A7BF7] text-[#E8ECF4] border-[#6382BF]/40'
             }`}
           >
             <ArrowLeft size={13} />
             <span>Previous</span>
           </button>
 
-          <div className="text-xs text-[#AC8968] tabular-nums hidden sm:inline">
+          <div className="text-xs text-[#7B8FAD] tabular-nums hidden sm:inline">
             {Object.keys(scores).length} of {paper.questions.length} marked
           </div>
         </div>
 
         {/* Keyboard shortcut badges */}
-        <div className="text-[11px] text-[#A69080] hidden md:flex items-center gap-3">
-          <span><kbd className="px-1.5 py-0.5 rounded bg-[#2C2620] border border-[#93785B]/30 text-[10px] font-sans">←</kbd> <kbd className="px-1.5 py-0.5 rounded bg-[#2C2620] border border-[#93785B]/30 text-[10px] font-sans">→</kbd> Navigate</span>
-          <span><kbd className="px-1.5 py-0.5 rounded bg-[#2C2620] border border-[#93785B]/30 text-[10px] font-sans">M</kbd> Mark Scheme</span>
-          <span><kbd className="px-1.5 py-0.5 rounded bg-[#2C2620] border border-[#93785B]/30 text-[10px] font-sans">F</kbd> Flag</span>
-          <span><kbd className="px-1.5 py-0.5 rounded bg-[#2C2620] border border-[#93785B]/30 text-[10px] font-sans">B</kbd> Formulas</span>
+        <div className="text-[11px] text-[#7B8FAD] hidden md:flex items-center gap-3">
+          <span><kbd className="px-1.5 py-0.5 rounded bg-[#0A1020] border border-[#6382BF]/30 text-[10px] font-sans">←</kbd> <kbd className="px-1.5 py-0.5 rounded bg-[#0A1020] border border-[#6382BF]/30 text-[10px] font-sans">→</kbd> Navigate</span>
+          <span><kbd className="px-1.5 py-0.5 rounded bg-[#0A1020] border border-[#6382BF]/30 text-[10px] font-sans">M</kbd> Mark Scheme</span>
+          <span><kbd className="px-1.5 py-0.5 rounded bg-[#0A1020] border border-[#6382BF]/30 text-[10px] font-sans">F</kbd> Flag</span>
+          <span><kbd className="px-1.5 py-0.5 rounded bg-[#0A1020] border border-[#6382BF]/30 text-[10px] font-sans">B</kbd> Formulas</span>
         </div>
 
         {currentIndex === paper.questions.length - 1 ? (
           <button
             onClick={handleFinishExam}
-            className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-semibold bg-[#865D36] hover:bg-[#93785B] text-[#FAF6F0] transition-colors shadow-sm"
+            className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-semibold bg-[#4A7BF7] hover:bg-[#6382BF] text-[#E8ECF4] transition-colors shadow-sm"
           >
             <span>Finish & Review</span>
             <CheckCircle2 size={13} />
@@ -1046,7 +1046,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
         ) : (
           <button
             onClick={() => setCurrentIndex(Math.min(paper.questions.length - 1, currentIndex + 1))}
-            className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-semibold bg-[#865D36] hover:bg-[#93785B] text-[#FAF6F0] transition-colors shadow-sm"
+            className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-semibold bg-[#4A7BF7] hover:bg-[#6382BF] text-[#E8ECF4] transition-colors shadow-sm"
           >
             <span>Next</span>
             <ArrowRight size={13} />

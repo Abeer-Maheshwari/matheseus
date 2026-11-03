@@ -76,25 +76,19 @@ export default function App() {
   };
 
   const handleLaunchPractice = (paper: PaperEntry, module: ModuleSection) => {
-    // If digitized interactive questions exist for this exact paper
-    const interactive = getInteractivePaper(paper.id);
-    if (interactive) {
-      setActiveInteractivePaper(interactive);
-      return;
-    }
-
-    // Launch authentic Exam Practice Mode with official paper PDF, timer, and self-marking
-    const isFM = module.subject === 'further-maths';
-    setPdfModal({
-      title: `${paper.season} ${paper.year} · ${module.title} (${module.code})`,
-      qpUrl: paper.qpUrl,
-      msUrl: paper.msUrl,
-      mode: 'qp',
-      isPractice: true,
-      paperId: paper.id,
-      durationMinutes: isFM ? 90 : 120,
-      totalMarks: isFM ? 75 : 100,
-    });
+    // Launch actual digital Practice Mode for all papers with module-matched questions
+    const interactive = getInteractivePaper(
+      paper.id,
+      `${paper.season} ${paper.year} · ${module.title} (${module.code})`,
+      module.code,
+      paper.year,
+      paper.season,
+      module.id,
+      module.subject
+    );
+    interactive.qpUrl = paper.qpUrl;
+    interactive.msUrl = paper.msUrl;
+    setActiveInteractivePaper(interactive);
   };
 
   const handleSaveScore = (paperId: string) => {
