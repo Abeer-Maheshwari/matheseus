@@ -16,6 +16,8 @@ export const PURE_2_2019_PAPER: InteractivePaper = {
       number: 1,
       totalMarks: 3,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2019-q1.png',
+      markSchemeImageUrl: '/crops/maths/p2/2019-q1-ms.png',
       parts: [
         {
           partLabel: '',
@@ -43,6 +45,8 @@ express y as a function of x.
       number: 2,
       totalMarks: 4,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2019-q2.png',
+      markSchemeImageUrl: '/crops/maths/p2/2019-q2-ms.png',
       contextText: `The speed of a small jet aircraft was measured every 5 seconds, starting from the time it
 turned onto a runway, until the time when it left the ground.
 The results are given in the table below with the time in seconds and the speed in m sí.
@@ -133,6 +137,8 @@ y
       number: 3,
       totalMarks: 3,
       topic: 'Trigonometry & Circular Functions',
+      questionImageUrl: '/crops/maths/p2/2019-q3.png',
+      markSchemeImageUrl: '/crops/maths/p2/2019-q3-ms.png',
       contextText: `O
 5 cm
 B
@@ -218,6 +224,8 @@ log
       number: 4,
       totalMarks: 6,
       topic: 'Coordinate Geometry',
+      questionImageUrl: '/crops/maths/p2/2019-q4.png',
+      markSchemeImageUrl: '/crops/maths/p2/2019-q4-ms.png',
       diagramUrl: '/diagrams/maths/p2/2019-figure-2.png',
       diagramCaption: 'Figure 2',
       parts: [
@@ -296,6 +304,8 @@ y
       number: 5,
       totalMarks: 3,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2019-q5.png',
+      markSchemeImageUrl: '/crops/maths/p2/2019-q5-ms.png',
       diagramUrl: '/diagrams/maths/p2/2019-figure-3.png',
       diagramCaption: 'Figure 3',
       parts: [
@@ -386,6 +396,8 @@ Way 3:
       number: 6,
       totalMarks: 10,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2019-q6.png',
+      markSchemeImageUrl: '/crops/maths/p2/2019-q6-ms.png',
       contextText: `y
 O
 x
@@ -512,6 +524,8 @@ Overestimate and a relevant explanation e.g.
       number: 7,
       totalMarks: 7,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2019-q7.png',
+      markSchemeImageUrl: '/crops/maths/p2/2019-q7-ms.png',
       contextText: `A small factory makes bars of soap.
 On any day, the total cost to the factory, £y, of making x bars of soap is modelled to be
 the sum of two separate elements:
@@ -610,6 +624,8 @@ or
       number: 8,
       totalMarks: 6,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2019-q8.png',
+      markSchemeImageUrl: '/crops/maths/p2/2019-q8-ms.png',
       parts: [
         {
           partLabel: '',
@@ -705,6 +721,8 @@ r
       number: 9,
       totalMarks: 9,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2019-q9.png',
+      markSchemeImageUrl: '/crops/maths/p2/2019-q9-ms.png',
       contextText: `A research engineer is testing the effectiveness of the braking system of a car when it is
 driven in wet conditions.
 The engineer measures and records the braking distance, d metres, when the brakes are
@@ -809,6 +827,8 @@ Way 1
       number: 10,
       totalMarks: 6,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2019-q10.png',
+      markSchemeImageUrl: '/crops/maths/p2/2019-q10-ms.png',
       contextText: `A
 B
 O
@@ -915,6 +935,8 @@ a`,
       number: 11,
       totalMarks: 11,
       topic: 'Numerical Methods & Roots',
+      questionImageUrl: '/crops/maths/p2/2019-q11.png',
+      markSchemeImageUrl: '/crops/maths/p2/2019-q11-ms.png',
       contextText: `y
 x
 C
@@ -1025,6 +1047,8 @@ x
       number: 12,
       totalMarks: 7,
       topic: 'Trigonometry & Circular Functions',
+      questionImageUrl: '/crops/maths/p2/2019-q12.png',
+      markSchemeImageUrl: '/crops/maths/p2/2019-q12-ms.png',
       contextText: `(a) Prove
 cos3
 sin
@@ -1108,6 +1132,8 @@ sin cos
       number: 13,
       totalMarks: 10,
       topic: 'Coordinate Geometry',
+      questionImageUrl: '/crops/maths/p2/2019-q13.png',
+      markSchemeImageUrl: '/crops/maths/p2/2019-q13-ms.png',
       contextText: `r m
 r m
 h m
@@ -1205,6 +1231,8 @@ x `,
       number: 14,
       totalMarks: 15,
       topic: 'Differential Equations & Modelling',
+      questionImageUrl: '/crops/maths/p2/2019-q14.png',
+      markSchemeImageUrl: '/crops/maths/p2/2019-q14-ms.png',
       contextText: `(a) Use the substitution  u í
 h to show that
 

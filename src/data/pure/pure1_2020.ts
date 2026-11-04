@@ -16,6 +16,8 @@ export const PURE_1_2020_PAPER: InteractivePaper = {
       number: 1,
       totalMarks: 5,
       topic: 'Binomial Expansion',
+      questionImageUrl: '/crops/maths/p1/2020-q1.png',
+      markSchemeImageUrl: '/crops/maths/p1/2020-q1-ms.png',
       contextText: `(a)	 Find the first four terms, in ascending powers of x, of the binomial expansion of
 1
 8
@@ -54,6 +56,8 @@ There is no need to carry out the calculation.
       number: 2,
       totalMarks: 3,
       topic: 'Exponentials & Logarithms',
+      questionImageUrl: '/crops/maths/p1/2020-q2.png',
+      markSchemeImageUrl: '/crops/maths/p1/2020-q2-ms.png',
       parts: [
         {
           partLabel: '',
@@ -79,6 +83,8 @@ giving the value of p to one decimal place.
       number: 3,
       totalMarks: 4,
       topic: 'Integration & Calculus',
+      questionImageUrl: '/crops/maths/p1/2020-q3.png',
+      markSchemeImageUrl: '/crops/maths/p1/2020-q3-ms.png',
       contextText: `Relative to a fixed origin O
 ●
 point A has position vector  2i + 5j - 6k
@@ -152,6 +158,8 @@ A1
       number: 4,
       totalMarks: 5,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2020-q4.png',
+      markSchemeImageUrl: '/crops/maths/p1/2020-q4-ms.png',
       contextText: `The function f is defined by
 f (x) = 3
 7
@@ -214,6 +222,8 @@ to give`,
       number: 5,
       totalMarks: 6,
       topic: 'Sequences & Series',
+      questionImageUrl: '/crops/maths/p1/2020-q5.png',
+      markSchemeImageUrl: '/crops/maths/p1/2020-q5-ms.png',
       contextText: `A car has six forward gears.
 The fastest speed of the car
 ●
@@ -294,6 +304,8 @@ For example look for term 3 in the form
       number: 6,
       totalMarks: 7,
       topic: 'Trigonometry & Circular Functions',
+      questionImageUrl: '/crops/maths/p1/2020-q6.png',
+      markSchemeImageUrl: '/crops/maths/p1/2020-q6-ms.png',
       contextText: `(a)	 Express  sin x + 2 cos x  in the form  R sin (x + \\alpha)  where R and \\alpha are constants,  R > 0
 and  0 < \\alpha < 2
 \\pi
@@ -397,6 +409,8 @@ A1:
       number: 7,
       totalMarks: 5,
       topic: 'Integration & Calculus',
+      questionImageUrl: '/crops/maths/p1/2020-q7.png',
+      markSchemeImageUrl: '/crops/maths/p1/2020-q7-ms.png',
       diagramUrl: '/diagrams/maths/p1/2020-figure-1.png',
       diagramCaption: 'Figure 1',
       parts: [
@@ -480,6 +494,8 @@ ff ( )`,
       number: 8,
       totalMarks: 2,
       topic: 'Differential Equations & Modelling',
+      questionImageUrl: '/crops/maths/p1/2020-q8.png',
+      markSchemeImageUrl: '/crops/maths/p1/2020-q8-ms.png',
       parts: [
         {
           partLabel: '',
@@ -548,6 +564,8 @@ x =`,
       number: 9,
       totalMarks: 9,
       topic: 'Differentiation & Optimization',
+      questionImageUrl: '/crops/maths/p1/2020-q9.png',
+      markSchemeImageUrl: '/crops/maths/p1/2020-q9-ms.png',
       contextText: `y
 x
 O
@@ -641,6 +659,8 @@ f ( )`,
       number: 10,
       totalMarks: 10,
       topic: 'Integration & Calculus',
+      questionImageUrl: '/crops/maths/p1/2020-q10.png',
+      markSchemeImageUrl: '/crops/maths/p1/2020-q10-ms.png',
       contextText: `(a)	 Use the substitution  x = u2 + 1  to show that
 3
 1 3
@@ -761,6 +781,8 @@ M1`,
       number: 11,
       totalMarks: 8,
       topic: 'Integration & Calculus',
+      questionImageUrl: '/crops/maths/p1/2020-q11.png',
+      markSchemeImageUrl: '/crops/maths/p1/2020-q11-ms.png',
       contextText: `y
 C2
 B
@@ -847,6 +869,8 @@ x
       number: 12,
       totalMarks: 8,
       topic: 'Trigonometry & Circular Functions',
+      questionImageUrl: '/crops/maths/p1/2020-q12.png',
+      markSchemeImageUrl: '/crops/maths/p1/2020-q12-ms.png',
       contextText: `In this question you must show all stages of your working.
 Solutions relying entirely on calculator technology are not acceptable.`,
       parts: [
@@ -922,6 +946,8 @@ A1`,
       number: 13,
       totalMarks: 7,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2020-q13.png',
+      markSchemeImageUrl: '/crops/maths/p1/2020-q13-ms.png',
       contextText: `A sequence of numbers  a1, a2, a3, …  is defined by
 an+1 =
 k a
@@ -1022,6 +1048,8 @@ E.g. Attempt using two points: Finds m
       number: 14,
       totalMarks: 10,
       topic: 'Differential Equations & Modelling',
+      questionImageUrl: '/crops/maths/p1/2020-q14.png',
+      markSchemeImageUrl: '/crops/maths/p1/2020-q14-ms.png',
       contextText: `A large spherical balloon is deflating.
 At time t seconds the balloon has radius r cm and volume V cm3
 The volume of the balloon is modelled as decreasing at a constant rate.`,
@@ -1118,6 +1146,8 @@ r`,
       number: 15,
       totalMarks: 7,
       topic: 'Differentiation & Optimization',
+      questionImageUrl: '/crops/maths/p1/2020-q15.png',
+      markSchemeImageUrl: '/crops/maths/p1/2020-q15-ms.png',
       contextText: `The curve C has equation
 x2 tan y = 9            0 < y < 2
 \\pi`,
@@ -1201,6 +1231,8 @@ A1`,
       number: 16,
       totalMarks: 4,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2020-q16.png',
+      markSchemeImageUrl: '/crops/maths/p1/2020-q16-ms.png',
       parts: [
         {
           partLabel: '',

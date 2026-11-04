@@ -16,6 +16,8 @@ export const PURE_2_2022_PAPER: InteractivePaper = {
       number: 1,
       totalMarks: 4,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2022-q1.png',
+      markSchemeImageUrl: '/crops/maths/p2/2022-q1-ms.png',
       diagramUrl: '/diagrams/maths/p2/2022-figure-1.png',
       diagramCaption: 'Figure 1',
       parts: [
@@ -48,6 +50,8 @@ Either  3`,
       number: 2,
       totalMarks: 4,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2022-q2.png',
+      markSchemeImageUrl: '/crops/maths/p2/2022-q2-ms.png',
       contextText: `(a)	 Sketch the curve with equation
 y = 4
 x
@@ -86,6 +90,8 @@ or   2`,
       number: 3,
       totalMarks: 4,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2022-q3.png',
+      markSchemeImageUrl: '/crops/maths/p2/2022-q3-ms.png',
       contextText: `A sequence of terms  a1, a2, a3, …  is defined by
 a1 = 3
 an+1 = 8 - an`,
@@ -133,6 +139,8 @@ Either`,
       number: 4,
       totalMarks: 3,
       topic: 'Differentiation & Optimization',
+      questionImageUrl: '/crops/maths/p2/2022-q4.png',
+      markSchemeImageUrl: '/crops/maths/p2/2022-q4-ms.png',
       parts: [
         {
           partLabel: '',
@@ -201,6 +209,8 @@ A1
       number: 5,
       totalMarks: 6,
       topic: 'Integration & Calculus',
+      questionImageUrl: '/crops/maths/p2/2022-q5.png',
+      markSchemeImageUrl: '/crops/maths/p2/2022-q5-ms.png',
       contextText: `The table below shows corresponding values of x and y for  y = log3 2x
 The values of y are given to 2 decimal places as appropriate.
 x
@@ -311,6 +321,8 @@ and`,
       number: 6,
       totalMarks: 7,
       topic: 'Differentiation & Optimization',
+      questionImageUrl: '/crops/maths/p2/2022-q6.png',
+      markSchemeImageUrl: '/crops/maths/p2/2022-q6-ms.png',
       contextText: `y
 x
 O
@@ -418,6 +430,8 @@ h
       number: 7,
       totalMarks: 5,
       topic: 'Binomial Expansion',
+      questionImageUrl: '/crops/maths/p2/2022-q7.png',
+      markSchemeImageUrl: '/crops/maths/p2/2022-q7-ms.png',
       contextText: `(a)	 Find the first four terms, in ascending powers of x, of the binomial expansion of
 4
 9
@@ -495,6 +509,8 @@ x
       number: 8,
       totalMarks: 6,
       topic: 'Integration & Calculus',
+      questionImageUrl: '/crops/maths/p2/2022-q8.png',
+      markSchemeImageUrl: '/crops/maths/p2/2022-q8-ms.png',
       diagramUrl: '/diagrams/maths/p2/2022-figure-3.png',
       diagramCaption: 'Figure 3',
       parts: [
@@ -592,6 +608,8 @@ n`,
       number: 9,
       totalMarks: 5,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2022-q9.png',
+      markSchemeImageUrl: '/crops/maths/p2/2022-q9-ms.png',
       contextText: `H
 O
 t
@@ -681,6 +699,8 @@ and`,
       number: 10,
       totalMarks: 8,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2022-q10.png',
+      markSchemeImageUrl: '/crops/maths/p2/2022-q10-ms.png',
       contextText: `The function f is defined by
 f(x) = 8
 5
@@ -802,6 +822,8 @@ Alternative by squaring:
       number: 11,
       totalMarks: 4,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2022-q11.png',
+      markSchemeImageUrl: '/crops/maths/p2/2022-q11-ms.png',
       parts: [
         {
           partLabel: '',
@@ -869,6 +891,8 @@ fg (16)
       number: 12,
       totalMarks: 6,
       topic: 'Differentiation & Optimization',
+      questionImageUrl: '/crops/maths/p2/2022-q12.png',
+      markSchemeImageUrl: '/crops/maths/p2/2022-q12-ms.png',
       contextText: `The function f is defined by
 f(x) =
 e3
@@ -955,6 +979,8 @@ x`,
       number: 13,
       totalMarks: 6,
       topic: 'Vectors in 3D',
+      questionImageUrl: '/crops/maths/p2/2022-q13.png',
+      markSchemeImageUrl: '/crops/maths/p2/2022-q13-ms.png',
       contextText: `Relative to a fixed origin O
 •
 the point A has position vector  4i - 3j + 5k
@@ -1046,6 +1072,8 @@ Isw if necessary e.g. ignore subsequent attempts to put the values in an inequal
       number: 14,
       totalMarks: 10,
       topic: 'Differential Equations & Modelling',
+      questionImageUrl: '/crops/maths/p2/2022-q14.png',
+      markSchemeImageUrl: '/crops/maths/p2/2022-q14-ms.png',
       contextText: `(a)	 Express
 3
 2
@@ -1186,6 +1214,8 @@ A1
       number: 15,
       totalMarks: 10,
       topic: 'Trigonometry & Circular Functions',
+      questionImageUrl: '/crops/maths/p2/2022-q15.png',
+      markSchemeImageUrl: '/crops/maths/p2/2022-q15-ms.png',
       contextText: `In this question you must show all stages of your working.
 Solutions relying on calculator technology are not acceptable.
 Given that the first three terms of a geometric series are
@@ -1280,6 +1310,8 @@ x
       number: 16,
       totalMarks: 12,
       topic: 'Differentiation & Optimization',
+      questionImageUrl: '/crops/maths/p2/2022-q16.png',
+      markSchemeImageUrl: '/crops/maths/p2/2022-q16-ms.png',
       contextText: `y
 l
 P

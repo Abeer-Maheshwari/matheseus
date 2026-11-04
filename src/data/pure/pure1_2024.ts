@@ -16,6 +16,8 @@ export const PURE_1_2024_PAPER: InteractivePaper = {
       number: 1,
       totalMarks: 3,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2024-q1.png',
+      markSchemeImageUrl: '/crops/maths/p1/2024-q1-ms.png',
       parts: [
         {
           partLabel: '',
@@ -58,6 +60,8 @@ Given that  (x - 3)  is a factor of g(x), find the value of k.
       number: 2,
       totalMarks: 4,
       topic: 'Binomial Expansion',
+      questionImageUrl: '/crops/maths/p1/2024-q2.png',
+      markSchemeImageUrl: '/crops/maths/p1/2024-q2-ms.png',
       contextText: `(a)	 Find, in ascending powers of x, the first four terms of the binomial expansion of
 1
 9
@@ -92,6 +96,8 @@ approximation to
       number: 3,
       totalMarks: 6,
       topic: 'Numerical Methods & Roots',
+      questionImageUrl: '/crops/maths/p1/2024-q3.png',
+      markSchemeImageUrl: '/crops/maths/p1/2024-q3-ms.png',
       contextText: `f(x) =
 1
 3
@@ -161,6 +167,8 @@ M1
       number: 4,
       totalMarks: 3,
       topic: 'Differentiation & Optimization',
+      questionImageUrl: '/crops/maths/p1/2024-q4.png',
+      markSchemeImageUrl: '/crops/maths/p1/2024-q4-ms.png',
       parts: [
         {
           partLabel: '',
@@ -226,6 +234,8 @@ As a minimum, expect to see
       number: 5,
       totalMarks: 6,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2024-q5.png',
+      markSchemeImageUrl: '/crops/maths/p1/2024-q5-ms.png',
       contextText: `The function f is defined by
 f(x) =
 2
@@ -324,6 +334,8 @@ x
       number: 6,
       totalMarks: 6,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2024-q6.png',
+      markSchemeImageUrl: '/crops/maths/p1/2024-q6-ms.png',
       contextText: `O
 P
 x
@@ -417,6 +429,8 @@ tan
       number: 7,
       totalMarks: 8,
       topic: 'Differential Equations & Modelling',
+      questionImageUrl: '/crops/maths/p1/2024-q7.png',
+      markSchemeImageUrl: '/crops/maths/p1/2024-q7-ms.png',
       contextText: `Diagram not drawn to scale.
 L
 1.5 m
@@ -539,6 +553,8 @@ M1
       number: 8,
       totalMarks: 11,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2024-q8.png',
+      markSchemeImageUrl: '/crops/maths/p1/2024-q8-ms.png',
       contextText: `The functions f and g are defined by
 f(x)
 2
@@ -638,6 +654,8 @@ Expansion is valid for
       number: 9,
       totalMarks: 6,
       topic: 'Sequences & Series',
+      questionImageUrl: '/crops/maths/p1/2024-q9.png',
+      markSchemeImageUrl: '/crops/maths/p1/2024-q9-ms.png',
       contextText: `The first 3 terms of a geometric sequence are
 3
 9
@@ -729,6 +747,8 @@ k
       number: 10,
       totalMarks: 9,
       topic: 'Integration & Calculus',
+      questionImageUrl: '/crops/maths/p1/2024-q10.png',
+      markSchemeImageUrl: '/crops/maths/p1/2024-q10-ms.png',
       contextText: `A
 l1
 R
@@ -845,6 +865,8 @@ If you are unsure, send to review.
       number: 11,
       totalMarks: 4,
       topic: 'Integration & Calculus',
+      questionImageUrl: '/crops/maths/p1/2024-q11.png',
+      markSchemeImageUrl: '/crops/maths/p1/2024-q11-ms.png',
       diagramUrl: '/diagrams/maths/p1/2024-figure-4.png',
       diagramCaption: 'Figure 4',
       parts: [
@@ -924,6 +946,8 @@ k
       number: 12,
       totalMarks: 11,
       topic: 'Trigonometry & Circular Functions',
+      questionImageUrl: '/crops/maths/p1/2024-q12.png',
+      markSchemeImageUrl: '/crops/maths/p1/2024-q12-ms.png',
       contextText: `(a)	 Express  140 cos \\theta - 480 sin \\theta  in the form  K cos(\\theta + \\alpha)
 where  K > 0  and  0 < \\alpha < 90°
 State the value of K and give the value of \\alpha, in degrees, to 2 decimal places.
@@ -1026,6 +1050,8 @@ are sufficient to imply M1M1A1.`,
       number: 13,
       totalMarks: 8,
       topic: 'Integration & Calculus',
+      questionImageUrl: '/crops/maths/p1/2024-q13.png',
+      markSchemeImageUrl: '/crops/maths/p1/2024-q13-ms.png',
       contextText: `(a)	 Given that a is a positive constant, use the substitution  x = a sin
 2 \\theta  to show that
 1
@@ -1136,6 +1162,8 @@ a
       number: 14,
       totalMarks: 9,
       topic: 'Differential Equations & Modelling',
+      questionImageUrl: '/crops/maths/p1/2024-q14.png',
+      markSchemeImageUrl: '/crops/maths/p1/2024-q14-ms.png',
       contextText: `A balloon is being inflated.
 In a simple model,
 •
@@ -1252,6 +1280,8 @@ Alt 3 Using Logs Way 1:
       number: 15,
       totalMarks: 6,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2024-q15.png',
+      markSchemeImageUrl: '/crops/maths/p1/2024-q15-ms.png',
       parts: [
         {
           partLabel: '',

@@ -830,127 +830,217 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
               </div>
             </div>
 
-            {/* Context Premise Text */}
-            {currentQ.contextText && (
-              <div className="p-4 sm:p-5 rounded-xl bg-[#0A1020] border border-[#6382BF]/25 text-sm sm:text-base leading-relaxed text-[#E8ECF4]">
-                <FormattedMathText text={currentQ.contextText} />
-              </div>
-            )}
-
-            {/* Diagram / Graph Card with Click-to-Zoom Lightbox trigger */}
-            {(currentQ.diagramSvg || currentQ.diagramUrl) && (
+            {/* Authentic Question Card (High-Resolution Official Pearson Crop) */}
+            {currentQ.questionImageUrl ? (
               <div
                 onClick={() => setLightboxDiagram({
-                  svg: currentQ.diagramSvg,
-                  url: currentQ.diagramUrl,
-                  caption: currentQ.diagramCaption,
+                  url: currentQ.questionImageUrl,
+                  caption: `Question ${currentQ.number} · Authentic Question Paper (${paper.paperCode})`,
                 })}
-                className="border border-[#6382BF]/30 rounded-xl bg-[#0A1020] p-4 relative group cursor-pointer hover:border-[#4A7BF7]/60 transition-all shadow-md"
+                className="relative group cursor-zoom-in rounded-2xl bg-white p-3 sm:p-5 shadow-xl border border-slate-200/80 transition-all hover:border-[#4A7BF7] hover:shadow-2xl overflow-hidden"
               >
-                {currentQ.diagramSvg ? (
-                  <div
-                    className="flex justify-center"
-                    dangerouslySetInnerHTML={{ __html: currentQ.diagramSvg }}
-                  />
-                ) : (
-                  <div className="bg-white rounded-lg p-3 mx-auto max-w-2xl flex items-center justify-center shadow-sm">
-                    <img
-                      src={currentQ.diagramUrl}
-                      alt={currentQ.diagramCaption || `Question ${currentQ.number} figure`}
-                      className="max-h-[340px] max-w-full object-contain select-none"
-                    />
+                <img
+                  src={currentQ.questionImageUrl}
+                  alt={`Question ${currentQ.number}`}
+                  className="w-full max-h-[620px] object-contain select-none mx-auto block"
+                />
+                <div className="absolute top-3 right-3 opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity bg-[#0A1020]/80 backdrop-blur text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg flex items-center gap-1.5 shadow-md">
+                  <Maximize2 size={12} className="text-[#4A7BF7]" />
+                  <span>Click to Zoom / Inspect</span>
+                </div>
+              </div>
+            ) : (
+              <>
+                {/* Context Premise Text */}
+                {currentQ.contextText && (
+                  <div className="p-4 sm:p-5 rounded-xl bg-[#0A1020] border border-[#6382BF]/25 text-sm sm:text-base leading-relaxed text-[#E8ECF4]">
+                    <FormattedMathText text={currentQ.contextText} />
                   </div>
                 )}
-                {/* Overlay hover prompt */}
-                <div className="text-center text-xs text-[#7B8FAD] mt-3 font-medium flex items-center justify-center gap-1.5">
-                  <Eye size={13} className="text-[#4A7BF7]" />
-                  <span>{currentQ.diagramCaption || 'Figure 1'}</span>
-                  <span className="text-[#4A7BF7] group-hover:underline font-semibold ml-1">
-                    · Click to Zoom / Inspect
-                  </span>
-                </div>
+
+                {/* Diagram / Graph Card with Click-to-Zoom Lightbox trigger */}
+                {(currentQ.diagramSvg || currentQ.diagramUrl) && (
+                  <div
+                    onClick={() => setLightboxDiagram({
+                      svg: currentQ.diagramSvg,
+                      url: currentQ.diagramUrl,
+                      caption: currentQ.diagramCaption,
+                    })}
+                    className="border border-[#6382BF]/30 rounded-xl bg-[#0A1020] p-4 relative group cursor-pointer hover:border-[#4A7BF7]/60 transition-all shadow-md"
+                  >
+                    {currentQ.diagramSvg ? (
+                      <div
+                        className="flex justify-center"
+                        dangerouslySetInnerHTML={{ __html: currentQ.diagramSvg }}
+                      />
+                    ) : (
+                      <div className="bg-white rounded-lg p-3 mx-auto max-w-2xl flex items-center justify-center shadow-sm">
+                        <img
+                          src={currentQ.diagramUrl}
+                          alt={currentQ.diagramCaption || `Question ${currentQ.number} figure`}
+                          className="max-h-[340px] max-w-full object-contain select-none"
+                        />
+                      </div>
+                    )}
+                    {/* Overlay hover prompt */}
+                    <div className="text-center text-xs text-[#7B8FAD] mt-3 font-medium flex items-center justify-center gap-1.5">
+                      <Eye size={13} className="text-[#4A7BF7]" />
+                      <span>{currentQ.diagramCaption || 'Figure 1'}</span>
+                      <span className="text-[#4A7BF7] group-hover:underline font-semibold ml-1">
+                        · Click to Zoom / Inspect
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+
+            {/* Legacy Text Parts Fallback (if no question image is present) */}
+            {!currentQ.questionImageUrl && (
+              <div className="space-y-4 pt-2">
+                {currentQ.parts.map((p, pIdx) => (
+                  <div key={pIdx} className="p-4 rounded-xl bg-[#0A1020]/70 border border-[#6382BF]/25 space-y-2">
+                    <div className="flex items-center gap-2 text-xs font-bold text-[#E8ECF4]">
+                      <span>Part {p.partLabel}</span>
+                      <span className="text-[#7B8FAD]">[{p.marks} {p.marks === 1 ? 'mark' : 'marks'}]</span>
+                    </div>
+                    <FormattedMathText text={p.text} className="text-sm sm:text-base text-[#E8ECF4]" />
+                  </div>
+                ))}
               </div>
             )}
 
-            {/* Subparts List */}
-            <div className="space-y-6 pt-2">
-              {currentQ.parts.map((p, pIdx) => {
-                const partKey = `${currentQ.number}_${pIdx}`;
-                const isPartRevealed = revealedParts[partKey] || revealedSolutions[currentQ.number] || isReviewMode;
-                const awarded = subpartScores[partKey];
+            {/* Solution & Official Mark Scheme Section */}
+            <div className="pt-2 space-y-4">
+              <div className="flex items-center justify-between gap-3 flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => setRevealedSolutions((prev) => ({
+                    ...prev,
+                    [currentQ.number]: !prev[currentQ.number]
+                  }))}
+                  className="px-4 py-2 rounded-xl bg-[#0A1020] hover:bg-[#1A2540] border border-[#6382BF]/30 hover:border-[#4A7BF7] text-xs font-semibold text-[#4A7BF7] flex items-center gap-2 transition-all shadow-sm"
+                >
+                  {revealedSolutions[currentQ.number] || isReviewMode ? (
+                    <>
+                      <EyeOff size={14} />
+                      <span>Hide Official Mark Scheme</span>
+                    </>
+                  ) : (
+                    <>
+                      <Eye size={14} />
+                      <span>Reveal Official Solution & Mark Scheme ({currentQ.totalMarks} marks)</span>
+                    </>
+                  )}
+                </button>
 
-                return (
-                  <div
-                    key={pIdx}
-                    className="p-5 rounded-xl bg-[#0A1020]/70 border border-[#6382BF]/25 space-y-4 shadow-sm"
-                  >
-                    {/* Part Header */}
-                    <div className="flex items-center justify-between text-xs border-b border-[#6382BF]/15 pb-2.5">
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-[#E8ECF4] text-sm">Part {p.partLabel}</span>
-                        <span className="text-[#7B8FAD]">[{p.marks} {p.marks === 1 ? 'mark' : 'marks'}]</span>
-                      </div>
-                      {awarded !== undefined && (
-                        <span className="px-2 py-0.5 rounded bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 font-semibold tabular-nums">
-                          Awarded: {awarded} / {p.marks}
-                        </span>
-                      )}
+                <span className="text-[11px] text-[#7B8FAD] hidden sm:inline">
+                  Compare your working against Pearson marking criteria
+                </span>
+              </div>
+
+              {/* Revealed Solution & Mark Scheme Card */}
+              {(revealedSolutions[currentQ.number] || isReviewMode) && (
+                <div className="p-4 sm:p-5 rounded-2xl bg-[#0A1020]/90 border border-[#4A7BF7]/40 space-y-4 animate-fadeIn shadow-lg">
+                  <div className="flex items-center justify-between border-b border-[#6382BF]/20 pb-3">
+                    <div className="flex items-center gap-2 text-xs font-bold text-[#E8ECF4]">
+                      <CheckCircle2 size={15} className="text-emerald-400" />
+                      <span>Official Pearson Edexcel Mark Scheme</span>
                     </div>
-
-                    {/* Part Question Text with Math */}
-                    <FormattedMathText text={p.text} className="text-sm sm:text-base text-[#E8ECF4]" />
-
-                    {/* Solution & Mark Scheme Reveal Toggle */}
-                    <div className="pt-2">
+                    {currentQ.markSchemeImageUrl && (
                       <button
                         type="button"
-                        onClick={() => setRevealedParts({ ...revealedParts, [partKey]: !isPartRevealed })}
-                        className="text-xs font-semibold text-[#4A7BF7] hover:text-[#6382BF] flex items-center gap-1.5 transition-colors"
+                        onClick={() => setLightboxDiagram({
+                          url: currentQ.markSchemeImageUrl,
+                          caption: `Question ${currentQ.number} · Official Mark Scheme Table`,
+                        })}
+                        className="text-[11px] text-[#4A7BF7] hover:underline flex items-center gap-1 font-semibold"
                       >
-                        {isPartRevealed ? <EyeOff size={13} /> : <Eye size={13} />}
-                        <span>{isPartRevealed ? 'Hide Mark Scheme' : 'Reveal Solution & Mark Scheme'}</span>
+                        <Maximize2 size={12} />
+                        <span>Inspect in Fullscreen</span>
                       </button>
-
-                      {/* Revealed Solution Box */}
-                      {isPartRevealed && (
-                        <div className="mt-3 p-4 rounded-xl bg-[#1A2540] border border-[#4A7BF7]/40 space-y-3 animate-fadeIn">
-                          <div className="text-xs font-semibold text-[#4A7BF7] flex items-center gap-1.5">
-                            <CheckCircle2 size={13} />
-                            <span>Official Solution & Marking Criteria</span>
-                          </div>
-
-                          {p.solution && (
-                            <div className="p-3 rounded-lg bg-[#0A1020] border border-[#6382BF]/20 text-xs sm:text-sm">
-                              <FormattedMathText text={p.solution} />
-                            </div>
-                          )}
-
-                          {/* Self-Score Allocation for this Subpart */}
-                          <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[#6382BF]/20 text-xs">
-                            <span className="text-[#7B8FAD] font-medium">Self-Award Marks for Part {p.partLabel}:</span>
-                            <div className="flex items-center gap-1.5">
-                              {Array.from({ length: p.marks + 1 }).map((_, mVal) => (
-                                <button
-                                  key={mVal}
-                                  type="button"
-                                  onClick={() => handleSubpartScoreChange(currentQ.number, pIdx, p.marks, mVal)}
-                                  className={`w-7 h-7 rounded-lg text-xs font-semibold transition-colors ${
-                                    awarded === mVal
-                                      ? 'bg-[#4A7BF7] text-white shadow-sm ring-1 ring-white/30'
-                                      : 'bg-[#0A1020] text-[#7B8FAD] hover:text-[#E8ECF4] border border-[#6382BF]/30'
-                                  }`}
-                                >
-                                  {mVal}
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
+                    )}
                   </div>
-                );
-              })}
+
+                  {currentQ.markSchemeImageUrl ? (
+                    <div
+                      onClick={() => setLightboxDiagram({
+                        url: currentQ.markSchemeImageUrl,
+                        caption: `Question ${currentQ.number} · Official Mark Scheme Table`,
+                      })}
+                      className="relative group cursor-zoom-in rounded-xl bg-white p-3 sm:p-4 shadow-md border border-slate-200 transition-all hover:ring-2 hover:ring-emerald-500/50 overflow-hidden"
+                    >
+                      <img
+                        src={currentQ.markSchemeImageUrl}
+                        alt={`Question ${currentQ.number} Mark Scheme`}
+                        className="w-full max-h-[620px] object-contain select-none mx-auto block"
+                      />
+                      <div className="absolute top-3 right-3 opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity bg-[#0A1020]/80 backdrop-blur text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg flex items-center gap-1.5 shadow-md">
+                        <Maximize2 size={12} className="text-[#4A7BF7]" />
+                        <span>Click to Zoom / Inspect Table</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="p-3.5 rounded-xl bg-[#1A2540] border border-[#6382BF]/20 text-xs sm:text-sm text-[#E8ECF4] leading-relaxed">
+                      <FormattedMathText text={currentQ.fullMarkScheme} />
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Subpart / Question Marking Controls */}
+            <div className="space-y-3 pt-2">
+              <div className="text-xs font-semibold text-[#7B8FAD] uppercase tracking-wider">
+                Self-Award Marks
+              </div>
+
+              <div className="grid gap-2.5">
+                {currentQ.parts.map((p, pIdx) => {
+                  const partKey = `${currentQ.number}_${pIdx}`;
+                  const awarded = subpartScores[partKey];
+                  const label = p.partLabel || (currentQ.parts.length === 1 ? 'Total' : `Part ${pIdx + 1}`);
+
+                  return (
+                    <div
+                      key={pIdx}
+                      className="p-3.5 rounded-xl bg-[#0A1020]/60 border border-[#6382BF]/25 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-[#E8ECF4] text-xs sm:text-sm">
+                          {label.startsWith('(') ? `Part ${label}` : label}
+                        </span>
+                        <span className="text-[11px] text-[#7B8FAD]">
+                          [{p.marks} {p.marks === 1 ? 'mark' : 'marks'}]
+                        </span>
+                        {awarded !== undefined && (
+                          <span className="ml-2 px-2 py-0.5 rounded text-[11px] bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 font-semibold tabular-nums">
+                            Awarded: {awarded} / {p.marks}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Marks selector pills */}
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        {Array.from({ length: p.marks + 1 }).map((_, mVal) => (
+                          <button
+                            key={mVal}
+                            type="button"
+                            onClick={() => handleSubpartScoreChange(currentQ.number, pIdx, p.marks, mVal)}
+                            className={`w-7 h-7 rounded-lg text-xs font-semibold transition-all ${
+                              awarded === mVal
+                                ? 'bg-[#4A7BF7] text-white shadow-md ring-2 ring-white/30 scale-105'
+                                : 'bg-[#1A2540] text-[#7B8FAD] hover:text-[#E8ECF4] hover:bg-[#6382BF]/20 border border-[#6382BF]/30'
+                            }`}
+                          >
+                            {mVal}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Question Mark Summary & Full Mark Scheme */}
@@ -1081,14 +1171,14 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
           </div>
 
           {/* Lightbox Canvas Viewport */}
-          <div className="flex-1 overflow-auto flex items-center justify-center p-6 border border-[#6382BF]/20 rounded-2xl bg-[#0A1020]">
+          <div className="flex-1 overflow-auto flex items-start justify-center p-4 sm:p-6 border border-[#6382BF]/20 rounded-2xl bg-[#0A1020]">
             <div
               style={{
                 transform: `scale(${lightboxZoom})`,
-                transformOrigin: 'center center',
+                transformOrigin: 'top center',
                 transition: 'transform 0.15s ease-out',
               }}
-              className="max-w-4xl max-h-[80vh] flex items-center justify-center"
+              className="max-w-4xl w-full my-auto flex items-center justify-center py-4"
             >
               {lightboxDiagram.svg ? (
                 <div
@@ -1096,11 +1186,11 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                   dangerouslySetInnerHTML={{ __html: lightboxDiagram.svg }}
                 />
               ) : (
-                <div className="bg-white rounded-xl p-4 flex items-center justify-center shadow-2xl">
+                <div className="bg-white rounded-xl p-3 sm:p-4 shadow-2xl max-w-full">
                   <img
                     src={lightboxDiagram.url}
                     alt={lightboxDiagram.caption || 'Diagram'}
-                    className="max-w-full max-h-[75vh] object-contain select-none"
+                    className="max-w-full h-auto object-contain select-none mx-auto block"
                   />
                 </div>
               )}

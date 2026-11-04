@@ -16,6 +16,8 @@ export const PURE_1_2023_PAPER: InteractivePaper = {
       number: 1,
       totalMarks: 4,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2023-q1.png',
+      markSchemeImageUrl: '/crops/maths/p1/2023-q1-ms.png',
       parts: [
         {
           partLabel: '',
@@ -52,6 +54,8 @@ writing each term in simplest form.
       number: 2,
       totalMarks: 6,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2023-q2.png',
+      markSchemeImageUrl: '/crops/maths/p1/2023-q2-ms.png',
       contextText: `In this question you must show all stages of your working.
 Solutions relying entirely on calculator technology are not acceptable.
 f(x) = 4x
@@ -108,6 +112,8 @@ or
       number: 3,
       totalMarks: 3,
       topic: 'Vectors in 3D',
+      questionImageUrl: '/crops/maths/p1/2023-q3.png',
+      markSchemeImageUrl: '/crops/maths/p1/2023-q3-ms.png',
       contextText: `Relative to a fixed origin O
 •
 the point A has position vector  5i + 3j + 2k
@@ -190,6 +196,8 @@ M1
       number: 4,
       totalMarks: 5,
       topic: 'Differentiation & Optimization',
+      questionImageUrl: '/crops/maths/p1/2023-q4.png',
+      markSchemeImageUrl: '/crops/maths/p1/2023-q4-ms.png',
       contextText: `In this question you must show all stages of your working.
 Solutions relying entirely on calculator technology are not acceptable.
 The curve C has equation  y = f(x)  where  x \\in \\mathbb{R}
@@ -266,6 +274,8 @@ x
       number: 5,
       totalMarks: 6,
       topic: 'Integration & Calculus',
+      questionImageUrl: '/crops/maths/p1/2023-q5.png',
+      markSchemeImageUrl: '/crops/maths/p1/2023-q5-ms.png',
       contextText: `A continuous curve has equation  y = f(x).
 The table shows corresponding values of x and y for this curve, where a and b
 are constants.
@@ -359,6 +369,8 @@ A1`,
       number: 6,
       totalMarks: 6,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2023-q6.png',
+      markSchemeImageUrl: '/crops/maths/p1/2023-q6-ms.png',
       contextText: `a = log2 x
 b = log2(x + 8)
 Express in terms of a and/or b`,
@@ -448,6 +460,8 @@ x`,
       number: 7,
       totalMarks: 8,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2023-q7.png',
+      markSchemeImageUrl: '/crops/maths/p1/2023-q7-ms.png',
       contextText: `The function f is defined by
 f(x) = 3 +
 x -2
@@ -552,6 +566,8 @@ f (6)`,
       number: 8,
       totalMarks: 10,
       topic: 'Trigonometry & Circular Functions',
+      questionImageUrl: '/crops/maths/p1/2023-q8.png',
+      markSchemeImageUrl: '/crops/maths/p1/2023-q8-ms.png',
       contextText: `FRONT OF STAGE
 Diagram NOT
 accurately drawn
@@ -665,6 +681,8 @@ If the = 0 is absent at the start of their solution, it must appear before achie
       number: 9,
       totalMarks: 7,
       topic: 'Sequences & Series',
+      questionImageUrl: '/crops/maths/p1/2023-q9.png',
+      markSchemeImageUrl: '/crops/maths/p1/2023-q9-ms.png',
       contextText: `The first three terms of a geometric sequence are
 3k + 4         12 - 3k         k + 16
 where k is a constant.`,
@@ -745,6 +763,8 @@ A1:
       number: 10,
       totalMarks: 9,
       topic: 'Coordinate Geometry',
+      questionImageUrl: '/crops/maths/p1/2023-q10.png',
+      markSchemeImageUrl: '/crops/maths/p1/2023-q10-ms.png',
       contextText: `A circle C has equation
 x
 2 + y
@@ -831,6 +851,8 @@ A1:
       number: 11,
       totalMarks: 7,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2023-q11.png',
+      markSchemeImageUrl: '/crops/maths/p1/2023-q11-ms.png',
       contextText: `O
 log10 V
 (0, 3)
@@ -933,6 +955,8 @@ f
       number: 12,
       totalMarks: 5,
       topic: 'Differentiation & Optimization',
+      questionImageUrl: '/crops/maths/p1/2023-q12.png',
+      markSchemeImageUrl: '/crops/maths/p1/2023-q12-ms.png',
       parts: [
         {
           partLabel: '',
@@ -1009,6 +1033,8 @@ c
       number: 13,
       totalMarks: 7,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2023-q13.png',
+      markSchemeImageUrl: '/crops/maths/p1/2023-q13-ms.png',
       contextText: `On a roller coaster ride, passengers travel in carriages around a track.
 On the ride, carriages complete multiple circuits of the track such that
 •
@@ -1121,6 +1147,8 @@ M1
       number: 14,
       totalMarks: 4,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2023-q14.png',
+      markSchemeImageUrl: '/crops/maths/p1/2023-q14-ms.png',
       parts: [
         {
           partLabel: '',
@@ -1189,6 +1217,8 @@ b`,
       number: 15,
       totalMarks: 13,
       topic: 'Numerical Methods & Roots',
+      questionImageUrl: '/crops/maths/p1/2023-q15.png',
+      markSchemeImageUrl: '/crops/maths/p1/2023-q15-ms.png',
       contextText: `A curve has equation  y = f(x), where
 f(x) =
 7

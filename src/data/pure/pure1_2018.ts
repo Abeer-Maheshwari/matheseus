@@ -16,6 +16,8 @@ export const PURE_1_2018_PAPER: InteractivePaper = {
       number: 1,
       totalMarks: 3,
       topic: 'Trigonometry & Circular Functions',
+      questionImageUrl: '/crops/maths/p1/2018-q1.png',
+      markSchemeImageUrl: '/crops/maths/p1/2018-q1-ms.png',
       parts: [
         {
           partLabel: '',
@@ -49,6 +51,8 @@ or
       number: 2,
       totalMarks: 7,
       topic: 'Differentiation & Optimization',
+      questionImageUrl: '/crops/maths/p1/2018-q2.png',
+      markSchemeImageUrl: '/crops/maths/p1/2018-q2-ms.png',
       contextText: `A curve C has equation
 y = x2 - 2x - 24 x,        x > 0`,
       parts: [
@@ -100,6 +104,8 @@ Attempts both sin3`,
       number: 3,
       totalMarks: 4,
       topic: 'Trigonometry & Circular Functions',
+      questionImageUrl: '/crops/maths/p1/2018-q3.png',
+      markSchemeImageUrl: '/crops/maths/p1/2018-q3-ms.png',
       diagramUrl: '/diagrams/maths/p1/2018-figure-1.png',
       diagramCaption: 'Figure 1',
       parts: [
@@ -137,6 +143,8 @@ or
       number: 4,
       totalMarks: 4,
       topic: 'Numerical Methods & Roots',
+      questionImageUrl: '/crops/maths/p1/2018-q4.png',
+      markSchemeImageUrl: '/crops/maths/p1/2018-q4-ms.png',
       contextText: `The curve with equation  y = 2 ln(8 - x)  meets the line  y = x  at a single point,  x = \\alpha.`,
       diagramUrl: '/diagrams/maths/p1/2018-figure-2.png',
       diagramCaption: 'Figure 2',
@@ -224,6 +232,8 @@ cos4
       number: 5,
       totalMarks: 5,
       topic: 'Trigonometry & Circular Functions',
+      questionImageUrl: '/crops/maths/p1/2018-q5.png',
+      markSchemeImageUrl: '/crops/maths/p1/2018-q5-ms.png',
       parts: [
         {
           partLabel: '',
@@ -283,6 +293,8 @@ where A is a rational constant to be found.
       number: 6,
       totalMarks: 10,
       topic: 'Differentiation & Optimization',
+      questionImageUrl: '/crops/maths/p1/2018-q6.png',
+      markSchemeImageUrl: '/crops/maths/p1/2018-q6-ms.png',
       contextText: `Not to scale
 y
 C
@@ -376,6 +388,8 @@ Alt:
       number: 7,
       totalMarks: 7,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2018-q7.png',
+      markSchemeImageUrl: '/crops/maths/p1/2018-q7-ms.png',
       contextText: `Given that k \\in \\mathbb{Z}^+`,
       parts: [
         {
@@ -475,6 +489,8 @@ y`,
       number: 8,
       totalMarks: 5,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2018-q8.png',
+      markSchemeImageUrl: '/crops/maths/p1/2018-q8-ms.png',
       contextText: `The depth of water, D metres, in a harbour on a particular day is modelled by the formula
 D = 5 + 2 sin (30t)°      0 \\le t < 24
 where t is the number of hours after midnight.
@@ -550,6 +566,8 @@ Alt:
       number: 9,
       totalMarks: 10,
       topic: 'Differentiation & Optimization',
+      questionImageUrl: '/crops/maths/p1/2018-q9.png',
+      markSchemeImageUrl: '/crops/maths/p1/2018-q9-ms.png',
       contextText: `y
 Q
 O
@@ -653,6 +671,8 @@ x
       number: 10,
       totalMarks: 8,
       topic: 'Differential Equations & Modelling',
+      questionImageUrl: '/crops/maths/p1/2018-q10.png',
+      markSchemeImageUrl: '/crops/maths/p1/2018-q10-ms.png',
       contextText: `The height above ground, H metres, of a passenger on a roller coaster can be modelled by
 the differential equation
 d
@@ -749,6 +769,8 @@ Scheme`,
       number: 11,
       totalMarks: 10,
       topic: 'Binomial Expansion',
+      questionImageUrl: '/crops/maths/p1/2018-q11.png',
+      markSchemeImageUrl: '/crops/maths/p1/2018-q11-ms.png',
       contextText: `(a)	 Use binomial expansions to show that
 1
 4
@@ -866,6 +888,8 @@ r `,
       number: 12,
       totalMarks: 10,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2018-q12.png',
+      markSchemeImageUrl: '/crops/maths/p1/2018-q12-ms.png',
       contextText: `The value, £V, of a vintage car t years after it was first valued on 1st January 2001, is
 modelled by the equation
 V = Ap t        where A and p are constants
@@ -953,6 +977,8 @@ M1
       number: 13,
       totalMarks: 7,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2018-q13.png',
+      markSchemeImageUrl: '/crops/maths/p1/2018-q13-ms.png',
       parts: [
         {
           partLabel: '',
@@ -1033,6 +1059,8 @@ B1`,
       number: 14,
       totalMarks: 10,
       topic: 'Coordinate Geometry',
+      questionImageUrl: '/crops/maths/p1/2018-q14.png',
+      markSchemeImageUrl: '/crops/maths/p1/2018-q14-ms.png',
       contextText: `A curve C has parametric equations
 x = 3 + 2 sin t,      y = 4 + 2 cos 2t,      0 \\le t < 2\\pi`,
       parts: [

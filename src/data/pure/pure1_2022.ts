@@ -16,6 +16,8 @@ export const PURE_1_2022_PAPER: InteractivePaper = {
       number: 1,
       totalMarks: 4,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2022-q1.png',
+      markSchemeImageUrl: '/crops/maths/p1/2022-q1-ms.png',
       contextText: `The point  P (-2, -5)  lies on the curve with equation  y = f (x),    x \\in 
 Find the point to which P is mapped, when the curve with equation  y = f (x)
 is transformed to the curve with equation`,
@@ -87,6 +89,8 @@ B1:  Accept without brackets. May be written`,
       number: 2,
       totalMarks: 3,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2022-q2.png',
+      markSchemeImageUrl: '/crops/maths/p1/2022-q2-ms.png',
       parts: [
         {
           partLabel: '',
@@ -116,6 +120,8 @@ f ( 2)
       number: 3,
       totalMarks: 5,
       topic: 'Coordinate Geometry',
+      questionImageUrl: '/crops/maths/p1/2022-q3.png',
+      markSchemeImageUrl: '/crops/maths/p1/2022-q3-ms.png',
       contextText: `A circle has equation
 x2 + y2 - 10x + 16y = 80`,
       parts: [
@@ -193,6 +199,8 @@ Scheme`,
       number: 4,
       totalMarks: 3,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2022-q4.png',
+      markSchemeImageUrl: '/crops/maths/p1/2022-q4-ms.png',
       contextText: `(a)	 Express
 6.3
 δ
@@ -288,6 +296,8 @@ x`,
       number: 5,
       totalMarks: 6,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2022-q5.png',
+      markSchemeImageUrl: '/crops/maths/p1/2022-q5-ms.png',
       contextText: `The height, h metres, of a tree, t years after being planted, is modelled by the equation
 h
 2 = at + b        0 \\le t < 25
@@ -370,6 +380,8 @@ f ( 2)`,
       number: 6,
       totalMarks: 6,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2022-q6.png',
+      markSchemeImageUrl: '/crops/maths/p1/2022-q6-ms.png',
       contextText: `(2, 8)
 C
 x
@@ -469,6 +481,8 @@ OR
       number: 7,
       totalMarks: 5,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2022-q7.png',
+      markSchemeImageUrl: '/crops/maths/p1/2022-q7-ms.png',
       parts: [
         {
           partLabel: '',
@@ -542,6 +556,8 @@ f( )
       number: 8,
       totalMarks: 8,
       topic: 'Numerical Methods & Roots',
+      questionImageUrl: '/crops/maths/p1/2022-q8.png',
+      markSchemeImageUrl: '/crops/maths/p1/2022-q8-ms.png',
       contextText: `v
 t
 T
@@ -665,6 +681,8 @@ M1: Attempts
       number: 9,
       totalMarks: 6,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2022-q9.png',
+      markSchemeImageUrl: '/crops/maths/p1/2022-q9-ms.png',
       contextText: `P
 S
 R
@@ -721,6 +739,8 @@ QR
       number: 10,
       totalMarks: 8,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2022-q10.png',
+      markSchemeImageUrl: '/crops/maths/p1/2022-q10-ms.png',
       contextText: `A scientist is studying the number of bees and the number of wasps on an island.
 The number of bees, measured in thousands, Nb , is modelled by the equation
 Nb = 45 + 220 e0.05t
@@ -816,6 +836,8 @@ M1
       number: 11,
       totalMarks: 7,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2022-q11.png',
+      markSchemeImageUrl: '/crops/maths/p1/2022-q11-ms.png',
       contextText: `y
 x
 C1
@@ -910,6 +932,8 @@ Sets
       number: 12,
       totalMarks: 5,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2022-q12.png',
+      markSchemeImageUrl: '/crops/maths/p1/2022-q12-ms.png',
       parts: [
         {
           partLabel: '',
@@ -990,6 +1014,8 @@ k
       number: 13,
       totalMarks: 7,
       topic: 'Sequences & Series',
+      questionImageUrl: '/crops/maths/p1/2022-q13.png',
+      markSchemeImageUrl: '/crops/maths/p1/2022-q13-ms.png',
       contextText: `(i)	 In an arithmetic series, the first term is a and the common difference is d.
 Show that
 Sn = n
@@ -1086,6 +1112,8 @@ If they are building up their solution in stages e.g. ( 2, 5)
       number: 14,
       totalMarks: 8,
       topic: 'Trigonometry & Circular Functions',
+      questionImageUrl: '/crops/maths/p1/2022-q14.png',
+      markSchemeImageUrl: '/crops/maths/p1/2022-q14-ms.png',
       contextText: `In this question you must show all stages of your working.
 Solutions relying entirely on calculator technology are not acceptable.`,
       parts: [
@@ -1170,6 +1198,8 @@ Either uses sin`,
       number: 15,
       totalMarks: 10,
       topic: 'Differentiation & Optimization',
+      questionImageUrl: '/crops/maths/p1/2022-q15.png',
+      markSchemeImageUrl: '/crops/maths/p1/2022-q15-ms.png',
       contextText: `A
 0.8 rad
 h
@@ -1287,6 +1317,8 @@ M1
       number: 16,
       totalMarks: 9,
       topic: 'Integration & Calculus',
+      questionImageUrl: '/crops/maths/p1/2022-q16.png',
+      markSchemeImageUrl: '/crops/maths/p1/2022-q16-ms.png',
       contextText: `y
 4
 C

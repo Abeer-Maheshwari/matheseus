@@ -16,6 +16,8 @@ export const PURE_2_2018_PAPER: InteractivePaper = {
       number: 1,
       totalMarks: 6,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2018-q1.png',
+      markSchemeImageUrl: '/crops/maths/p2/2018-q1-ms.png',
       contextText: `g(x) = 2
 5
 3
@@ -70,6 +72,8 @@ x
       number: 2,
       totalMarks: 5,
       topic: 'Vectors in 3D',
+      questionImageUrl: '/crops/maths/p2/2018-q2.png',
+      markSchemeImageUrl: '/crops/maths/p2/2018-q2-ms.png',
       contextText: `Relative to a fixed origin O,
 the point A has position vector  (2i + 3j - 4k),
 the point B has position vector  (4i - 2j + 3k),
@@ -108,6 +112,8 @@ g( )
       number: 3,
       totalMarks: 5,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2018-q3.png',
+      markSchemeImageUrl: '/crops/maths/p2/2018-q3-ms.png',
       contextText: `(a)	 “If m and n are irrational numbers, where m ≠ n, then mn is also irrational.”
 Disprove this statement by means of a counter example.
 (2)`,
@@ -159,6 +165,8 @@ Way 1`,
       number: 4,
       totalMarks: 7,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2018-q4.png',
+      markSchemeImageUrl: '/crops/maths/p2/2018-q4-ms.png',
       parts: [
         {
           partLabel: '',
@@ -229,6 +237,8 @@ Way 2
       number: 5,
       totalMarks: 6,
       topic: 'Numerical Methods & Roots',
+      questionImageUrl: '/crops/maths/p2/2018-q5.png',
+      markSchemeImageUrl: '/crops/maths/p2/2018-q5-ms.png',
       contextText: `The equation  2x3 + x2 - 1 = 0  has exactly one real root.`,
       parts: [
         {
@@ -331,6 +341,8 @@ or 4.4
       number: 6,
       totalMarks: 6,
       topic: 'Trigonometry & Circular Functions',
+      questionImageUrl: '/crops/maths/p2/2018-q6.png',
+      markSchemeImageUrl: '/crops/maths/p2/2018-q6-ms.png',
       contextText: `f (x) = -3x3 + 8x2 - 9x + 10,    x \\in \\mathbb{R}`,
       parts: [
         {
@@ -373,6 +385,8 @@ or
       number: 7,
       totalMarks: 9,
       topic: 'Trigonometry & Circular Functions',
+      questionImageUrl: '/crops/maths/p2/2018-q7.png',
+      markSchemeImageUrl: '/crops/maths/p2/2018-q7-ms.png',
       parts: [
         {
           partLabel: '',
@@ -444,6 +458,8 @@ giving your answers to one decimal place.
       number: 8,
       totalMarks: 7,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2018-q8.png',
+      markSchemeImageUrl: '/crops/maths/p2/2018-q8-ms.png',
       contextText: `H
 x
 O
@@ -537,6 +553,8 @@ M1:`,
       number: 9,
       totalMarks: 5,
       topic: 'Trigonometry & Circular Functions',
+      questionImageUrl: '/crops/maths/p2/2018-q9.png',
+      markSchemeImageUrl: '/crops/maths/p2/2018-q9-ms.png',
       parts: [
         {
           partLabel: '',
@@ -614,6 +632,8 @@ x
       number: 10,
       totalMarks: 8,
       topic: 'Coordinate Geometry',
+      questionImageUrl: '/crops/maths/p2/2018-q10.png',
+      markSchemeImageUrl: '/crops/maths/p2/2018-q10-ms.png',
       contextText: `A spherical mint of radius 5 mm is placed in the mouth and sucked.
 Four minutes later, the radius of the mint is 3 mm.
 In a simple model, the rate of decrease of the radius of the mint is inversely proportional
@@ -699,6 +719,8 @@ M1
       number: 11,
       totalMarks: 7,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2018-q11.png',
+      markSchemeImageUrl: '/crops/maths/p2/2018-q11-ms.png',
       contextText: `1
 11
 6
@@ -822,6 +844,8 @@ y
       number: 12,
       totalMarks: 9,
       topic: 'Trigonometry & Circular Functions',
+      questionImageUrl: '/crops/maths/p2/2018-q12.png',
+      markSchemeImageUrl: '/crops/maths/p2/2018-q12-ms.png',
       contextText: `(a)	 Prove that
 1 - cos 2\\theta ≡ tan \\theta sin 2\\theta,    \\theta ≠ (2
 1)
@@ -899,6 +923,8 @@ M1`,
       number: 13,
       totalMarks: 10,
       topic: 'Integration & Calculus',
+      questionImageUrl: '/crops/maths/p2/2018-q13.png',
+      markSchemeImageUrl: '/crops/maths/p2/2018-q13-ms.png',
       diagramUrl: '/diagrams/maths/p2/2018-figure-2.png',
       diagramCaption: 'Figure 2',
       parts: [
@@ -976,6 +1002,8 @@ e)
       number: 14,
       totalMarks: 10,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2018-q14.png',
+      markSchemeImageUrl: '/crops/maths/p2/2018-q14-ms.png',
       contextText: `A scientist is studying a population of mice on an island.
 The number of mice, N, in the population, t months after the start of the study, is
 modelled by the equation

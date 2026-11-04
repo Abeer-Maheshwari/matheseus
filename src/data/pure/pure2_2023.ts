@@ -16,6 +16,8 @@ export const PURE_2_2023_PAPER: InteractivePaper = {
       number: 1,
       totalMarks: 4,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2023-q1.png',
+      markSchemeImageUrl: '/crops/maths/p2/2023-q1-ms.png',
       contextText: `f(x) = x
 3 + 2x
 2 - 8x + 5`,
@@ -50,6 +52,8 @@ export const PURE_2_2023_PAPER: InteractivePaper = {
       number: 2,
       totalMarks: 6,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2023-q2.png',
+      markSchemeImageUrl: '/crops/maths/p2/2023-q2-ms.png',
       contextText: `A sequence  u1, u2, u3 ...  is defined by
 u1 = 35
 1 =
@@ -134,6 +138,8 @@ f ( )`,
       number: 3,
       totalMarks: 5,
       topic: 'Numerical Methods & Roots',
+      questionImageUrl: '/crops/maths/p2/2023-q3.png',
+      markSchemeImageUrl: '/crops/maths/p2/2023-q3-ms.png',
       contextText: `Given that
 log2(x + 3) + log2(x + 10) = 2 + 2 log2 x`,
       parts: [
@@ -173,6 +179,8 @@ f ( )
       number: 4,
       totalMarks: 4,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2023-q4.png',
+      markSchemeImageUrl: '/crops/maths/p2/2023-q4-ms.png',
       contextText: `Coffee is poured into a cup.
 The temperature of the coffee, H  °C, t minutes after being poured into the cup is
 modelled by the equation
@@ -253,6 +261,8 @@ or
       number: 5,
       totalMarks: 5,
       topic: 'Differentiation & Optimization',
+      questionImageUrl: '/crops/maths/p2/2023-q5.png',
+      markSchemeImageUrl: '/crops/maths/p2/2023-q5-ms.png',
       contextText: `The curve C has equation  y = f (x)
 The curve
 •
@@ -346,6 +356,8 @@ or`,
       number: 6,
       totalMarks: 6,
       topic: 'Vectors in 3D',
+      questionImageUrl: '/crops/maths/p2/2023-q6.png',
+      markSchemeImageUrl: '/crops/maths/p2/2023-q6-ms.png',
       contextText: `Relative to a fixed origin O,
 •
 A is the point with position vector 12i
@@ -438,6 +450,8 @@ or
       number: 7,
       totalMarks: 7,
       topic: 'Differentiation & Optimization',
+      questionImageUrl: '/crops/maths/p2/2023-q7.png',
+      markSchemeImageUrl: '/crops/maths/p2/2023-q7-ms.png',
       contextText: `In this question you must show all stages of your working.
 Solutions relying on calculator technology are not acceptable.
 A curve has equation
@@ -518,6 +532,8 @@ x`,
       number: 8,
       totalMarks: 6,
       topic: 'Trigonometry & Circular Functions',
+      questionImageUrl: '/crops/maths/p2/2023-q8.png',
+      markSchemeImageUrl: '/crops/maths/p2/2023-q8-ms.png',
       contextText: `(a)	 Express  2 cos \\theta + 8 sin \\theta  in the form  R cos(\\theta - \\alpha) , where R and \\alpha are constants,
 R > 0  and  0 < \\alpha < 2
 \\pi
@@ -598,6 +614,8 @@ or
       number: 9,
       totalMarks: 7,
       topic: 'Differentiation & Optimization',
+      questionImageUrl: '/crops/maths/p2/2023-q9.png',
+      markSchemeImageUrl: '/crops/maths/p2/2023-q9-ms.png',
       contextText: `The curve C has parametric equations
 x = t
 2 + 6t - 16            y = 6 ln(t + 3)            t > -3`,
@@ -675,6 +693,8 @@ M1
       number: 10,
       totalMarks: 7,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2023-q10.png',
+      markSchemeImageUrl: '/crops/maths/p2/2023-q10-ms.png',
       contextText: `f ( )
 (
 )(
@@ -776,6 +796,8 @@ dM1
       number: 11,
       totalMarks: 10,
       topic: 'Numerical Methods & Roots',
+      questionImageUrl: '/crops/maths/p2/2023-q11.png',
+      markSchemeImageUrl: '/crops/maths/p2/2023-q11-ms.png',
       contextText: `h m
 10 m
 20 m
@@ -901,6 +923,8 @@ dM1
       number: 12,
       totalMarks: 10,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2023-q12.png',
+      markSchemeImageUrl: '/crops/maths/p2/2023-q12-ms.png',
       contextText: `O
 5
 t
@@ -1017,6 +1041,8 @@ x
       number: 13,
       totalMarks: 13,
       topic: 'Binomial Expansion',
+      questionImageUrl: '/crops/maths/p2/2023-q13.png',
+      markSchemeImageUrl: '/crops/maths/p2/2023-q13-ms.png',
       contextText: `In this question you must show all stages of your working.
 Solutions relying entirely on calculator technology are not acceptable.`,
       parts: [
@@ -1133,6 +1159,8 @@ Notes`,
       number: 14,
       totalMarks: 7,
       topic: 'Trigonometry & Circular Functions',
+      questionImageUrl: '/crops/maths/p2/2023-q14.png',
+      markSchemeImageUrl: '/crops/maths/p2/2023-q14-ms.png',
       contextText: `In this question you must show all stages of your working.
 Solutions relying entirely on calculator technology are not acceptable.`,
       parts: [
@@ -1222,6 +1250,8 @@ t
       number: 15,
       totalMarks: 3,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2023-q15.png',
+      markSchemeImageUrl: '/crops/maths/p2/2023-q15-ms.png',
       parts: [
         {
           partLabel: '',

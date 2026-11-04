@@ -16,6 +16,8 @@ export const PURE_1_2021_PAPER: InteractivePaper = {
       number: 1,
       totalMarks: 3,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2021-q1.png',
+      markSchemeImageUrl: '/crops/maths/p1/2021-q1-ms.png',
       parts: [
         {
           partLabel: '',
@@ -41,6 +43,8 @@ You must make your method clear.
       number: 2,
       totalMarks: 4,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2021-q2.png',
+      markSchemeImageUrl: '/crops/maths/p1/2021-q2-ms.png',
       contextText: `Given that
 f (x) = x2 - 4x + 5            x \\in `,
       parts: [
@@ -78,6 +82,8 @@ f( )`,
       number: 3,
       totalMarks: 6,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2021-q3.png',
+      markSchemeImageUrl: '/crops/maths/p1/2021-q3-ms.png',
       contextText: `The sequence  u1, u2, u3, …  is defined by
 un + 1 = k - 24
 un
@@ -132,6 +138,8 @@ It is implied by a solution of
       number: 4,
       totalMarks: 9,
       topic: 'Numerical Methods & Roots',
+      questionImageUrl: '/crops/maths/p1/2021-q4.png',
+      markSchemeImageUrl: '/crops/maths/p1/2021-q4-ms.png',
       contextText: `The curve with equation  y = f (x)  where
 f (x) = x2 + ln (2x2 - 4x + 5)
 has a single turning point at x = \\alpha`,
@@ -230,6 +238,8 @@ and shows that (`,
       number: 5,
       totalMarks: 6,
       topic: 'Sequences & Series',
+      questionImageUrl: '/crops/maths/p1/2021-q5.png',
+      markSchemeImageUrl: '/crops/maths/p1/2021-q5-ms.png',
       contextText: `In this question you should show all stages of your working.
 Solutions relying entirely on calculator technology are not acceptable.
 A company made a profit of £20 000 in its first year of trading, Year 1
@@ -314,6 +324,8 @@ x
       number: 6,
       totalMarks: 5,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2021-q6.png',
+      markSchemeImageUrl: '/crops/maths/p1/2021-q6-ms.png',
       contextText: `B
 C
 A
@@ -405,6 +417,8 @@ a x
       number: 7,
       totalMarks: 9,
       topic: 'Differentiation & Optimization',
+      questionImageUrl: '/crops/maths/p1/2021-q7.png',
+      markSchemeImageUrl: '/crops/maths/p1/2021-q7-ms.png',
       contextText: `The circle C has equation
 x2 + y2 - 10x + 4y + 11 = 0`,
       parts: [
@@ -487,6 +501,8 @@ A1
       number: 8,
       totalMarks: 9,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2021-q8.png',
+      markSchemeImageUrl: '/crops/maths/p1/2021-q8-ms.png',
       contextText: `A scientist is studying the growth of two different populations of bacteria.
 The number of bacteria, N, in the first population is modelled by the equation
 N = Aekt      t \\ge 0
@@ -585,6 +601,8 @@ or
       number: 9,
       totalMarks: 11,
       topic: 'Binomial Expansion',
+      questionImageUrl: '/crops/maths/p1/2021-q9.png',
+      markSchemeImageUrl: '/crops/maths/p1/2021-q9-ms.png',
       contextText: `f(x) = 50
 38
 9
@@ -686,6 +704,8 @@ E.g. 1:
       number: 10,
       totalMarks: 8,
       topic: 'Trigonometry & Circular Functions',
+      questionImageUrl: '/crops/maths/p1/2021-q10.png',
+      markSchemeImageUrl: '/crops/maths/p1/2021-q10-ms.png',
       contextText: `In this question you should show all stages of your working.
 Solutions relying entirely on calculator technology are not acceptable.`,
       parts: [
@@ -804,6 +824,8 @@ x
       number: 11,
       totalMarks: 8,
       topic: 'Integration & Calculus',
+      questionImageUrl: '/crops/maths/p1/2021-q11.png',
+      markSchemeImageUrl: '/crops/maths/p1/2021-q11-ms.png',
       contextText: `y
 R
 O
@@ -911,6 +933,8 @@ k
       number: 12,
       totalMarks: 9,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2021-q12.png',
+      markSchemeImageUrl: '/crops/maths/p1/2021-q12-ms.png',
       contextText: `H
 x
 O
@@ -1018,6 +1042,8 @@ d`,
       number: 13,
       totalMarks: 3,
       topic: 'Coordinate Geometry',
+      questionImageUrl: '/crops/maths/p1/2021-q13.png',
+      markSchemeImageUrl: '/crops/maths/p1/2021-q13-ms.png',
       parts: [
         {
           partLabel: '',
@@ -1099,6 +1125,8 @@ a =`,
       number: 14,
       totalMarks: 4,
       topic: 'Differentiation & Optimization',
+      questionImageUrl: '/crops/maths/p1/2021-q14.png',
+      markSchemeImageUrl: '/crops/maths/p1/2021-q14-ms.png',
       parts: [
         {
           partLabel: '',
@@ -1179,6 +1207,8 @@ M1`,
       number: 15,
       totalMarks: 6,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2021-q15.png',
+      markSchemeImageUrl: '/crops/maths/p1/2021-q15-ms.png',
       parts: [
         {
           partLabel: '',

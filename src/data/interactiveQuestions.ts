@@ -17,6 +17,8 @@ export interface InteractiveQuestion {
   diagramSvg?: string;
   diagramUrl?: string;
   diagramCaption?: string;
+  questionImageUrl?: string;
+  markSchemeImageUrl?: string;
   parts: QuestionPart[];
   fullMarkScheme: string;
   finalAnswer: string;

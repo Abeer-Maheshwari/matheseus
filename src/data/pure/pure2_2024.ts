@@ -16,6 +16,8 @@ export const PURE_2_2024_PAPER: InteractivePaper = {
       number: 1,
       totalMarks: 5,
       topic: 'Differentiation & Optimization',
+      questionImageUrl: '/crops/maths/p2/2024-q1.png',
+      markSchemeImageUrl: '/crops/maths/p2/2024-q1-ms.png',
       contextText: `y
 x
 x
@@ -59,6 +61,8 @@ O
       number: 2,
       totalMarks: 5,
       topic: 'Sequences & Series',
+      questionImageUrl: '/crops/maths/p2/2024-q2.png',
+      markSchemeImageUrl: '/crops/maths/p2/2024-q2-ms.png',
       contextText: `Jamie takes out an interest‑free loan of £8100
 Jamie makes a payment every month to pay back the loan.
 Jamie repays £400 in month 1, £390 in month 2, £380 in month 3, and so on, so that the
@@ -144,6 +148,8 @@ x`,
       number: 3,
       totalMarks: 4,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2024-q3.png',
+      markSchemeImageUrl: '/crops/maths/p2/2024-q3-ms.png',
       parts: [
         {
           partLabel: '',
@@ -171,6 +177,8 @@ d`,
       number: 4,
       totalMarks: 5,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2024-q4.png',
+      markSchemeImageUrl: '/crops/maths/p2/2024-q4-ms.png',
       contextText: `A sequence u1, u2, u3, ... is defined by
 u
 ku
@@ -229,6 +237,8 @@ rO
       number: 5,
       totalMarks: 3,
       topic: 'Trigonometry & Circular Functions',
+      questionImageUrl: '/crops/maths/p2/2024-q5.png',
+      markSchemeImageUrl: '/crops/maths/p2/2024-q5-ms.png',
       parts: [
         {
           partLabel: '',
@@ -301,6 +311,8 @@ x
       number: 6,
       totalMarks: 7,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2024-q6.png',
+      markSchemeImageUrl: '/crops/maths/p2/2024-q6-ms.png',
       contextText: `O
 y = f(x)
 y = g(x)
@@ -428,6 +440,8 @@ k
       number: 7,
       totalMarks: 5,
       topic: 'Vectors in 3D',
+      questionImageUrl: '/crops/maths/p2/2024-q7.png',
+      markSchemeImageUrl: '/crops/maths/p2/2024-q7-ms.png',
       contextText: `A
 B
 l
@@ -518,6 +532,8 @@ x
       number: 8,
       totalMarks: 7,
       topic: 'Trigonometry & Circular Functions',
+      questionImageUrl: '/crops/maths/p2/2024-q8.png',
+      markSchemeImageUrl: '/crops/maths/p2/2024-q8-ms.png',
       contextText: `In this question you must show all stages of your working.
 Solutions relying entirely on calculator technology are not acceptable.`,
       parts: [
@@ -641,6 +657,8 @@ u = - to find
       number: 9,
       totalMarks: 7,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2024-q9.png',
+      markSchemeImageUrl: '/crops/maths/p2/2024-q9-ms.png',
       contextText: `O
 B(20, 0.8)
 A(0, 2)
@@ -747,6 +765,8 @@ This is a B mark so if awarding for cos3\\theta do not condone missing brackets 
       number: 10,
       totalMarks: 6,
       topic: 'Differentiation & Optimization',
+      questionImageUrl: '/crops/maths/p2/2024-q10.png',
+      markSchemeImageUrl: '/crops/maths/p2/2024-q10-ms.png',
       contextText: `O
 C
 x
@@ -855,6 +875,8 @@ x
       number: 11,
       totalMarks: 5,
       topic: 'Integration & Calculus',
+      questionImageUrl: '/crops/maths/p2/2024-q11.png',
+      markSchemeImageUrl: '/crops/maths/p2/2024-q11-ms.png',
       diagramUrl: '/diagrams/maths/p2/2024-figure-5.png',
       diagramCaption: 'Figure 5',
       parts: [
@@ -958,6 +980,8 @@ N
       number: 12,
       totalMarks: 12,
       topic: 'Differential Equations & Modelling',
+      questionImageUrl: '/crops/maths/p2/2024-q12.png',
+      markSchemeImageUrl: '/crops/maths/p2/2024-q12-ms.png',
       contextText: `(a)	 Express
 1
 25
@@ -1080,6 +1104,8 @@ x
       number: 13,
       totalMarks: 9,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p2/2024-q13.png',
+      markSchemeImageUrl: '/crops/maths/p2/2024-q13-ms.png',
       contextText: `The world human population, P billions, is modelled by the equation
 P = ab
 t
@@ -1185,6 +1211,8 @@ and
       number: 14,
       totalMarks: 8,
       topic: 'Coordinate Geometry',
+      questionImageUrl: '/crops/maths/p2/2024-q14.png',
+      markSchemeImageUrl: '/crops/maths/p2/2024-q14-ms.png',
       contextText: `The circle C1 has equation
 x
 y
@@ -1287,6 +1315,8 @@ x
       number: 15,
       totalMarks: 12,
       topic: 'Differentiation & Optimization',
+      questionImageUrl: '/crops/maths/p2/2024-q15.png',
+      markSchemeImageUrl: '/crops/maths/p2/2024-q15-ms.png',
       contextText: `The curve C has equation
 (
 )

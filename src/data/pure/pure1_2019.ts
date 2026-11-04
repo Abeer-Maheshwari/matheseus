@@ -16,6 +16,8 @@ export const PURE_1_2019_PAPER: InteractivePaper = {
       number: 1,
       totalMarks: 3,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2019-q1.png',
+      markSchemeImageUrl: '/crops/maths/p1/2019-q1-ms.png',
       parts: [
         {
           partLabel: '',
@@ -40,6 +42,8 @@ Given that (x + 3) is a factor of f(x), find the value of the constant a.
       number: 2,
       totalMarks: 5,
       topic: 'Trigonometry & Circular Functions',
+      questionImageUrl: '/crops/maths/p1/2019-q2.png',
+      markSchemeImageUrl: '/crops/maths/p1/2019-q2-ms.png',
       contextText: `y
 x
 O
@@ -90,6 +94,8 @@ Diagram 1`,
       number: 3,
       totalMarks: 5,
       topic: 'Differentiation & Optimization',
+      questionImageUrl: '/crops/maths/p1/2019-q3.png',
+      markSchemeImageUrl: '/crops/maths/p1/2019-q3-ms.png',
       contextText: `y
 x
 x
@@ -151,6 +157,8 @@ where A and n are constants to be found.`,
       number: 4,
       totalMarks: 6,
       topic: 'Binomial Expansion',
+      questionImageUrl: '/crops/maths/p1/2019-q4.png',
+      markSchemeImageUrl: '/crops/maths/p1/2019-q4-ms.png',
       contextText: `(a) Find the first three terms, in ascending powers of x, of the binomial expansion of
 1
 4 -x
@@ -228,6 +236,8 @@ accurate approximation to
       number: 5,
       totalMarks: 10,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2019-q5.png',
+      markSchemeImageUrl: '/crops/maths/p1/2019-q5-ms.png',
       contextText: `f(x) = 2x2 + 4x + 9    x `,
       parts: [
         {
@@ -289,6 +299,8 @@ x 
       number: 6,
       totalMarks: 8,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2019-q6.png',
+      markSchemeImageUrl: '/crops/maths/p1/2019-q6-ms.png',
       contextText: `(a) Solve, for -180° - ș - 180°, the equation
 5 sin 2ș= 9 tan ș
 giving your answers, where necessary, to one decimal place.
@@ -359,6 +371,8 @@ a
       number: 7,
       totalMarks: 7,
       topic: 'Exponentials & Logarithms',
+      questionImageUrl: '/crops/maths/p1/2019-q7.png',
+      markSchemeImageUrl: '/crops/maths/p1/2019-q7-ms.png',
       contextText: `In a simple model, the value, £V, of a car depends on its age, t, in years.
 The following information is available for car A
 Ɣ its value when new is £20 000
@@ -449,6 +463,8 @@ A1
       number: 8,
       totalMarks: 10,
       topic: 'Integration & Calculus',
+      questionImageUrl: '/crops/maths/p1/2019-q8.png',
+      markSchemeImageUrl: '/crops/maths/p1/2019-q8-ms.png',
       contextText: `y
 O
 x
@@ -552,6 +568,8 @@ Note:     Alternatively 
       number: 9,
       totalMarks: 5,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2019-q9.png',
+      markSchemeImageUrl: '/crops/maths/p1/2019-q9-ms.png',
       contextText: `Given that a  b  0 and that a and b satisfy the equation
 log a - log b = log(a - b)`,
       parts: [
@@ -630,6 +648,8 @@ a
       number: 10,
       totalMarks: 6,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2019-q10.png',
+      markSchemeImageUrl: '/crops/maths/p1/2019-q10-ms.png',
       parts: [
         {
           partLabel: '',
@@ -695,6 +715,8 @@ x
       number: 11,
       totalMarks: 7,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2019-q11.png',
+      markSchemeImageUrl: '/crops/maths/p1/2019-q11-ms.png',
       contextText: `A competitor is running a 20 kilometre race.
 She runs each of the first 4 kilometres at a steady pace of 6 minutes per kilometre.
 After the first 4 kilometres, she begins to slow down.
@@ -782,6 +804,8 @@ Eg. 24 minutes +
       number: 12,
       totalMarks: 10,
       topic: 'Algebra & Functions',
+      questionImageUrl: '/crops/maths/p1/2019-q12.png',
+      markSchemeImageUrl: '/crops/maths/p1/2019-q12-ms.png',
       contextText: `f(x) = 10e±௘x sin x,   x . 0`,
       diagramUrl: '/diagrams/maths/p1/2019-figure-3.png',
       diagramCaption: 'Figure 3',
@@ -884,6 +908,8 @@ A1
       number: 13,
       totalMarks: 11,
       topic: 'Integration & Calculus',
+      questionImageUrl: '/crops/maths/p1/2019-q13.png',
+      markSchemeImageUrl: '/crops/maths/p1/2019-q13-ms.png',
       contextText: `The curve C with equation
 y
 p
@@ -957,6 +983,8 @@ constants to be found.
       number: 14,
       totalMarks: 7,
       topic: 'Differentiation & Optimization',
+      questionImageUrl: '/crops/maths/p1/2019-q14.png',
+      markSchemeImageUrl: '/crops/maths/p1/2019-q14-ms.png',
       contextText: `The curve C, in the standard Cartesian plane, is defined by the equation
 x = 4 sin 2\\    4
 4
