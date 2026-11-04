@@ -686,9 +686,6 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
           <span className="font-bold text-sm text-[#E8ECF4] truncate hidden md:inline max-w-sm">
             {paper.title}
           </span>
-          <span className="text-xs px-2 py-0.5 rounded bg-[#4A7BF7]/15 text-[#4A7BF7] font-semibold border border-[#4A7BF7]/30 hidden lg:inline shrink-0">
-            Interactive Practice
-          </span>
         </div>
 
         {/* Center: FlipClock Countdown Timer */}
@@ -1213,17 +1210,31 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
       {/* Formula Booklet Slide-over Drawer                                     */}
       {/* ---------------------------------------------------------------------- */}
       {showFormulaDrawer && (
-        <FormulaBookletModal
-          mode="drawer"
-          onClose={() => setShowFormulaDrawer(false)}
-        />
+        <>
+          {/* Subtle click-outside backdrop on smaller screens */}
+          <div
+            className="fixed inset-0 z-40 bg-black/40 backdrop-blur-[2px] xl:hidden"
+            onClick={() => setShowFormulaDrawer(false)}
+          />
+          <div className="fixed inset-y-0 right-0 z-50 w-full sm:w-[500px] md:w-[560px] bg-[#1A2540] border-l border-[#6382BF]/30 shadow-2xl flex flex-col animate-slideInRight">
+            <FormulaBookletModal
+              mode="drawer"
+              onClose={() => setShowFormulaDrawer(false)}
+            />
+          </div>
+        </>
       )}
 
       {/* ---------------------------------------------------------------------- */}
       {/* Scanned Official Question Paper Slide-over Drawer                     */}
       {/* ---------------------------------------------------------------------- */}
       {showPdfDrawer && paper.qpUrl && (
-        <div className="fixed inset-y-0 left-0 z-50 w-full sm:w-[640px] md:w-[720px] bg-[#1A2540] border-r border-[#6382BF]/30 shadow-2xl flex flex-col animate-fadeIn">
+        <>
+          <div
+            className="fixed inset-0 z-40 bg-black/40 backdrop-blur-[2px] xl:hidden"
+            onClick={() => setShowPdfDrawer(false)}
+          />
+          <div className="fixed inset-y-0 left-0 z-50 w-full sm:w-[640px] md:w-[720px] bg-[#1A2540] border-r border-[#6382BF]/30 shadow-2xl flex flex-col animate-fadeIn">
           <div className="h-12 bg-[#0A1020] px-4 border-b border-[#6382BF]/30 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2">
               <FileText size={15} className="text-[#4A7BF7]" />
@@ -1255,6 +1266,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
             title={`${paper.title} PDF reference`}
           />
         </div>
+        </>
       )}
 
       {/* ---------------------------------------------------------------------- */}

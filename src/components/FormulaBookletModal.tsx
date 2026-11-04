@@ -58,7 +58,7 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
   }).filter((cat) => cat.sections.length > 0);
 
   const containerClasses = mode === 'drawer'
-    ? 'w-full md:w-[460px] border-l border-[#6382BF]/30 bg-[#1A2540] flex flex-col h-full shadow-2xl shrink-0 z-30 animate-fadeIn'
+    ? 'w-full h-full flex flex-col overflow-hidden bg-[#1A2540]'
     : 'fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#0A1020]/80 backdrop-blur-sm text-[#E8ECF4] animate-fadeIn';
 
   const cardClasses = mode === 'drawer'
