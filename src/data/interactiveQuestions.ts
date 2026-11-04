@@ -191,12 +191,14 @@ export const SVG_ARGAND_LOCUS = `<svg viewBox="0 0 600 320" className="w-full h-
 export interface InteractivePaper {
   id: string;
   paperCode: string;
+  paperTitle?: string;
   title: string;
   durationMinutes: number;
   totalMarks: number;
   questions: InteractiveQuestion[];
   qpUrl?: string;
   msUrl?: string;
+  erUrl?: string;
 }
 
 import { PURE_PAPERS_DATABASE } from './pure';

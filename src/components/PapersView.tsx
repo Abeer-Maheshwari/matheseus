@@ -24,7 +24,13 @@ interface PapersViewProps {
   onSelectModule: (moduleId: string) => void;
   onOpenSplitView: (title: string, qpUrl: string, msUrl: string) => void;
   onOpenSingleDoc: (title: string, url: string) => void;
-  onOpenPractice: (paper: PaperEntry, module: ModuleSection) => void;
+  onOpenPractice: (
+    paper: PaperEntry,
+    module: ModuleSection,
+    initialReviewMode?: boolean,
+    initialQIndex?: number,
+    initialAttempt?: ExamAttempt
+  ) => void;
   completedMap: Record<string, boolean>;
   onToggleCompleted: (paperId: string) => void;
 }
@@ -361,7 +367,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
         </table>
       </div>
 
-      {/* Full Interactive Score Report Modal */}
+      {/* Full Interactive Score Report Modal / Screen */}
       {selectedAttempt && (
         <ScoreReportModal
           attempt={selectedAttempt}
@@ -371,6 +377,13 @@ export const PapersView: React.FC<PapersViewProps> = ({
             setSelectedAttempt(null);
             if (paperToRetake) {
               onOpenPractice(paperToRetake, activeModule);
+            }
+          }}
+          onReview={(qIdx) => {
+            const paperToReview = filteredPapers.find((p) => p.id === selectedAttempt.paperId);
+            setSelectedAttempt(null);
+            if (paperToReview) {
+              onOpenPractice(paperToReview, activeModule, true, qIdx || 0, selectedAttempt);
             }
           }}
           onDelete={() => {

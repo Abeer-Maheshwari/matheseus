@@ -6,6 +6,7 @@ import { FlipClock } from './FlipClock';
 import { playExamChime } from '../utils/audio';
 import { ExamAttempt } from '../types';
 import { saveExamAttempt, getExamAttempts } from '../utils/attempts';
+import { ScoreReportScreen } from './ScoreReportModal';
 import { 
   BookOpen, 
   Flag, 
@@ -39,22 +40,31 @@ interface InteractiveExamRunnerProps {
   paper: InteractivePaper;
   onClose: () => void;
   onSaveResult?: (paperId: string, score: number, maxScore: number) => void;
+  initialReviewMode?: boolean;
+  initialQuestionIndex?: number;
+  initialAttempt?: ExamAttempt;
 }
 
 export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
   paper,
   onClose,
   onSaveResult,
+  initialReviewMode = false,
+  initialQuestionIndex = 0,
+  initialAttempt,
 }) => {
   // Pre-exam setup
-  const [isStarted, setIsStarted] = useState(false);
-  const [timingMode, setTimingMode] = useState<TimingMode>('timed');
+  const [isStarted, setIsStarted] = useState(initialReviewMode);
+  const [timingMode, setTimingMode] = useState<TimingMode>(initialAttempt?.timingMode || 'timed');
 
   // Active question index
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(initialQuestionIndex);
 
   // User input states per question & subpart
-  const [scores, setScores] = useState<Record<number, number>>({});
+  const [scores, setScores] = useState<Record<number, number>>(() => {
+    if (initialAttempt?.questionScores) return initialAttempt.questionScores;
+    return {};
+  });
   const [subpartScores, setSubpartScores] = useState<Record<string, number>>({});
   const [revealedSolutions, setRevealedSolutions] = useState<Record<number, boolean>>({});
   const [revealedParts, setRevealedParts] = useState<Record<string, boolean>>({});
@@ -80,8 +90,8 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
   const [lightboxZoom, setLightboxZoom] = useState(1);
 
   // Completed exam summary view
-  const [isFinished, setIsFinished] = useState(false);
-  const [isReviewMode, setIsReviewMode] = useState(false);
+  const [isFinished, setIsFinished] = useState(initialReviewMode);
+  const [isReviewMode, setIsReviewMode] = useState(initialReviewMode);
 
   // Past attempts history
   const [pastAttempts, setPastAttempts] = useState<ExamAttempt[]>([]);
@@ -293,6 +303,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
       percentage: percent,
       predictedGrade: calculateGrade(percent),
       timingMode,
+      timeSpentSeconds: timeSpent,
       questionScores: scores,
     };
 
@@ -482,138 +493,37 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
   }
 
   // --------------------------------------------------------------------------
-  // Exam Completed / Summary Screen
+  // Exam Completed / Summary Screen (Unified Report Screen)
   // --------------------------------------------------------------------------
   if (isFinished && !isReviewMode) {
-    const grade = calculateGrade(percent);
+    const latestAttempt: ExamAttempt = pastAttempts.find((a) => a.paperId === paper.id) || {
+      id: `${paper.id}_${Date.now()}`,
+      paperId: paper.id,
+      paperCode: paper.paperCode,
+      paperTitle: paper.title,
+      completedAt: new Date().toISOString(),
+      achievedScore: totalAchievedScore,
+      maxScore: paperMaxMarks,
+      percentage: percent,
+      predictedGrade: calculateGrade(percent),
+      timingMode,
+      timeSpentSeconds: timeSpent,
+      questionScores: scores,
+    };
 
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0A1020]/95 backdrop-blur-md text-[#E8ECF4] overflow-y-auto animate-fadeIn">
-        <div className="bg-[#1A2540] border border-[#6382BF]/40 rounded-2xl max-w-2xl w-full p-6 space-y-6 shadow-2xl my-8 animate-modalFadeIn">
-          {/* Header */}
-          <div className="text-center space-y-2 border-b border-[#6382BF]/25 pb-5">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#4A7BF7]/15 border border-[#4A7BF7]/30 text-[#4A7BF7] text-xs font-semibold">
-              <Award size={14} />
-              <span>Exam Practice Completed</span>
-            </div>
-            <h2 className="text-2xl font-bold font-serif text-[#E8ECF4]">{paper.title}</h2>
-            <p className="text-xs text-[#7B8FAD]">
-              Completed in {Math.floor(timeSpent / 60)}m {timeSpent % 60}s · {paper.paperCode}
-            </p>
-          </div>
-
-          {/* Score & Grade Display */}
-          <div className="grid grid-cols-3 gap-4 text-center">
-            <div className="p-4 rounded-xl bg-[#0A1020] border border-[#6382BF]/30">
-              <span className="text-[11px] font-semibold text-[#7B8FAD] uppercase tracking-wider block">
-                Total Score
-              </span>
-              <div className="text-3xl font-bold text-[#E8ECF4] tabular-nums mt-1">
-                {totalAchievedScore}
-                <span className="text-sm font-normal text-[#7B8FAD]"> / {paperMaxMarks}</span>
-              </div>
-            </div>
-
-            <div className="p-4 rounded-xl bg-[#0A1020] border border-[#6382BF]/30">
-              <span className="text-[11px] font-semibold text-[#7B8FAD] uppercase tracking-wider block">
-                Percentage
-              </span>
-              <div className="text-3xl font-bold text-[#4A7BF7] tabular-nums mt-1">
-                {percent}%
-              </div>
-            </div>
-
-            <div className="p-4 rounded-xl bg-[#0A1020] border border-[#6382BF]/30">
-              <span className="text-[11px] font-semibold text-[#7B8FAD] uppercase tracking-wider block">
-                Grade
-              </span>
-              <div className="text-3xl font-bold text-emerald-400 mt-1">
-                {grade}
-              </div>
-            </div>
-          </div>
-
-          {/* Question Breakdown Table */}
-          <div className="space-y-2">
-            <div className="flex items-center justify-between text-xs font-semibold text-[#7B8FAD] uppercase tracking-wider px-1">
-              <span>Question Breakdown</span>
-              <span>{Object.keys(scores).length} of {paper.questions.length} Scored</span>
-            </div>
-            <div className="border border-[#6382BF]/30 rounded-xl overflow-hidden bg-[#0A1020]">
-              <div className="max-h-60 overflow-y-auto divide-y divide-[#6382BF]/15">
-                {paper.questions.map((q) => {
-                  const score = scores[q.number];
-                  const hasAnswered = score !== undefined;
-                  const isFullMarks = score === q.totalMarks;
-
-                  return (
-                    <div
-                      key={q.number}
-                      className="px-4 py-2.5 flex items-center justify-between text-xs hover:bg-[#1A2540]/40 transition-colors"
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className="font-semibold text-[#E8ECF4] w-8">Q{q.number}</span>
-                        <span className="text-[#7B8FAD] text-[11px] truncate max-w-[280px] sm:max-w-md">
-                          {q.topic}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <span className={`font-semibold tabular-nums ${
-                          !hasAnswered
-                            ? 'text-[#7B8FAD]'
-                            : isFullMarks
-                            ? 'text-emerald-400'
-                            : score > 0
-                            ? 'text-amber-300'
-                            : 'text-rose-400'
-                        }`}>
-                          {hasAnswered ? `${score} / ${q.totalMarks}` : `— / ${q.totalMarks}`}
-                        </span>
-                        <button
-                          onClick={() => {
-                            setCurrentIndex(q.number - 1);
-                            setIsReviewMode(true);
-                          }}
-                          className="px-2 py-0.5 rounded bg-[#1A2540] hover:bg-[#4A7BF7] text-[#7B8FAD] hover:text-white border border-[#6382BF]/30 text-[10px] font-semibold transition-colors"
-                        >
-                          Review
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <button
-              onClick={handleRestart}
-              className="w-full sm:w-auto px-4 py-2 rounded-xl bg-[#0A1020] hover:bg-[#1A2540] text-[#7B8FAD] hover:text-[#E8ECF4] border border-[#6382BF]/30 text-xs font-semibold flex items-center justify-center gap-2 transition-colors"
-            >
-              <RotateCcw size={14} />
-              <span>Retake Paper</span>
-            </button>
-
-            <div className="flex items-center gap-3 w-full sm:w-auto">
-              <button
-                onClick={() => setIsReviewMode(true)}
-                className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-[#0A1020] hover:bg-[#4A7BF7]/20 text-[#E8ECF4] border border-[#6382BF]/30 text-xs font-semibold flex items-center justify-center gap-2 transition-colors"
-              >
-                <Eye size={14} className="text-[#4A7BF7]" />
-                <span>Review All Questions</span>
-              </button>
-              <button
-                onClick={onClose}
-                className="flex-1 sm:flex-none px-6 py-2 rounded-xl bg-[#4A7BF7] hover:bg-[#6382BF] text-white text-xs font-semibold shadow-md transition-colors"
-              >
-                Done
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ScoreReportScreen
+        attempt={latestAttempt}
+        paper={paper}
+        onClose={onClose}
+        onRetake={handleRestart}
+        onReview={(qIdx) => {
+          if (qIdx !== undefined) setCurrentIndex(qIdx);
+          setIsReviewMode(true);
+        }}
+        erUrl={paper.erUrl || (paper.qpUrl ? paper.qpUrl.replace(/qp/g, 'er') : undefined)}
+        onOpenSingleDoc={(title, url) => window.open(url, '_blank')}
+      />
     );
   }
 
@@ -628,16 +538,18 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
         <div className="flex items-center gap-3">
           <button
             onClick={() => {
-              if (Object.keys(scores).length > 0 && !isFinished) {
+              if (isReviewMode) {
+                setIsReviewMode(false);
+              } else if (Object.keys(scores).length > 0 && !isFinished) {
                 setShowFinishConfirm(true);
               } else {
                 onClose();
               }
             }}
             className="p-1.5 rounded-lg hover:bg-[#0A1020] text-[#7B8FAD] hover:text-[#E8ECF4] transition-colors"
-            title="Exit Practice Mode"
+            title={isReviewMode ? "Return to Score Report" : "Exit Practice Mode"}
           >
-            <X size={18} />
+            {isReviewMode ? <ArrowLeft size={18} /> : <X size={18} />}
           </button>
 
           <img src="/logo.png" alt="matheseus" className="w-7 h-7 rounded-lg object-cover ring-1 ring-white/10 hidden sm:inline" />
@@ -650,9 +562,15 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
           </span>
         </div>
 
-        {/* Center: FlipClock Countdown Timer */}
+        {/* Center: Countdown Timer or Review Mode Indicator */}
         <div className="flex items-center gap-2">
-          {timingMode === 'timed' ? (
+          {isReviewMode ? (
+            <div className="flex items-center gap-2 bg-[#0A1020] px-3.5 py-1.5 rounded-xl border border-[#4A7BF7]/40 shadow-inner">
+              <Eye size={13} className="text-[#4A7BF7]" />
+              <span className="text-xs font-bold text-[#E8ECF4]">Review Mode</span>
+              <span className="text-[11px] text-[#7B8FAD] hidden sm:inline">· Official Mark Scheme Active</span>
+            </div>
+          ) : timingMode === 'timed' ? (
             <div className="flex items-center bg-[#0A1020] px-3 py-1.5 rounded-xl border border-[#6382BF]/30 shadow-inner">
               <FlipClock
                 secondsRemaining={secondsRemaining}
@@ -700,13 +618,23 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
             </button>
           )}
 
-          {/* Finish & Grade Button */}
-          <button
-            onClick={() => setShowFinishConfirm(true)}
-            className="px-4 py-1.5 text-xs rounded-xl bg-[#4A7BF7] hover:bg-[#6382BF] text-white font-semibold transition-colors shadow-sm shrink-0"
-          >
-            Finish Exam
-          </button>
+          {/* Finish & Grade or Back to Report Button */}
+          {isReviewMode ? (
+            <button
+              onClick={() => setIsReviewMode(false)}
+              className="px-4 py-1.5 text-xs rounded-xl bg-[#4A7BF7] hover:bg-[#6382BF] text-white font-semibold transition-colors shadow-sm shrink-0 flex items-center gap-1.5"
+            >
+              <Award size={13} />
+              <span>Back to Report</span>
+            </button>
+          ) : (
+            <button
+              onClick={() => setShowFinishConfirm(true)}
+              className="px-4 py-1.5 text-xs rounded-xl bg-[#4A7BF7] hover:bg-[#6382BF] text-white font-semibold transition-colors shadow-sm shrink-0"
+            >
+              Finish Exam
+            </button>
+          )}
         </div>
       </header>
 
@@ -1249,14 +1177,18 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-[#0A1020] border border-[#6382BF]/25 text-xs text-[#7B8FAD] space-y-1">
-              <div className="flex justify-between">
-                <span>Current Total Score:</span>
-                <span className="text-[#E8ECF4] font-bold tabular-nums">{totalAchievedScore} / {paperMaxMarks} ({percent}%)</span>
+            <div className="p-3.5 rounded-xl bg-[#0A1020] border border-[#6382BF]/25 text-xs text-[#7B8FAD] space-y-1.5">
+              <div className="flex justify-between items-center">
+                <span>Graded Questions:</span>
+                <span className="text-[#E8ECF4] font-bold tabular-nums">
+                  {Object.keys(scores).length} of {paper.questions.length} questions
+                </span>
               </div>
-              <div className="flex justify-between">
-                <span>Projected Grade:</span>
-                <span className="text-emerald-400 font-bold">{calculateGrade(percent)}</span>
+              <div className="flex justify-between items-center">
+                <span>Current Total Score:</span>
+                <span className="text-[#E8ECF4] font-bold tabular-nums">
+                  {totalAchievedScore} / {paperMaxMarks} marks
+                </span>
               </div>
             </div>
 

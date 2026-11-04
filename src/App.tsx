@@ -9,6 +9,7 @@ import { InteractiveExamRunner } from './components/InteractiveExamRunner';
 import { ExamTimerModal } from './components/ExamTimerModal';
 import { getInteractivePaper, InteractivePaper } from './data/interactiveQuestions';
 import { PaperEntry, ModuleSection } from './data/papersData';
+import { ExamAttempt } from './types';
 import { applyTheme, applyFont } from './utils/theme';
 import { Sigma, BarChart3 } from 'lucide-react';
 
@@ -75,7 +76,19 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
-  const handleLaunchPractice = (paper: PaperEntry, module: ModuleSection) => {
+  const [practiceConfig, setPracticeConfig] = useState<{
+    reviewMode?: boolean;
+    questionIndex?: number;
+    attempt?: ExamAttempt;
+  }>({});
+
+  const handleLaunchPractice = (
+    paper: PaperEntry,
+    module: ModuleSection,
+    initialReviewMode?: boolean,
+    initialQIndex?: number,
+    initialAttempt?: ExamAttempt
+  ) => {
     // Launch actual digital Practice Mode for all papers with module-matched questions
     const interactive = getInteractivePaper(
       paper.id,
@@ -88,6 +101,12 @@ export default function App() {
     );
     interactive.qpUrl = paper.qpUrl;
     interactive.msUrl = paper.msUrl;
+    interactive.erUrl = paper.erUrl;
+    setPracticeConfig({
+      reviewMode: initialReviewMode,
+      questionIndex: initialQIndex,
+      attempt: initialAttempt,
+    });
     setActiveInteractivePaper(interactive);
   };
 
@@ -175,9 +194,15 @@ export default function App() {
       {/* Interactive Question-by-Question Exam Runner (for papers with digitized questions) */}
       {activeInteractivePaper && (
         <InteractiveExamRunner
-          key={activeInteractivePaper.id}
+          key={`${activeInteractivePaper.id}_${practiceConfig.reviewMode ? 'review' : 'practice'}`}
           paper={activeInteractivePaper}
-          onClose={() => setActiveInteractivePaper(null)}
+          initialReviewMode={practiceConfig.reviewMode}
+          initialQuestionIndex={practiceConfig.questionIndex}
+          initialAttempt={practiceConfig.attempt}
+          onClose={() => {
+            setActiveInteractivePaper(null);
+            setPracticeConfig({});
+          }}
           onSaveResult={handleSaveScore}
         />
       )}
