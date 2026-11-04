@@ -69,8 +69,6 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
   // User input states per question & subpart
   const [scores, setScores] = useState<Record<number, number>>({});
   const [subpartScores, setSubpartScores] = useState<Record<string, number>>({});
-  const [studentAnswers, setStudentAnswers] = useState<Record<string, string>>({});
-  const [studentWorking, setStudentWorking] = useState<Record<string, string>>({});
   const [revealedSolutions, setRevealedSolutions] = useState<Record<number, boolean>>({});
   const [revealedParts, setRevealedParts] = useState<Record<string, boolean>>({});
   const [flagged, setFlagged] = useState<Record<number, boolean>>({});
@@ -107,8 +105,6 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
   const [savedDraft, setSavedDraft] = useState<{
     scores: Record<number, number>;
     subpartScores?: Record<string, number>;
-    studentAnswers?: Record<string, string>;
-    studentWorking?: Record<string, string>;
     flagged: Record<number, boolean>;
     currentIndex: number;
     timeSpent: number;
@@ -145,8 +141,6 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
           JSON.stringify({
             scores,
             subpartScores,
-            studentAnswers,
-            studentWorking,
             flagged,
             currentIndex,
             timeSpent,
@@ -164,8 +158,6 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
     isFinished,
     scores,
     subpartScores,
-    studentAnswers,
-    studentWorking,
     flagged,
     currentIndex,
     timeSpent,
@@ -357,8 +349,6 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
     setSavedDraft(null);
     setScores({});
     setSubpartScores({});
-    setStudentAnswers({});
-    setStudentWorking({});
     setRevealedSolutions({});
     setRevealedParts({});
     setFlagged({});
@@ -434,8 +424,6 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                   onClick={() => {
                     setScores(savedDraft.scores || {});
                     if (savedDraft.subpartScores) setSubpartScores(savedDraft.subpartScores);
-                    if (savedDraft.studentAnswers) setStudentAnswers(savedDraft.studentAnswers);
-                    if (savedDraft.studentWorking) setStudentWorking(savedDraft.studentWorking);
                     setFlagged(savedDraft.flagged || {});
                     setCurrentIndex(savedDraft.currentIndex || 0);
                     setTimeSpent(savedDraft.timeSpent || 0);
@@ -778,7 +766,6 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
             const isCurrent = idx === currentIndex;
             const isScored = scores[q.number] !== undefined;
             const isFlag = !!flagged[q.number];
-            const hasInput = !!studentAnswers[`${q.number}_0`] || !!studentWorking[`${q.number}_0`];
 
             return (
               <button
@@ -789,8 +776,6 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                     ? 'bg-[#4A7BF7] text-white shadow-md ring-2 ring-white/30'
                     : isScored
                     ? 'bg-emerald-600/30 border border-emerald-500/50 text-emerald-300'
-                    : hasInput
-                    ? 'bg-[#0A1020] border border-[#4A7BF7]/60 text-[#E8ECF4]'
                     : 'bg-[#0A1020] border border-[#6382BF]/30 text-[#7B8FAD] hover:text-[#E8ECF4]'
                 }`}
                 title={`Question ${q.number} (${q.totalMarks} marks)`}
@@ -922,37 +907,6 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
 
                     {/* Part Question Text with Math */}
                     <FormattedMathText text={p.text} className="text-sm sm:text-base text-[#E8ECF4]" />
-
-                    {/* Student Input: Answer & Working */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
-                      {/* Final Answer Input */}
-                      <div className="space-y-1">
-                        <label className="text-[11px] font-semibold text-[#7B8FAD] uppercase tracking-wider block">
-                          Your Final Answer
-                        </label>
-                        <input
-                          type="text"
-                          value={studentAnswers[partKey] || ''}
-                          onChange={(e) => setStudentAnswers({ ...studentAnswers, [partKey]: e.target.value })}
-                          placeholder="e.g. x = 2/3, y = 14/3"
-                          className="w-full px-3 py-2 bg-[#1A2540] border border-[#6382BF]/40 rounded-xl text-sm text-[#E8ECF4] focus:outline-none focus:border-[#4A7BF7] placeholder-[#7B8FAD]/50 font-mono"
-                        />
-                      </div>
-
-                      {/* Working Notes */}
-                      <div className="space-y-1">
-                        <label className="text-[11px] font-semibold text-[#7B8FAD] uppercase tracking-wider block">
-                          Working / Scratchpad Notes
-                        </label>
-                        <input
-                          type="text"
-                          value={studentWorking[partKey] || ''}
-                          onChange={(e) => setStudentWorking({ ...studentWorking, [partKey]: e.target.value })}
-                          placeholder="Key substitution steps, discriminant..."
-                          className="w-full px-3 py-2 bg-[#1A2540] border border-[#6382BF]/40 rounded-xl text-sm text-[#E8ECF4] focus:outline-none focus:border-[#4A7BF7] placeholder-[#7B8FAD]/50"
-                        />
-                      </div>
-                    </div>
 
                     {/* Solution & Mark Scheme Reveal Toggle */}
                     <div className="pt-2">
