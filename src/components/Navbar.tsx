@@ -21,13 +21,13 @@ export const Navbar: React.FC<NavbarProps> = ({
   const isPapersActive = currentTab === 'maths' || currentTab === 'further-maths';
 
   return (
-    <header className="border-b border-[#6382BF]/25 bg-[#1A2540]/95 backdrop-blur-md sticky top-0 z-40 transition-colors">
+    <header className="border-b border-[#6382BF]/25 bg-[#1A2540]/90 backdrop-blur-xl sticky top-0 z-40 transition-colors duration-200">
       <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
         {/* Brand & Left Navigation */}
         <div className="flex items-center gap-6">
           <button
             onClick={() => onNavigate('home')}
-            className="flex items-center gap-2.5 text-[#E8ECF4] hover:opacity-90 transition-opacity"
+            className="flex items-center gap-2.5 text-[#E8ECF4] hover:opacity-90 active:scale-95 transition-all duration-200"
           >
             <img
               src="/logo.png"
@@ -41,25 +41,25 @@ export const Navbar: React.FC<NavbarProps> = ({
           <nav className="flex items-center gap-1.5 text-xs font-medium">
             <button
               onClick={() => onNavigate('home')}
-              className={`group flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors ${
+              className={`group flex items-center gap-1.5 px-3 py-1.5 rounded-lg active:scale-95 transition-all duration-200 ${
                 currentTab === 'home'
                   ? 'bg-[#0A1020] text-[#E8ECF4] font-semibold border border-[#6382BF]/40 shadow-sm'
                   : 'text-[#7B8FAD] hover:text-[#E8ECF4] hover:bg-[#0A1020]/50'
               }`}
             >
-              <Home size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100" />
+              <Home size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100 transition-opacity" />
               <span>Home</span>
             </button>
 
             <button
               onClick={() => onNavigate(currentTab === 'further-maths' ? 'further-maths' : 'maths')}
-              className={`group flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors ${
+              className={`group flex items-center gap-1.5 px-3 py-1.5 rounded-lg active:scale-95 transition-all duration-200 ${
                 isPapersActive
                   ? 'bg-[#0A1020] text-[#E8ECF4] font-semibold border border-[#6382BF]/40 shadow-sm'
                   : 'text-[#7B8FAD] hover:text-[#E8ECF4] hover:bg-[#0A1020]/50'
               }`}
             >
-              <BookOpen size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100" />
+              <BookOpen size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100 transition-opacity" />
               <span>Past Papers</span>
             </button>
           </nav>
@@ -70,29 +70,29 @@ export const Navbar: React.FC<NavbarProps> = ({
           {isExamMode && onOpenTimer && (
             <button
               onClick={onOpenTimer}
-              className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[#E8ECF4] bg-[#0A1020] hover:bg-[#4A7BF7] hover:text-white border border-[#6382BF]/30 font-medium transition-colors"
+              className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[#E8ECF4] bg-[#0A1020] hover:bg-[#4A7BF7] hover:text-white border border-[#6382BF]/30 font-medium active:scale-95 transition-all duration-200 shadow-sm"
               title="Exam countdown timer"
             >
-              <Clock size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100" />
+              <Clock size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100 transition-opacity" />
               <span className="hidden sm:inline">Timer</span>
             </button>
           )}
 
           <button
             onClick={onOpenFormulas}
-            className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[#E8ECF4] bg-[#0A1020] hover:bg-[#4A7BF7] hover:text-white border border-[#6382BF]/30 font-medium transition-colors"
+            className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[#E8ECF4] bg-[#0A1020] hover:bg-[#4A7BF7] hover:text-white border border-[#6382BF]/30 font-medium active:scale-95 transition-all duration-200 shadow-sm"
             title="Formula booklet reference"
           >
-            <Sigma size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100" />
+            <Sigma size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100 transition-opacity" />
             <span className="hidden sm:inline">Formulae</span>
           </button>
 
           <button
             onClick={onOpenBoundaries}
-            className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[#E8ECF4] bg-[#0A1020] hover:bg-[#4A7BF7] hover:text-white border border-[#6382BF]/30 font-medium transition-colors"
+            className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[#E8ECF4] bg-[#0A1020] hover:bg-[#4A7BF7] hover:text-white border border-[#6382BF]/30 font-medium active:scale-95 transition-all duration-200 shadow-sm"
             title="Grade boundaries thresholds"
           >
-            <BarChart3 size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100" />
+            <BarChart3 size={14} className="shrink-0 text-inherit opacity-80 group-hover:opacity-100 transition-opacity" />
             <span className="hidden sm:inline">Boundaries</span>
           </button>
         </div>

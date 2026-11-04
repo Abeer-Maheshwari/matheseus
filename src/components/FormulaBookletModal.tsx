@@ -162,16 +162,16 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
                   placeholder="Search formulas (e.g. binomial, integration, normal)..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-full pl-9 pr-3 py-1.5 bg-[#0A1020] border border-[#6382BF]/30 rounded-lg text-xs text-[#E8ECF4] placeholder-[#5A6E8A] focus:outline-none focus:border-[#4A7BF7]"
+                  className="w-full pl-9 pr-3 py-2 bg-[#0A1020] border border-[#6382BF]/30 rounded-xl text-xs text-[#E8ECF4] placeholder-[#5A6E8A] focus:outline-none focus:border-[#4A7BF7] focus:ring-1 focus:ring-[#4A7BF7]/40 transition-all duration-200"
                 />
               </div>
 
               <div className="flex items-center gap-1.5 text-xs">
                 <button
                   onClick={() => setActiveQual('all')}
-                  className={`px-2.5 py-1 rounded-md transition-colors border ${
+                  className={`px-3 py-1 rounded-lg transition-all duration-150 active:scale-95 border ${
                     activeQual === 'all'
-                      ? 'bg-[#4A7BF7] text-white border-[#4A7BF7] font-semibold'
+                      ? 'bg-[#4A7BF7] text-white border-[#4A7BF7] font-semibold shadow-sm'
                       : 'text-[#7B8FAD] hover:text-[#E8ECF4] bg-[#0A1020] border-[#6382BF]/20'
                   }`}
                 >
@@ -179,9 +179,9 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
                 </button>
                 <button
                   onClick={() => setActiveQual('maths')}
-                  className={`px-2.5 py-1 rounded-md transition-colors border ${
+                  className={`px-3 py-1 rounded-lg transition-all duration-150 active:scale-95 border ${
                     activeQual === 'maths'
-                      ? 'bg-[#4A7BF7] text-white border-[#4A7BF7] font-semibold'
+                      ? 'bg-[#4A7BF7] text-white border-[#4A7BF7] font-semibold shadow-sm'
                       : 'text-[#7B8FAD] hover:text-[#E8ECF4] bg-[#0A1020] border-[#6382BF]/20'
                   }`}
                 >
@@ -189,9 +189,9 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
                 </button>
                 <button
                   onClick={() => setActiveQual('fm')}
-                  className={`px-2.5 py-1 rounded-md transition-colors border ${
+                  className={`px-3 py-1 rounded-lg transition-all duration-150 active:scale-95 border ${
                     activeQual === 'fm'
-                      ? 'bg-[#4A7BF7] text-white border-[#4A7BF7] font-semibold'
+                      ? 'bg-[#4A7BF7] text-white border-[#4A7BF7] font-semibold shadow-sm'
                       : 'text-[#7B8FAD] hover:text-[#E8ECF4] bg-[#0A1020] border-[#6382BF]/20'
                   }`}
                 >

@@ -120,9 +120,9 @@ export const PapersView: React.FC<PapersViewProps> = ({
             onSelectSubject('maths');
             onSelectModule('p1');
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 active:scale-[0.98] ${
             currentSubject === 'maths'
-              ? 'bg-[#4A7BF7] text-white shadow-sm'
+              ? 'bg-[#4A7BF7] text-white shadow-md shadow-[#4A7BF7]/20'
               : 'text-[#7B8FAD] hover:text-[#E8ECF4] bg-[#1A2540] border border-[#6382BF]/30 hover:border-[#4A7BF7]/50'
           }`}
         >
@@ -135,9 +135,9 @@ export const PapersView: React.FC<PapersViewProps> = ({
             onSelectSubject('further-maths');
             onSelectModule('cp1');
           }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 active:scale-[0.98] ${
             currentSubject === 'further-maths'
-              ? 'bg-[#4A7BF7] text-white shadow-sm'
+              ? 'bg-[#4A7BF7] text-white shadow-md shadow-[#4A7BF7]/20'
               : 'text-[#7B8FAD] hover:text-[#E8ECF4] bg-[#1A2540] border border-[#6382BF]/30 hover:border-[#4A7BF7]/50'
           }`}
         >
@@ -157,7 +157,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
           {moduleCategories.map((category) => (
             <div
               key={category.title}
-              className="p-2.5 rounded-xl bg-[#1A2540] border border-[#6382BF]/25 space-y-1.5 shadow-sm"
+              className="p-3 rounded-2xl bg-[#1A2540] border border-[#6382BF]/25 space-y-2 shadow-sm transition-all duration-200 hover:border-[#6382BF]/40"
             >
               <div className="text-[11px] font-semibold text-[#7B8FAD] uppercase tracking-wider px-1">
                 {category.title}
@@ -169,14 +169,14 @@ export const PapersView: React.FC<PapersViewProps> = ({
                     <button
                       key={m.id}
                       onClick={() => onSelectModule(m.id)}
-                      className={`flex-1 min-w-[120px] flex items-center justify-between px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
+                      className={`flex-1 min-w-[120px] flex items-center justify-between px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-[0.98] ${
                         isSelected
                           ? 'bg-[#0A1020] text-[#E8ECF4] border-[#4A7BF7] shadow-sm font-semibold ring-1 ring-[#4A7BF7]/40'
                           : 'bg-[#0A1020]/60 text-[#7B8FAD] hover:text-[#E8ECF4] border-[#6382BF]/20 hover:border-[#6382BF]/50'
                       }`}
                     >
                       <span className="truncate">{m.title}</span>
-                      <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#1A2540] border border-[#6382BF]/30 text-[#7B8FAD] ml-1.5 shrink-0">
+                      <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#1A2540] border border-[#6382BF]/30 text-[#7B8FAD] ml-1.5 shrink-0 font-sans">
                         {m.code.split('/')[1] || m.code}
                       </span>
                     </button>
@@ -189,11 +189,11 @@ export const PapersView: React.FC<PapersViewProps> = ({
       </div>
 
       {/* Module Overview Card & Search */}
-      <div className="p-4 rounded-xl bg-[#1A2540] border border-[#6382BF]/25 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-md">
+      <div className="p-4 rounded-2xl bg-[#1A2540] border border-[#6382BF]/25 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-md">
         <div>
           <h3 className="text-base font-serif font-bold text-[#E8ECF4] flex items-center gap-2">
             <span>{activeModule.title}</span>
-            <span className="text-xs px-2.5 py-0.5 rounded bg-[#0A1020] text-[#4A7BF7] border border-[#6382BF]/40 font-semibold">
+            <span className="text-xs px-2.5 py-0.5 rounded-md bg-[#0A1020] text-[#4A7BF7] border border-[#6382BF]/40 font-semibold font-sans">
               {activeModule.code}
             </span>
           </h3>
@@ -209,7 +209,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search by year or season..."
-            className="w-full pl-9 pr-3 py-1.5 bg-[#0A1020] border border-[#6382BF]/30 rounded-lg text-xs text-[#E8ECF4] placeholder-[#5A6E8A] focus:outline-none focus:border-[#4A7BF7]"
+            className="w-full pl-9 pr-3 py-2 bg-[#0A1020] border border-[#6382BF]/30 rounded-xl text-xs text-[#E8ECF4] placeholder-[#5A6E8A] focus:outline-none focus:border-[#4A7BF7] focus:ring-1 focus:ring-[#4A7BF7]/40 transition-all duration-200"
           />
         </div>
       </div>
@@ -247,7 +247,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
                   <td className="py-3 px-4 text-center">
                     <button
                       onClick={() => onOpenPractice(paper, activeModule)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#4A7BF7]/15 hover:bg-[#4A7BF7]/30 text-[#E8ECF4] font-semibold border border-[#4A7BF7]/40 transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#4A7BF7]/15 hover:bg-[#4A7BF7]/30 text-[#E8ECF4] font-semibold border border-[#4A7BF7]/40 transition-all duration-150 hover:scale-[1.02] active:scale-95 shadow-sm"
                       title="Practice this paper under exam conditions with timer and self-marking"
                     >
                       <Play size={13} className="text-[#4A7BF7]" />
@@ -260,7 +260,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
                     <div className="inline-flex items-center gap-2">
                       <button
                         onClick={() => onOpenSplitView(paperTitle, paper.qpUrl, paper.msUrl)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0A1020] hover:bg-[#4A7BF7]/20 text-[#E8ECF4] font-medium border border-[#6382BF]/30 transition-colors"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0A1020] hover:bg-[#4A7BF7]/20 text-[#E8ECF4] font-medium border border-[#6382BF]/30 transition-all duration-150 active:scale-95 shadow-sm"
                         title="Open Question Paper and Mark Scheme side-by-side"
                       >
                         <Columns size={13} className="text-[#4A7BF7]" />
@@ -268,13 +268,13 @@ export const PapersView: React.FC<PapersViewProps> = ({
                       </button>
 
                       {/* Direct QP / MS Download icons */}
-                      <div className="flex items-center border border-[#6382BF]/30 rounded-lg overflow-hidden bg-[#0A1020]">
+                      <div className="flex items-center border border-[#6382BF]/30 rounded-lg overflow-hidden bg-[#0A1020] shadow-sm">
                         <a
                           href={paper.qpUrl}
                           download
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="px-2 py-1 text-[11px] text-[#7B8FAD] hover:text-[#E8ECF4] hover:bg-[#1A2540] transition-colors border-r border-[#6382BF]/20 flex items-center gap-1"
+                          className="px-2 py-1 text-[11px] text-[#7B8FAD] hover:text-[#E8ECF4] hover:bg-[#1A2540] transition-colors border-r border-[#6382BF]/20 flex items-center gap-1 active:scale-95"
                           title="Download Question Paper PDF"
                         >
                           <Download size={11} className="text-[#4A7BF7]" />
@@ -285,7 +285,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
                           download
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="px-2 py-1 text-[11px] text-[#7B8FAD] hover:text-[#E8ECF4] hover:bg-[#1A2540] transition-colors flex items-center gap-1"
+                          className="px-2 py-1 text-[11px] text-[#7B8FAD] hover:text-[#E8ECF4] hover:bg-[#1A2540] transition-colors flex items-center gap-1 active:scale-95"
                           title="Download Mark Scheme PDF"
                         >
                           <Download size={11} className="text-[#7B8FAD]" />
@@ -301,18 +301,18 @@ export const PapersView: React.FC<PapersViewProps> = ({
                       <div className="inline-flex items-center justify-center gap-1.5">
                         <button
                           onClick={() => setSelectedAttempt(attempt)}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 font-semibold border border-emerald-500/40 text-xs transition-all shadow-sm group"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 font-semibold border border-emerald-500/40 text-xs transition-all duration-150 hover:scale-[1.02] active:scale-95 shadow-sm group"
                           title="Click to view full score report & question breakdown"
                         >
                           <CheckCircle2 size={13} className="text-emerald-400" />
                           <span className="tabular-nums font-bold">{attempt.achievedScore}/{attempt.maxScore}</span>
                           <span className="text-emerald-400 font-bold">({attempt.predictedGrade || `${attempt.percentage}%`})</span>
-                          <Eye size={12} className="opacity-70 group-hover:opacity-100 ml-0.5 text-emerald-400" />
+                          <Eye size={12} className="opacity-70 group-hover:opacity-100 ml-0.5 text-emerald-400 transition-opacity" />
                         </button>
                         {paper.erUrl && (
                           <button
                             onClick={() => onOpenSingleDoc(`${paperTitle} — Examiner Report`, paper.erUrl!)}
-                            className="p-1 rounded bg-[#0A1020] hover:bg-[#1A2540] text-[#7B8FAD] hover:text-[#E8ECF4] border border-[#6382BF]/30 transition-colors"
+                            className="p-1.5 rounded-lg bg-[#0A1020] hover:bg-[#1A2540] text-[#7B8FAD] hover:text-[#E8ECF4] border border-[#6382BF]/30 transition-all duration-150 active:scale-95"
                             title="Official Examiner Report PDF"
                           >
                             <FileText size={12} />
@@ -323,7 +323,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
                       <div className="inline-flex items-center justify-center gap-1.5">
                         <button
                           onClick={() => onToggleCompleted(paper.id)}
-                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#4A7BF7]/20 hover:bg-[#4A7BF7]/30 text-[#E8ECF4] border border-[#4A7BF7]/40 text-xs font-semibold transition-all shadow-sm"
+                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#4A7BF7]/20 hover:bg-[#4A7BF7]/30 text-[#E8ECF4] border border-[#4A7BF7]/40 text-xs font-semibold transition-all duration-150 active:scale-95 shadow-sm"
                           title="Completed offline. Practice paper to record detailed score report."
                         >
                           <Check size={12} className="text-[#4A7BF7]" />
@@ -332,7 +332,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
                         {paper.erUrl && (
                           <button
                             onClick={() => onOpenSingleDoc(`${paperTitle} — Examiner Report`, paper.erUrl!)}
-                            className="p-1 rounded bg-[#0A1020] hover:bg-[#1A2540] text-[#7B8FAD] hover:text-[#E8ECF4] border border-[#6382BF]/30 transition-colors"
+                            className="p-1.5 rounded-lg bg-[#0A1020] hover:bg-[#1A2540] text-[#7B8FAD] hover:text-[#E8ECF4] border border-[#6382BF]/30 transition-all duration-150 active:scale-95"
                             title="Official Examiner Report PDF"
                           >
                             <FileText size={12} />
@@ -343,7 +343,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
                       <div className="inline-flex items-center justify-center gap-1.5">
                         <button
                           onClick={() => onToggleCompleted(paper.id)}
-                          className="px-2.5 py-1 rounded-lg text-xs text-[#7B8FAD] hover:text-[#E8ECF4] bg-[#0A1020] hover:bg-[#1A2540] border border-[#6382BF]/20 hover:border-[#6382BF]/50 transition-colors font-medium"
+                          className="px-2.5 py-1 rounded-lg text-xs text-[#7B8FAD] hover:text-[#E8ECF4] bg-[#0A1020] hover:bg-[#1A2540] border border-[#6382BF]/20 hover:border-[#6382BF]/50 transition-all duration-150 active:scale-95 font-medium"
                           title="Mark paper as done"
                         >
                           Mark Done
@@ -351,7 +351,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
                         {paper.erUrl && (
                           <button
                             onClick={() => onOpenSingleDoc(`${paperTitle} — Examiner Report`, paper.erUrl!)}
-                            className="p-1 rounded bg-[#0A1020] hover:bg-[#1A2540] text-[#7B8FAD] hover:text-[#E8ECF4] border border-[#6382BF]/30 transition-colors"
+                            className="p-1.5 rounded-lg bg-[#0A1020] hover:bg-[#1A2540] text-[#7B8FAD] hover:text-[#E8ECF4] border border-[#6382BF]/30 transition-all duration-150 active:scale-95"
                             title="Official Examiner Report PDF"
                           >
                             <FileText size={12} />

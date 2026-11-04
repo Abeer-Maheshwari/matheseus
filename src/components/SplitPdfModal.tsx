@@ -372,12 +372,14 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
 
             {enteredScore !== '' && (
               <div className="flex items-center gap-2 text-xs">
-                <span className="px-2 py-0.5 rounded bg-[#0A1020] text-[#E8ECF4] border border-[#6382BF]/30 font-semibold">
+                <span className="px-2.5 py-0.5 rounded bg-[#0A1020] text-[#E8ECF4] border border-[#6382BF]/30 font-semibold tabular-nums">
                   {percentage}%
                 </span>
-                <span className="px-2 py-0.5 rounded bg-[#4A7BF7]/20 text-[#4A7BF7] border border-[#4A7BF7]/40 font-bold">
-                  Grade {predictedGrade}
-                </span>
+                {isSaved && (
+                  <span className="px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-bold">
+                    Grade {predictedGrade}
+                  </span>
+                )}
               </div>
             )}
           </div>

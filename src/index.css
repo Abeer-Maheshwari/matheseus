@@ -27,11 +27,19 @@
   --font-serif: 'Fraunces', Georgia, serif;
 }
 
+html {
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 @layer base {
   body {
     font-family: var(--font-body);
     background-color: var(--theme-bg-page);
     color: var(--theme-text-main);
+    overflow-x: hidden;
   }
   
   .font-serif {
@@ -49,27 +57,52 @@
   }
 }
 
-/* Force pointer cursor on all interactive elements */
+/* Fluid interactive feedback on all buttons and actionable elements */
 button, 
 [role="button"], 
-a, 
-input[type="button"], 
-input[type="submit"], 
-select {
+a {
   cursor: pointer !important;
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.18s ease,
+              border-color 0.18s ease,
+              color 0.18s ease,
+              box-shadow 0.18s ease,
+              opacity 0.18s ease;
 }
 
-/* Minimal scrollbars styled with palette */
+button:active:not(:disabled),
+[role="button"]:active:not(:disabled) {
+  transform: scale(0.975);
+}
+
+/* Fluid, sleek scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
-/* Subtle, smooth transitions between screens, menus, and modes */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(99, 130, 191, 0.25);
+  border-radius: 9999px;
+  border: 1.5px solid transparent;
+  background-clip: padding-box;
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(74, 123, 247, 0.65);
+  background-clip: padding-box;
+}
+
+/* Physics-based fluid transitions with natural deceleration */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(3px);
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
@@ -80,26 +113,18 @@ select {
 @keyframes modalFadeIn {
   from {
     opacity: 0;
-    transform: scale(0.985);
+    transform: scale(0.975) translateY(4px);
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) translateY(0);
   }
-}
-
-.animate-fadeIn {
-  animation: fadeIn 0.16s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.animate-modalFadeIn {
-  animation: modalFadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes slideInRight {
   from {
     transform: translateX(100%);
-    opacity: 0.4;
+    opacity: 0.3;
   }
   to {
     transform: translateX(0);
@@ -107,19 +132,46 @@ select {
   }
 }
 
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0.3;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes questionFade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-modalFadeIn {
+  animation: modalFadeIn 0.26s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 .animate-slideInRight {
-  animation: slideInRight 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: slideInRight 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
-::-webkit-scrollbar-track {
-  background: var(--theme-bg-page);
+
+.animate-slideInLeft {
+  animation: slideInLeft 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
-::-webkit-scrollbar-thumb {
-  background: var(--theme-bg-card);
-  border: 1px solid var(--theme-border);
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--theme-accent);
+
+.animate-questionFade {
+  animation: questionFade 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Dynamic CSS overrides for all themes */

@@ -683,9 +683,9 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
 
       {/* Main Stage: Interactive Question Viewer */}
       <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 space-y-6">
-        <div className="max-w-4xl mx-auto space-y-6 pb-12">
+        <div key={currentQ.number} className="max-w-4xl mx-auto space-y-6 pb-12 animate-questionFade">
           {/* Question Card */}
-          <div className="border border-[#6382BF]/30 rounded-2xl bg-[#1A2540] p-6 sm:p-8 shadow-xl space-y-6">
+          <div className="border border-[#6382BF]/30 hover:border-[#4A7BF7]/40 rounded-2xl bg-[#1A2540] p-6 sm:p-8 shadow-xl space-y-6 transition-colors duration-200">
             {/* Question Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#6382BF]/25 gap-3">
               <div className="flex items-center gap-3">

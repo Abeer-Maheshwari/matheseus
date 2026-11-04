@@ -179,7 +179,7 @@ export const ScoreReportScreen: React.FC<ScoreReportScreenProps> = ({
                   {onRetake && (
                     <button
                       onClick={onRetake}
-                      className="px-3.5 py-2 rounded-xl bg-[#0A1020] hover:bg-[#1A2540] text-[#E8ECF4] border border-[#6382BF]/30 text-xs font-semibold flex items-center gap-1.5 transition-colors"
+                      className="px-3.5 py-2 rounded-xl bg-[#0A1020] hover:bg-[#1A2540] text-[#E8ECF4] border border-[#6382BF]/30 text-xs font-semibold flex items-center gap-1.5 transition-all duration-150 active:scale-95 shadow-sm"
                       title="Practice this paper again from start"
                     >
                       <RotateCcw size={13} />
@@ -189,7 +189,7 @@ export const ScoreReportScreen: React.FC<ScoreReportScreenProps> = ({
                   {onReview && (
                     <button
                       onClick={() => onReview(0)}
-                      className="px-4 py-2 rounded-xl bg-[#4A7BF7] hover:bg-[#6382BF] text-white text-xs font-semibold flex items-center gap-1.5 shadow-md transition-colors"
+                      className="px-4 py-2 rounded-xl bg-[#4A7BF7] hover:bg-[#6382BF] text-white text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-[#4A7BF7]/20 transition-all duration-150 active:scale-95 hover:scale-[1.02]"
                       title="Step through all questions with Pearson mark scheme"
                     >
                       <Eye size={13} />
@@ -202,7 +202,7 @@ export const ScoreReportScreen: React.FC<ScoreReportScreenProps> = ({
               {/* Three Main Metric Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
                 {/* Total Marks */}
-                <div className="p-4 sm:p-5 rounded-xl bg-[#0A1020] border border-[#6382BF]/30 shadow-inner space-y-1">
+                <div className="p-4 sm:p-5 rounded-xl bg-[#0A1020] border border-[#6382BF]/30 shadow-inner space-y-1 transition-all duration-200 hover:border-[#6382BF]/60 hover:-translate-y-0.5">
                   <span className="text-[11px] font-semibold text-[#7B8FAD] uppercase tracking-wider block">
                     Total Score
                   </span>
@@ -216,7 +216,7 @@ export const ScoreReportScreen: React.FC<ScoreReportScreenProps> = ({
                 </div>
 
                 {/* Percentage */}
-                <div className="p-4 sm:p-5 rounded-xl bg-[#0A1020] border border-[#6382BF]/30 shadow-inner space-y-1">
+                <div className="p-4 sm:p-5 rounded-xl bg-[#0A1020] border border-[#6382BF]/30 shadow-inner space-y-1 transition-all duration-200 hover:border-[#6382BF]/60 hover:-translate-y-0.5">
                   <span className="text-[11px] font-semibold text-[#7B8FAD] uppercase tracking-wider block">
                     Percentage
                   </span>
@@ -225,14 +225,14 @@ export const ScoreReportScreen: React.FC<ScoreReportScreenProps> = ({
                   </div>
                   <div className="w-full bg-[#1A2540] h-1.5 rounded-full overflow-hidden mt-2">
                     <div
-                      className="bg-[#4A7BF7] h-full rounded-full transition-all duration-500"
+                      className="bg-[#4A7BF7] h-full rounded-full transition-all duration-500 ease-out"
                       style={{ width: `${Math.min(100, Math.max(0, attempt.percentage))}%` }}
                     />
                   </div>
                 </div>
 
                 {/* Predicted Grade */}
-                <div className="p-4 sm:p-5 rounded-xl bg-[#0A1020] border border-[#6382BF]/30 shadow-inner space-y-1">
+                <div className="p-4 sm:p-5 rounded-xl bg-[#0A1020] border border-[#6382BF]/30 shadow-inner space-y-1 transition-all duration-200 hover:border-[#6382BF]/60 hover:-translate-y-0.5">
                   <span className="text-[11px] font-semibold text-[#7B8FAD] uppercase tracking-wider block">
                     Predicted Grade
                   </span>
