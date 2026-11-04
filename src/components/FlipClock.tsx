@@ -63,13 +63,13 @@ export const FlipClock: React.FC<FlipClockProps> = ({
   const isUrgent = secondsRemaining < 300 && secondsRemaining > 0; // < 5 mins
 
   return (
-    <div className={`inline-flex items-center gap-2.5 text-sm sm:text-base ${className}`}>
+    <div className={`inline-flex items-center gap-2 text-sm sm:text-base ${className}`}>
       {/* Clock Icon */}
-      <Clock size={15} className={isUrgent ? 'text-[#865D36] animate-pulse' : 'text-[#AC8968]'} />
+      <Clock size={14} className={isUrgent ? 'text-rose-400 animate-pulse' : isPaused ? 'text-amber-400' : 'text-[#4A7BF7]'} />
 
       {/* Normal Text with Flip Animation in Libre font */}
-      <div className={`inline-flex items-center font-bold tracking-wide tabular-nums ${
-        isUrgent ? 'text-[#865D36]' : 'text-[#FAF6F0]'
+      <div className={`inline-flex items-center font-bold tracking-wider tabular-nums font-mono ${
+        isUrgent ? 'text-rose-400' : isPaused ? 'text-amber-300' : 'text-[#E8ECF4]'
       }`}>
         {hours > 0 && (
           <>
@@ -90,16 +90,20 @@ export const FlipClock: React.FC<FlipClockProps> = ({
         <button
           type="button"
           onClick={onTogglePause}
-          className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[11px] font-medium transition-colors bg-[#3E362E] hover:bg-[#865D36] text-[#FAF6F0] border border-[#93785B]/40"
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold transition-all border shadow-sm ${
+            isPaused
+              ? 'bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border-amber-500/40'
+              : 'bg-[#1A2540] hover:bg-[#4A7BF7] text-[#7B8FAD] hover:text-white border-[#6382BF]/30'
+          }`}
           title={isPaused ? 'Resume exam clock' : 'Pause exam clock'}
         >
-          {isPaused ? <Play size={10} className="text-[#AC8968]" /> : <Pause size={10} className="text-[#865D36]" />}
+          {isPaused ? <Play size={11} className="fill-current" /> : <Pause size={11} />}
           <span>{isPaused ? 'Resume' : 'Pause'}</span>
         </button>
       )}
 
       {isUrgent && (
-        <span className="hidden sm:inline-flex items-center gap-1 text-[11px] text-[#865D36] font-medium">
+        <span className="hidden sm:inline-flex items-center gap-1 text-[11px] text-rose-400 font-semibold bg-rose-500/15 border border-rose-500/30 px-1.5 py-0.5 rounded-md">
           <AlertCircle size={11} />
           <span>&lt; 5m</span>
         </span>

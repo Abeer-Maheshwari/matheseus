@@ -694,20 +694,12 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
         {/* Center: FlipClock Countdown Timer */}
         <div className="flex items-center gap-2">
           {timingMode === 'timed' ? (
-            <div className="flex items-center gap-2 bg-[#0A1020] px-2.5 py-1 rounded-xl border border-[#6382BF]/30 shadow-inner">
-              <Clock size={13} className="text-[#4A7BF7]" />
+            <div className="flex items-center bg-[#0A1020] px-3 py-1.5 rounded-xl border border-[#6382BF]/30 shadow-inner">
               <FlipClock
                 secondsRemaining={secondsRemaining}
                 isPaused={isTimerPaused}
                 onTogglePause={() => setIsTimerPaused(!isTimerPaused)}
               />
-              <button
-                onClick={() => setIsTimerPaused(!isTimerPaused)}
-                className="text-[10px] px-2 py-0.5 rounded bg-[#1A2540] hover:bg-[#4A7BF7] hover:text-white text-[#7B8FAD] transition-colors ml-1 font-semibold"
-                title={isTimerPaused ? 'Resume Timer' : 'Pause Timer'}
-              >
-                {isTimerPaused ? 'Resume' : 'Pause'}
-              </button>
             </div>
           ) : (
             <div className="flex items-center gap-1.5 text-xs text-[#7B8FAD] bg-[#0A1020] px-3 py-1.5 rounded-xl border border-[#6382BF]/30 tabular-nums">
