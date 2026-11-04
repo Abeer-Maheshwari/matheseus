@@ -837,16 +837,21 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                   url: currentQ.questionImageUrl,
                   caption: `Question ${currentQ.number} · Authentic Question Paper (${paper.paperCode})`,
                 })}
-                className="relative group cursor-zoom-in rounded-2xl bg-white p-3 sm:p-5 shadow-xl border border-slate-200/80 transition-all hover:border-[#4A7BF7] hover:shadow-2xl overflow-hidden"
+                className="border border-[#6382BF]/30 hover:border-[#4A7BF7]/60 rounded-xl bg-[#0A1020] p-3 sm:p-4 relative group cursor-zoom-in transition-all shadow-md overflow-hidden"
               >
-                <img
-                  src={currentQ.questionImageUrl}
-                  alt={`Question ${currentQ.number}`}
-                  className="w-full max-h-[620px] object-contain select-none mx-auto block"
-                />
-                <div className="absolute top-3 right-3 opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity bg-[#0A1020]/80 backdrop-blur text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg flex items-center gap-1.5 shadow-md">
-                  <Maximize2 size={12} className="text-[#4A7BF7]" />
-                  <span>Click to Zoom / Inspect</span>
+                <div className="bg-white rounded-lg p-2.5 sm:p-4 mx-auto flex items-center justify-center shadow-sm">
+                  <img
+                    src={currentQ.questionImageUrl}
+                    alt={`Question ${currentQ.number}`}
+                    className="w-full max-h-[620px] object-contain select-none mx-auto block"
+                  />
+                </div>
+                <div className="text-center text-xs text-[#7B8FAD] mt-2.5 font-medium flex items-center justify-center gap-1.5">
+                  <Eye size={13} className="text-[#4A7BF7]" />
+                  <span>Question {currentQ.number} Paper Sheet</span>
+                  <span className="text-[#4A7BF7] group-hover:underline font-semibold ml-1">
+                    · Click to Zoom / Inspect
+                  </span>
                 </div>
               </div>
             ) : (
@@ -968,16 +973,21 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                         url: currentQ.markSchemeImageUrl,
                         caption: `Question ${currentQ.number} · Official Mark Scheme Table`,
                       })}
-                      className="relative group cursor-zoom-in rounded-xl bg-white p-3 sm:p-4 shadow-md border border-slate-200 transition-all hover:ring-2 hover:ring-emerald-500/50 overflow-hidden"
+                      className="border border-[#6382BF]/30 hover:border-emerald-500/60 rounded-xl bg-[#0A1020] p-3 sm:p-4 relative group cursor-zoom-in transition-all shadow-md overflow-hidden"
                     >
-                      <img
-                        src={currentQ.markSchemeImageUrl}
-                        alt={`Question ${currentQ.number} Mark Scheme`}
-                        className="w-full max-h-[620px] object-contain select-none mx-auto block"
-                      />
-                      <div className="absolute top-3 right-3 opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity bg-[#0A1020]/80 backdrop-blur text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg flex items-center gap-1.5 shadow-md">
-                        <Maximize2 size={12} className="text-[#4A7BF7]" />
-                        <span>Click to Zoom / Inspect Table</span>
+                      <div className="bg-white rounded-lg p-2.5 sm:p-4 mx-auto flex items-center justify-center shadow-sm">
+                        <img
+                          src={currentQ.markSchemeImageUrl}
+                          alt={`Question ${currentQ.number} Mark Scheme`}
+                          className="w-full max-h-[620px] object-contain select-none mx-auto block"
+                        />
+                      </div>
+                      <div className="text-center text-xs text-[#7B8FAD] mt-2.5 font-medium flex items-center justify-center gap-1.5">
+                        <Eye size={13} className="text-emerald-400" />
+                        <span>Official Pearson Edexcel Criteria Table</span>
+                        <span className="text-emerald-400 group-hover:underline font-semibold ml-1">
+                          · Click to Zoom / Inspect in Fullscreen
+                        </span>
                       </div>
                     </div>
                   ) : (
