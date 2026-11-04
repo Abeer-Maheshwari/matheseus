@@ -886,96 +886,102 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
               )}
             </div>
 
-            {/* Subpart / Question Marking Controls */}
-            <div className="space-y-3 pt-2">
-              <div className="text-xs font-semibold text-[#7B8FAD] uppercase tracking-wider">
-                Self-Award Marks
-              </div>
+            {/* Marking / Scoring Section */}
+            {isReviewMode ? (
+              /* Review Mode: Read-Only Result Display (No Self-Awarding) */
+              <div className="pt-4 border-t border-[#6382BF]/25 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-semibold text-[#7B8FAD]">
+                    Question {currentQ.number} Score:
+                  </span>
+                  <span
+                    className={`px-3 py-1 rounded-lg text-xs font-bold tabular-nums border ${
+                      scores[currentQ.number] === currentQ.totalMarks
+                        ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
+                        : (scores[currentQ.number] || 0) > 0
+                        ? 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+                        : 'bg-rose-500/15 text-rose-400 border-rose-500/30'
+                    }`}
+                  >
+                    {scores[currentQ.number] !== undefined ? `${scores[currentQ.number]} / ${currentQ.totalMarks} marks` : `0 / ${currentQ.totalMarks} marks`}
+                  </span>
+                </div>
 
-              <div className="grid gap-2.5">
-                {currentQ.parts.map((p, pIdx) => {
-                  const partKey = `${currentQ.number}_${pIdx}`;
-                  const awarded = subpartScores[partKey];
-                  const label = p.partLabel || (currentQ.parts.length === 1 ? 'Total' : `Part ${pIdx + 1}`);
-
-                  return (
-                    <div
-                      key={pIdx}
-                      className="p-3.5 rounded-xl bg-[#0A1020]/60 border border-[#6382BF]/25 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm"
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-[#E8ECF4] text-xs sm:text-sm">
-                          {label.startsWith('(') ? `Part ${label}` : label}
-                        </span>
-                        <span className="text-[11px] text-[#7B8FAD]">
-                          [{p.marks} {p.marks === 1 ? 'mark' : 'marks'}]
-                        </span>
-                        {awarded !== undefined && (
-                          <span className="ml-2 px-2 py-0.5 rounded text-[11px] bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 font-semibold tabular-nums">
-                            Awarded: {awarded} / {p.marks}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Marks selector pills */}
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        {Array.from({ length: p.marks + 1 }).map((_, mVal) => (
-                          <button
-                            key={mVal}
-                            type="button"
-                            onClick={() => handleSubpartScoreChange(currentQ.number, pIdx, p.marks, mVal)}
-                            className={`w-7 h-7 rounded-lg text-xs font-semibold transition-all ${
-                              awarded === mVal
-                                ? 'bg-[#4A7BF7] text-white shadow-md ring-2 ring-white/30 scale-105'
-                                : 'bg-[#1A2540] text-[#7B8FAD] hover:text-[#E8ECF4] hover:bg-[#6382BF]/20 border border-[#6382BF]/30'
-                            }`}
-                          >
-                            {mVal}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Question Mark Summary & Full Mark Scheme */}
-            <div className="pt-4 border-t border-[#6382BF]/25 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <span className="text-xs font-semibold text-[#7B8FAD] block">
-                  Question {currentQ.number} Score
-                </span>
-                <div className="text-lg font-bold text-[#E8ECF4] tabular-nums mt-0.5">
-                  {scores[currentQ.number] !== undefined ? scores[currentQ.number] : 0} <span className="text-xs text-[#7B8FAD] font-normal">/ {currentQ.totalMarks} marks</span>
+                <div className="text-xs text-[#7B8FAD] flex items-center gap-1.5 font-medium">
+                  <CheckCircle2 size={14} className="text-emerald-400" />
+                  <span>Reviewing with Pearson Mark Scheme</span>
                 </div>
               </div>
+            ) : (
+              /* Practice Mode: Subpart Marking Controls */
+              <>
+                <div className="space-y-3 pt-2">
+                  <div className="text-xs font-semibold text-[#7B8FAD] uppercase tracking-wider">
+                    Self-Award Marks
+                  </div>
 
-              {/* Quick Overall Fill Buttons */}
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => handleScoreChange(currentQ.number, '0', currentQ.totalMarks)}
-                  className="px-2.5 py-1 text-xs rounded-lg bg-[#0A1020] hover:bg-[#1A2540] text-[#7B8FAD] hover:text-[#E8ECF4] border border-[#6382BF]/30 font-medium transition-colors"
-                >
-                  0
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleScoreChange(currentQ.number, String(Math.round(currentQ.totalMarks / 2)), currentQ.totalMarks)}
-                  className="px-2.5 py-1 text-xs rounded-lg bg-[#0A1020] hover:bg-[#1A2540] text-[#7B8FAD] hover:text-[#E8ECF4] border border-[#6382BF]/30 font-medium transition-colors"
-                >
-                  ½ Marks
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleScoreChange(currentQ.number, String(currentQ.totalMarks), currentQ.totalMarks)}
-                  className="px-3 py-1 text-xs rounded-lg bg-[#4A7BF7]/20 hover:bg-[#4A7BF7]/40 text-[#4A7BF7] hover:text-white border border-[#4A7BF7]/40 font-semibold transition-colors"
-                >
-                  Full Marks ({currentQ.totalMarks})
-                </button>
-              </div>
-            </div>
+                  <div className="grid gap-2.5">
+                    {currentQ.parts.map((p, pIdx) => {
+                      const partKey = `${currentQ.number}_${pIdx}`;
+                      const awarded = subpartScores[partKey];
+                      const label = p.partLabel || (currentQ.parts.length === 1 ? 'Total' : `Part ${pIdx + 1}`);
+
+                      return (
+                        <div
+                          key={pIdx}
+                          className="p-3.5 rounded-xl bg-[#0A1020]/60 border border-[#6382BF]/25 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm"
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-[#E8ECF4] text-xs sm:text-sm">
+                              {label.startsWith('(') ? `Part ${label}` : label}
+                            </span>
+                            <span className="text-[11px] text-[#7B8FAD]">
+                              [{p.marks} {p.marks === 1 ? 'mark' : 'marks'}]
+                            </span>
+                            {awarded !== undefined && (
+                              <span className="ml-2 px-2 py-0.5 rounded text-[11px] bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 font-semibold tabular-nums">
+                                Awarded: {awarded} / {p.marks}
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Marks selector pills */}
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            {Array.from({ length: p.marks + 1 }).map((_, mVal) => (
+                              <button
+                                key={mVal}
+                                type="button"
+                                onClick={() => handleSubpartScoreChange(currentQ.number, pIdx, p.marks, mVal)}
+                                className={`w-7 h-7 rounded-lg text-xs font-semibold transition-all ${
+                                  awarded === mVal
+                                    ? 'bg-[#4A7BF7] text-white shadow-md ring-2 ring-white/30 scale-105'
+                                    : 'bg-[#1A2540] text-[#7B8FAD] hover:text-[#E8ECF4] hover:bg-[#6382BF]/20 border border-[#6382BF]/30'
+                                }`}
+                              >
+                                {mVal}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Question Mark Summary */}
+                <div className="pt-4 border-t border-[#6382BF]/25 flex items-center justify-between gap-4">
+                  <div>
+                    <span className="text-xs font-semibold text-[#7B8FAD] block">
+                      Question {currentQ.number} Score
+                    </span>
+                    <div className="text-lg font-bold text-[#E8ECF4] tabular-nums mt-0.5">
+                      {scores[currentQ.number] !== undefined ? scores[currentQ.number] : 0}{' '}
+                      <span className="text-xs text-[#7B8FAD] font-normal">/ {currentQ.totalMarks} marks</span>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
 
           {/* Bottom Pagination Controls */}
