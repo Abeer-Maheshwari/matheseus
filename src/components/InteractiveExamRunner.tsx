@@ -6,7 +6,6 @@ import { FlipClock } from './FlipClock';
 import { playExamChime } from '../utils/audio';
 import { ExamAttempt } from '../types';
 import { saveExamAttempt, getExamAttempts } from '../utils/attempts';
-import confetti from 'canvas-confetti';
 import { 
   BookOpen, 
   Flag, 
@@ -175,7 +174,6 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
   const handleAutoTimeUp = () => {
     playExamChime();
     setIsFinished(true);
-    triggerCelebration();
   };
 
   // Keyboard navigation & shortcuts
@@ -279,7 +277,6 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
   const handleFinishExam = () => {
     setShowFinishConfirm(false);
     setIsFinished(true);
-    triggerCelebration();
 
     try {
       localStorage.removeItem(draftStorageKey);
@@ -305,17 +302,6 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
     if (onSaveResult) {
       onSaveResult(paper.id, totalAchievedScore, paperMaxMarks);
     }
-  };
-
-  const triggerCelebration = () => {
-    try {
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ['#4A7BF7', '#10B981', '#F59E42', '#E8ECF4'],
-      });
-    } catch {}
   };
 
   const handleRestart = () => {
