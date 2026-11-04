@@ -34,7 +34,7 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
 
   // PDF Viewer state
   const [activePdfQual, setActivePdfQual] = useState<'maths' | 'fm'>('maths');
-  const [fitMode, setFitMode] = useState<'FitH' | 'Fit'>('FitH');
+  const [fitMode, setFitMode] = useState<'FitH' | 'Fit'>('Fit');
 
   const filteredCategories = FORMULA_BOOKLET_CATEGORIES.filter((cat) => {
     if (activeQual === 'maths' && cat.qualification !== 'A Level Mathematics') return false;

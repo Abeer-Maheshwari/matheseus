@@ -876,11 +876,13 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                     dangerouslySetInnerHTML={{ __html: currentQ.diagramSvg }}
                   />
                 ) : (
-                  <img
-                    src={currentQ.diagramUrl}
-                    alt={currentQ.diagramCaption || `Question ${currentQ.number} figure`}
-                    className="max-h-[340px] mx-auto object-contain select-none rounded-lg"
-                  />
+                  <div className="bg-white rounded-lg p-3 mx-auto max-w-2xl flex items-center justify-center shadow-sm">
+                    <img
+                      src={currentQ.diagramUrl}
+                      alt={currentQ.diagramCaption || `Question ${currentQ.number} figure`}
+                      className="max-h-[340px] max-w-full object-contain select-none"
+                    />
+                  </div>
                 )}
                 {/* Overlay hover prompt */}
                 <div className="text-center text-xs text-[#7B8FAD] mt-3 font-medium flex items-center justify-center gap-1.5">
@@ -1148,11 +1150,13 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                   dangerouslySetInnerHTML={{ __html: lightboxDiagram.svg }}
                 />
               ) : (
-                <img
-                  src={lightboxDiagram.url}
-                  alt={lightboxDiagram.caption || 'Diagram'}
-                  className="max-w-full max-h-[75vh] object-contain select-none rounded-lg"
-                />
+                <div className="bg-white rounded-xl p-4 flex items-center justify-center shadow-2xl">
+                  <img
+                    src={lightboxDiagram.url}
+                    alt={lightboxDiagram.caption || 'Diagram'}
+                    className="max-w-full max-h-[75vh] object-contain select-none"
+                  />
+                </div>
               )}
             </div>
           </div>

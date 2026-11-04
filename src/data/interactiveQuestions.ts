@@ -197,6 +197,9 @@ export interface InteractivePaper {
   msUrl?: string;
 }
 
+import { PURE_PAPERS_DATABASE } from './pure';
+export { PURE_PAPERS_DATABASE } from './pure';
+
 // =========================================================================
 // 1. PURE MATHEMATICS 1 (9MA0/01) — 100 MARKS TOTAL (12 Questions)
 // =========================================================================
@@ -1411,6 +1414,11 @@ function generateVariedQuestions(baseQuestions: InteractiveQuestion[], paperId: 
 
 // Module resolver that guarantees authentic syllabus questions for EVERY module
 export function getQuestionsForModule(moduleId: string, paperId: string, year: number | string): InteractiveQuestion[] {
+  // Return authentic pure paper questions directly if present in authentic bank
+  if (PURE_PAPERS_DATABASE[paperId]) {
+    return PURE_PAPERS_DATABASE[paperId].questions;
+  }
+
   let base: InteractiveQuestion[];
 
   switch (moduleId) {
@@ -1466,6 +1474,16 @@ export function getInteractivePaper(
   moduleId?: string,
   subject?: 'maths' | 'further-maths'
 ): InteractivePaper {
+  // Check authentic Pure database first
+  if (PURE_PAPERS_DATABASE[paperId]) {
+    const authentic = PURE_PAPERS_DATABASE[paperId];
+    return {
+      ...authentic,
+      title: paperTitle || authentic.title,
+      paperCode: paperCode || authentic.paperCode,
+    };
+  }
+
   // Derive module identifier
   const effectiveModuleId = moduleId || (
     paperId.includes('-d1-') ? 'd1' :
