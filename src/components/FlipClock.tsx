@@ -67,10 +67,10 @@ export const FlipClock: React.FC<FlipClockProps> = ({
   return (
     <div className={`inline-flex items-center gap-2.5 text-sm sm:text-base leading-none ${className}`}>
       {/* Clock Icon */}
-      <Clock size={15} className={`shrink-0 ${isUrgent ? 'text-rose-400 animate-pulse' : isPaused ? 'text-amber-400' : 'text-[#4A7BF7]'}`} />
+      <Clock size={15} className={`shrink-0 self-center ${isUrgent ? 'text-rose-400 animate-pulse' : isPaused ? 'text-amber-400' : 'text-[#4A7BF7]'}`} />
 
       {/* Normal Text with Flip Animation in Libre font */}
-      <div className={`inline-flex items-center justify-center font-bold tracking-wider tabular-nums font-mono leading-none ${
+      <div className={`inline-flex items-center justify-center font-bold tracking-wider tabular-nums font-mono leading-none -translate-y-[1px] ${
         isUrgent ? 'text-rose-400' : isPaused ? 'text-amber-300' : 'text-[#E8ECF4]'
       }`}>
         {hours > 0 && (

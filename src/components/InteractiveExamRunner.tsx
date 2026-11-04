@@ -4,6 +4,8 @@ import { FormattedMathText } from './MathRenderer';
 import { FormulaBookletModal } from './FormulaBookletModal';
 import { FlipClock } from './FlipClock';
 import { playExamChime } from '../utils/audio';
+import { ExamAttempt } from '../types';
+import { saveExamAttempt, getExamAttempts } from '../utils/attempts';
 import confetti from 'canvas-confetti';
 import { 
   BookOpen, 
@@ -33,20 +35,6 @@ import {
 } from 'lucide-react';
 
 export type TimingMode = 'timed' | 'untimed';
-
-export interface ExamAttempt {
-  id: string;
-  paperId: string;
-  paperCode: string;
-  paperTitle: string;
-  completedAt: string;
-  achievedScore: number;
-  maxScore: number;
-  percentage: number;
-  predictedGrade: string;
-  timingMode: TimingMode;
-  questionScores: Record<number, number>;
-}
 
 interface InteractiveExamRunnerProps {
   paper: InteractivePaper;
@@ -122,14 +110,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
 
   // Load past attempts
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem('matheseus_exam_attempts');
-      if (saved) {
-        setPastAttempts(JSON.parse(saved));
-      }
-    } catch (e) {
-      console.warn('Failed to load past exam attempts', e);
-    }
+    setPastAttempts(getExamAttempts());
   }, []);
 
   // Auto-save ongoing draft
@@ -318,13 +299,8 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
       questionScores: scores,
     };
 
-    const updated = [newAttempt, ...pastAttempts];
+    const updated = saveExamAttempt(newAttempt);
     setPastAttempts(updated);
-    try {
-      localStorage.setItem('matheseus_exam_attempts', JSON.stringify(updated));
-    } catch (e) {
-      console.warn('Failed to save attempt', e);
-    }
 
     if (onSaveResult) {
       onSaveResult(paper.id, totalAchievedScore, paperMaxMarks);
@@ -374,7 +350,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <img src="/logo.png" alt="matheseus" className="w-6 h-6 rounded-md object-cover ring-1 ring-white/10" />
-                <span className="text-xs px-2.5 py-1 rounded bg-[#0A1020] border border-[#6382BF]/40 text-[#4A7BF7] font-semibold">
+                <span className="text-xs px-2.5 py-1 rounded bg-[#0A1020] border border-[#6382BF]/40 text-[#4A7BF7] font-semibold tracking-wide font-sans">
                   {paper.paperCode}
                 </span>
               </div>
@@ -680,7 +656,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
 
           <img src="/logo.png" alt="matheseus" className="w-7 h-7 rounded-lg object-cover ring-1 ring-white/10 hidden sm:inline" />
 
-          <span className="text-xs px-2.5 py-1 rounded bg-[#0A1020] border border-[#6382BF]/40 text-[#4A7BF7] font-semibold shrink-0">
+          <span className="text-xs px-2.5 py-1 rounded bg-[#0A1020] border border-[#6382BF]/40 text-[#4A7BF7] font-semibold tracking-wide font-sans shrink-0">
             {paper.paperCode}
           </span>
           <span className="font-bold text-sm text-[#E8ECF4] truncate hidden md:inline max-w-sm">

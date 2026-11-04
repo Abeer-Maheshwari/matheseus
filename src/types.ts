@@ -60,3 +60,18 @@ export interface GradeBoundaryItem {
     'E': number;
   }[];
 }
+
+export interface ExamAttempt {
+  id: string;
+  paperId: string;
+  paperCode?: string;
+  paperTitle?: string;
+  completedAt: string;
+  achievedScore: number;
+  maxScore: number;
+  percentage: number;
+  predictedGrade: string;
+  timingMode?: 'timed' | 'untimed';
+  timeSpentSeconds?: number;
+  questionScores?: Record<number, number>;
+}

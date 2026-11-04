@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MODULES_DATA, ModuleSection, PaperEntry } from '../data/papersData';
+import { ExamAttempt } from '../types';
+import { ScoreReportModal } from './ScoreReportModal';
+import { getAllLatestAttemptsMap, deleteExamAttempt } from '../utils/attempts';
 import { 
   FileText, 
   Columns, 
   Check, 
+  CheckCircle2,
+  Eye,
   Download, 
   Search, 
   GraduationCap, 
@@ -36,6 +41,20 @@ export const PapersView: React.FC<PapersViewProps> = ({
   onToggleCompleted,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [attemptsMap, setAttemptsMap] = useState<Record<string, ExamAttempt>>(() => getAllLatestAttemptsMap());
+  const [selectedAttempt, setSelectedAttempt] = useState<ExamAttempt | null>(null);
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      setAttemptsMap(getAllLatestAttemptsMap());
+    };
+    window.addEventListener('matheseus_attempts_updated', handleUpdate);
+    window.addEventListener('storage', handleUpdate);
+    return () => {
+      window.removeEventListener('matheseus_attempts_updated', handleUpdate);
+      window.removeEventListener('storage', handleUpdate);
+    };
+  }, []);
 
   const availableModules = MODULES_DATA.filter((m) => m.subject === currentSubject);
   const activeModule = availableModules.find((m) => m.id === activeModuleId) || availableModules[0];
@@ -198,12 +217,12 @@ export const PapersView: React.FC<PapersViewProps> = ({
               <th className="py-3 px-4 text-center">Practice</th>
               <th className="py-3 px-4 text-center">PDF Options</th>
               <th className="py-3 px-4 text-center">Report</th>
-              <th className="py-3 px-4 text-right">Status</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[#6382BF]/15">
             {filteredPapers.map((paper) => {
-              const isDone = !!completedMap[paper.id];
+              const attempt = attemptsMap[paper.id];
+              const isDone = !!completedMap[paper.id] || !!attempt;
               const paperTitle = `${activeModule.title} (${paper.season} ${paper.year})`;
 
               return (
@@ -270,41 +289,70 @@ export const PapersView: React.FC<PapersViewProps> = ({
                     </div>
                   </td>
 
-                  {/* Reports */}
+                  {/* Unified Score Report / Status */}
                   <td className="py-3 px-4 text-center">
-                    {paper.erUrl ? (
-                      <button
-                        onClick={() => onOpenSingleDoc(`${paperTitle} — Examiner Report`, paper.erUrl!)}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#0A1020] hover:bg-[#1A2540] text-[#7B8FAD] hover:text-[#E8ECF4] border border-[#6382BF]/30 text-[11px] transition-colors"
-                        title="Examiner Report"
-                      >
-                        <FileText size={11} />
-                        <span>Report</span>
-                      </button>
-                    ) : (
-                      <span className="text-[#5A6E8A] text-[11px]">—</span>
-                    )}
-                  </td>
-
-                  {/* Done status */}
-                  <td className="py-3 px-4 text-right">
-                    <button
-                      onClick={() => onToggleCompleted(paper.id)}
-                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-medium border transition-colors ${
-                        isDone
-                          ? 'bg-[#4A7BF7] text-white border-[#4A7BF7] font-semibold'
-                          : 'bg-[#0A1020] text-[#7B8FAD] hover:text-[#E8ECF4] border-[#6382BF]/30 hover:border-[#6382BF]/60'
-                      }`}
-                    >
-                      {isDone ? (
-                        <>
-                          <Check size={12} className="text-white" />
+                    {attempt ? (
+                      <div className="inline-flex items-center justify-center gap-1.5">
+                        <button
+                          onClick={() => setSelectedAttempt(attempt)}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 font-semibold border border-emerald-500/40 text-xs transition-all shadow-sm group"
+                          title="Click to view full score report & question breakdown"
+                        >
+                          <CheckCircle2 size={13} className="text-emerald-400" />
+                          <span className="tabular-nums font-bold">{attempt.achievedScore}/{attempt.maxScore}</span>
+                          <span className="text-emerald-400 font-bold">({attempt.predictedGrade || `${attempt.percentage}%`})</span>
+                          <Eye size={12} className="opacity-70 group-hover:opacity-100 ml-0.5 text-emerald-400" />
+                        </button>
+                        {paper.erUrl && (
+                          <button
+                            onClick={() => onOpenSingleDoc(`${paperTitle} — Examiner Report`, paper.erUrl!)}
+                            className="p-1 rounded bg-[#0A1020] hover:bg-[#1A2540] text-[#7B8FAD] hover:text-[#E8ECF4] border border-[#6382BF]/30 transition-colors"
+                            title="Official Examiner Report PDF"
+                          >
+                            <FileText size={12} />
+                          </button>
+                        )}
+                      </div>
+                    ) : isDone ? (
+                      <div className="inline-flex items-center justify-center gap-1.5">
+                        <button
+                          onClick={() => onToggleCompleted(paper.id)}
+                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#4A7BF7]/20 hover:bg-[#4A7BF7]/30 text-[#E8ECF4] border border-[#4A7BF7]/40 text-xs font-semibold transition-all shadow-sm"
+                          title="Completed offline. Practice paper to record detailed score report."
+                        >
+                          <Check size={12} className="text-[#4A7BF7]" />
                           <span>Done</span>
-                        </>
-                      ) : (
-                        <span>Mark Done</span>
-                      )}
-                    </button>
+                        </button>
+                        {paper.erUrl && (
+                          <button
+                            onClick={() => onOpenSingleDoc(`${paperTitle} — Examiner Report`, paper.erUrl!)}
+                            className="p-1 rounded bg-[#0A1020] hover:bg-[#1A2540] text-[#7B8FAD] hover:text-[#E8ECF4] border border-[#6382BF]/30 transition-colors"
+                            title="Official Examiner Report PDF"
+                          >
+                            <FileText size={12} />
+                          </button>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="inline-flex items-center justify-center gap-1.5">
+                        <button
+                          onClick={() => onToggleCompleted(paper.id)}
+                          className="px-2.5 py-1 rounded-lg text-xs text-[#7B8FAD] hover:text-[#E8ECF4] bg-[#0A1020] hover:bg-[#1A2540] border border-[#6382BF]/20 hover:border-[#6382BF]/50 transition-colors font-medium"
+                          title="Mark paper as done"
+                        >
+                          Mark Done
+                        </button>
+                        {paper.erUrl && (
+                          <button
+                            onClick={() => onOpenSingleDoc(`${paperTitle} — Examiner Report`, paper.erUrl!)}
+                            className="p-1 rounded bg-[#0A1020] hover:bg-[#1A2540] text-[#7B8FAD] hover:text-[#E8ECF4] border border-[#6382BF]/30 transition-colors"
+                            title="Official Examiner Report PDF"
+                          >
+                            <FileText size={12} />
+                          </button>
+                        )}
+                      </div>
+                    )}
                   </td>
                 </tr>
               );
@@ -312,6 +360,27 @@ export const PapersView: React.FC<PapersViewProps> = ({
           </tbody>
         </table>
       </div>
+
+      {/* Full Interactive Score Report Modal */}
+      {selectedAttempt && (
+        <ScoreReportModal
+          attempt={selectedAttempt}
+          onClose={() => setSelectedAttempt(null)}
+          onRetake={() => {
+            const paperToRetake = filteredPapers.find((p) => p.id === selectedAttempt.paperId);
+            setSelectedAttempt(null);
+            if (paperToRetake) {
+              onOpenPractice(paperToRetake, activeModule);
+            }
+          }}
+          onDelete={() => {
+            deleteExamAttempt(selectedAttempt.id);
+            setSelectedAttempt(null);
+          }}
+          erUrl={filteredPapers.find((p) => p.id === selectedAttempt.paperId)?.erUrl}
+          onOpenSingleDoc={onOpenSingleDoc}
+        />
+      )}
     </div>
   );
 };
