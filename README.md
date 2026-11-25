@@ -1,33 +1,31 @@
 <div align="center">
 
-<img src="public/favicon-squircle.png" width="96" alt="matheseus logo">
+<img src="public/favicon-squircle.png" alt="matheseus" width="96">
 
 # matheseus
 
-**Past paper portal, topic practice runner, and revision tracker for Edexcel A Level Maths and Further Maths.**
+**Edexcel A Level Maths & Further Maths past papers, mock sets, and topic practice.**
 
-Browse papers, filter questions by topic, mark against official schemes, and sync your progress across devices.
+<p align="center">
+  <a href="https://matheseus.freedev.app"><img alt="Live Site" src="https://img.shields.io/badge/WEBSITE-matheseus.freedev.app-4A7BF7?style=for-the-badge"></a>
+  <img alt="Specs" src="https://img.shields.io/badge/EDEXCEL-9MA0_%26_9FM0-1A2540?style=for-the-badge">
+  <img alt="Latest Papers" src="https://img.shields.io/badge/PAST_PAPERS-2018--2026-2EA44F?style=for-the-badge">
+  <img alt="Mock Sets" src="https://img.shields.io/badge/MOCK_SETS-59_PAPERS-6a3fb5?style=for-the-badge">
+  <br>
+  <img alt="React 19" src="https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
+  <img alt="Vite" src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white">
+  <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwind-css&logoColor=white">
+  <img alt="Supabase" src="https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white">
+</p>
 
-[![Live Site](https://img.shields.io/badge/live-matheseus.freedev.app-4A7BF7)](https://matheseus.freedev.app)
-[![React 19](https://img.shields.io/badge/React-19-20232A?logo=react&logoColor=61DAFB)](#setup)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?logo=typescript&logoColor=white)](#setup)
-[![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)](#setup)
-[![Supabase](https://img.shields.io/badge/Supabase-Auth%20%26%20Sync-3ECF8E?logo=supabase&logoColor=white)](#configuration)
-
-[Why matheseus](#why-matheseus) · [Features](#features) · [Modules](#modules) · [Setup](#setup) · [Configuration](#configuration) · [Deployment](#deployment)
+**matheseus** brings the latest **Pearson Edexcel A Level Maths (`9MA0`)** and **Further Maths (`9FM0`)**
+past papers (including **2025 & 2026** series) together with **59 curated Mock Sets**, question-by-question
+practice, official mark schemes, and cross-device progress tracking at [matheseus.freedev.app](https://matheseus.freedev.app).
 
 </div>
 
 ---
-
-matheseus is a web app for **Pearson Edexcel A Level Mathematics (`9MA0`)** and **Further Mathematics (`9FM0`)** revision. It combines full past paper and mock paper archives, interactive question-by-question practice with official mark schemes, grade boundary tools, and an account-synced analytics dashboard.
-
-## Why matheseus
-
-- **Built for Edexcel workflows.** Every paper, module, formula booklet, and raw mark grade boundary sits in one dark, distraction-free workspace.
-- **Practice without friction.** Open question papers and mark schemes side-by-side, or run questions interactively with self-marking and timers.
-- **Filter straight to weak areas.** Jump directly into **By Topic** mode to drill specific theorems, modules, and question types instead of hunting through full PDFs.
-- **Sync across devices.** Works locally out of the box, or signs into Supabase to persist completed papers, attempt history, and predicted grades across sessions.
 
 ## Features
 
@@ -35,19 +33,43 @@ matheseus is a web app for **Pearson Edexcel A Level Mathematics (`9MA0`)** and 
 <tr>
 <td width="50%" valign="top">
 
-### Past Papers & Mocks
-- Complete Edexcel `9MA0` and `9FM0` past paper archive
-- Curated Mock Sets organised by series
-- Side-by-side Question Paper and Mark Scheme split view
-- Instant status toggles (*Not Started*, *In Progress*, *Completed*)
+**Latest Past Papers**
+
+- Full Edexcel `9MA0` and `9FM0` archive up to **June 2026**
+- Covers Pure 1, Pure 2, Paper 3 (Stats & Mechanics), Core Pure 1/2, and Further options (`FP1/2`, `FM1/2`, `FS1/2`, `D1/2`)
+- Official Question Papers and Mark Schemes in side-by-side Split View
+- Direct QP and MS PDF downloads plus completion status toggles
 
 </td>
 <td width="50%" valign="top">
 
-### Practice Mode
-- Interactive question-by-question runner with KaTeX rendering
-- Cropped official question and mark scheme cards
+**Mock Sets**
+
+- **59 Mock Sets** spanning Maths and Further Maths (`Set 1` onwards)
+- Organised by mock series alongside module breakdowns
+- Full Interactive Practice Mode and Mark Scheme review for mock papers
+- Tracked separately in Dashboard Module Coverage and Attempt History
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+**Questions by Topic**
+
+- **1,478 questions** (**12,775 marks**) indexed across **68 topics**
+- Filter by subject (`9MA0`, `9FM0`, `8MA0`, `8FM0`), module, or keyword
+- Switch source between All, Past Papers only, or Mock Sets only
+- Launch focused topic runs under exam conditions
+
+</td>
+<td valign="top">
+
+**Practice Mode**
+
+- Cropped official question and mark scheme cards with zoom view
 - Step-by-step mark pills for fast self-marking
+- Flag questions, track per-question scores, and review breakdowns
 - Built-in exam timer with presets and audio alerts
 
 </td>
@@ -55,40 +77,65 @@ matheseus is a web app for **Pearson Edexcel A Level Mathematics (`9MA0`)** and 
 <tr>
 <td valign="top">
 
-### Topic Practice
-- Search and filter questions by subject, module, or topic
-- Drill individual questions directly without loading full papers
-- Integrated score reporting and attempt review breakdowns
+**Dashboard & Sync**
+
+- Completion progress across `166` tracked papers and mocks
+- Average score, practice time, and live predicted A Level grades
+- Topic Accuracy breakdown (`>80%` green, `50–80%` amber, `<50%` red)
+- Optional Supabase accounts to sync progress across devices
 
 </td>
 <td valign="top">
 
-### Dashboard & Tools
-- Module coverage bars, average score, predicted grades, and practice time
-- Topic Accuracy tracking (`>80%` green, `50–80%` amber, `<50%` red)
-- Interactive Grade Boundaries explorer and marks-to-next-grade calculator
-- Searchable Formula Sheet alongside official Edexcel PDF booklets
+**Exam Tools**
+
+- Official Edexcel Grade Boundaries explorer (`A*`–`E`)
+- Marks-to-next-grade boundary calculator
+- Searchable Formula Sheet with KaTeX rendering
+- Built-in Maths & Further Maths PDF Formula Booklets
 
 </td>
 </tr>
 </table>
 
-## Modules
+---
 
-| Subject | Modules |
+## Screenshots
+
+<table>
+  <tr>
+    <td><img src="docs/screenshots/dashboard.jpg" alt="Student dashboard with module coverage, topic accuracy, and attempt history"></td>
+    <td><img src="docs/screenshots/topic-practice.jpg" alt="Questions by Topic filter and search view"></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/past-papers.jpg" alt="Past Papers archive up to June 2026 with Split View and Practice controls"></td>
+    <td><img src="docs/screenshots/practice-question.jpg" alt="Interactive Practice Mode question card and self-marking pills"></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><img src="docs/screenshots/practice-mark-scheme.jpg" alt="Official Edexcel mark scheme revealed inside Practice Mode" width="50%"></td>
+  </tr>
+</table>
+
+---
+
+## Live App
+
+<p align="center">
+  <a href="https://matheseus.freedev.app">
+    <img src="https://img.shields.io/badge/Open_matheseus.freedev.app-4A7BF7?style=for-the-badge" height="40" alt="Open matheseus.freedev.app">
+  </a>
+</p>
+
+| Section | What's inside |
 |---|---|
-| Mathematics (`9MA0`) | `Pure 1` · `Pure 2` · `Paper 3 (Statistics & Mechanics)` |
-| Further Mathematics (`9FM0`) | `Core Pure 1` · `Core Pure 2` · `FP1` · `FP2` · `FM1` · `FM2` · `FS1` · `FS2` · `D1` · `D2` |
-| Mock Sets | Structured A Level Maths & Further Maths mock sets (`src/data/mockSetsData.ts`) |
+| Past Papers | Series from 2018 through June 2026 across `9MA0` and `9FM0` |
+| Mock Sets | Timed mock series across Maths and Further Maths (`59` papers) |
+| By Topic | `68` topic sets with combined Past Paper and Mock Set filtering |
+| Dashboard | Synced stats, predicted grades, Module Coverage, and Attempt History |
 
-## Setup
+---
 
-### Requirements
-
-- Node.js v18+
-- npm
-
-### Local Development
+## Building from Source
 
 ```bash
 git clone https://github.com/Abeer-Maheshwari/matheseus.git
@@ -98,26 +145,29 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open `http://localhost:5173`. Add your local `public/papers/` and `public/crops/` assets locally, or set `VITE_ASSET_BASE_URL` in `.env.local` to load them from remote object storage.
+To build for static hosting (packaging the bundle to `deploy-infinityfree/` without the large `papers/` and `crops/` folders):
 
-### Scripts
+```bash
+npm run build:infinityfree
+```
 
-| Command | Purpose |
+| File | Purpose |
 |---|---|
-| `npm run dev` | Start Vite dev server |
-| `npm run build` | Type-check and build production bundle to `dist/` |
-| `npm run build:infinityfree` | Build `dist/` and package static output to `deploy-infinityfree/` without `papers/` & `crops/` |
-| `npm run preview` | Preview the production build locally |
+| [`.env.example`](.env.example) | Template for `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, and `VITE_ASSET_BASE_URL` |
+| [`supabase/schema.sql`](supabase/schema.sql) | User profiles, progress sync, and attempt history schema |
+| [`src/utils/assets.ts`](src/utils/assets.ts) | Routes `/papers/*` and `/crops/*` URLs to Cloudflare R2 when `VITE_ASSET_BASE_URL` is set |
+| [`scripts/build-infinityfree.mjs`](scripts/build-infinityfree.mjs) | Prepares lightweight static output for hosts without the 1.6 GB asset directory |
 
-## Configuration
+---
 
-| What | Where |
-|---|---|
-| Environment variables | `.env.local` (template in [`.env.example`](.env.example)) |
-| Auth & progress database | `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, schema in [`supabase/schema.sql`](supabase/schema.sql) |
-| CDN / R2 asset URL | `VITE_ASSET_BASE_URL` (prefixes `/papers/*` and `/crops/*` via [`src/utils/assets.ts`](src/utils/assets.ts)) |
-| SPA routing rules | [`public/.htaccess`](public/.htaccess) |
+## How It Works
 
-## Deployment
+- All past papers (`2018–2026`), mock sets, and `1,478` question entries live in typed TypeScript indexes under `src/data/`, powering instant client-side filtering and KaTeX formula rendering.
+- Large PDF papers and cropped question/mark-scheme images are excluded from Git and served from Cloudflare R2 via `VITE_ASSET_BASE_URL`, while the static SPA shell deploys cleanly anywhere.
+- Progress works offline in local storage and syncs to Supabase (`auth` + `profiles`/`attempts`) once signed in.
 
-Large exam PDFs and question crops (`public/papers/` and `public/crops/`) are excluded from Git and hosted separately on Cloudflare R2 (`VITE_ASSET_BASE_URL`), keeping the web bundle compact enough for static hosting such as InfinityFree (`npm run build:infinityfree`).
+---
+
+## Disclaimer
+
+This project is not affiliated with, funded, authorized, or endorsed by Pearson Education Limited or Edexcel. All past papers, mark schemes, and formula booklets belong to their respective owners.
