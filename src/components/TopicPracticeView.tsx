@@ -22,9 +22,11 @@ import {
   getTopicGroups,
   createTopicInteractivePaper,
   createSingleQuestionInteractivePaper,
+  isTopicIndexCached,
 } from '../data/questionIndex';
 import { InteractivePaper } from '../data/interactiveQuestions';
 import { contentFadeVariants, PILL_SPRING } from '../utils/motion';
+import { SectionLoader } from './SectionLoader';
 
 interface TopicPracticeViewProps {
   onOpenPracticeInteractive: (paper: InteractivePaper, reviewMode?: boolean, questionIndex?: number) => void;
@@ -46,13 +48,19 @@ export const TopicPracticeView: React.FC<TopicPracticeViewProps> = ({
 
   // Expanded topic IDs
   const [expandedTopicIds, setExpandedTopicIds] = useState<Set<string>>(new Set());
+  // Defer cold index build until after mount so tab entry shows loader smoothly instead of stalling
+  const [indexReady, setIndexReady] = useState<boolean>(() => isTopicIndexCached());
   // Defer off-screen cards until after the tab enter transition finishes so mounting is instant
   const [showAllTopics, setShowAllTopics] = useState<boolean>(false);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setShowAllTopics(true), 250);
-    return () => window.clearTimeout(timer);
-  }, []);
+    const timers: number[] = [];
+    if (!indexReady) {
+      timers.push(window.setTimeout(() => setIndexReady(true), 80));
+    }
+    timers.push(window.setTimeout(() => setShowAllTopics(true), 250));
+    return () => timers.forEach((id) => window.clearTimeout(id));
+  }, [indexReady]);
 
   const toggleTopicExpand = (topicId: string) => {
     setExpandedTopicIds((prev) => {
@@ -80,6 +88,7 @@ export const TopicPracticeView: React.FC<TopicPracticeViewProps> = ({
     selectedSubject === 'as-maths' || selectedSubject === 'as-further-maths' ? 'as' : 'all';
 
   const topicGroups = useMemo(() => {
+    if (!indexReady) return [];
     return getTopicGroups({
       subject: effectiveSubject,
       moduleId: selectedModule,
@@ -87,7 +96,7 @@ export const TopicPracticeView: React.FC<TopicPracticeViewProps> = ({
       searchQuery,
       level: effectiveLevel,
     });
-  }, [effectiveSubject, selectedModule, sourceFilter, searchQuery, effectiveLevel]);
+  }, [indexReady, effectiveSubject, selectedModule, sourceFilter, searchQuery, effectiveLevel]);
 
   // Aggregate stats
   const totalQuestionsCount = useMemo(() => {
@@ -494,7 +503,14 @@ export const TopicPracticeView: React.FC<TopicPracticeViewProps> = ({
 
           {/* Topics Grid with Unified Fade Transition */}
           <AnimatePresence mode="wait" initial={false}>
-            {topicGroups.length === 0 ? (
+            {!indexReady ? (
+              <SectionLoader
+                key="topic-loading"
+                label="Loading topic questions..."
+                sublabel="Indexing Past Papers & Official Mock Sets"
+                className="min-h-[320px] rounded-2xl bg-[#1A2540]/50 border border-[#6382BF]/20"
+              />
+            ) : topicGroups.length === 0 ? (
               <motion.div
                 key="no-results"
                 variants={contentFadeVariants}

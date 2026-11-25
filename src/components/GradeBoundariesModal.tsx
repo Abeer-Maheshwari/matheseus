@@ -1,9 +1,10 @@
-import React, { useState, useMemo, useId } from 'react';
+import React, { useState, useMemo, useId, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { GRADE_BOUNDARIES } from '../data/gradeBoundaries';
 import { GradeThresholds } from '../types';
 import { X, Award, TrendingUp, Calculator } from 'lucide-react';
 import { contentFadeVariants, PILL_SPRING } from '../utils/motion';
+import { SectionLoader } from './SectionLoader';
 
 interface GradeBoundariesModalProps {
   onClose?: () => void;
@@ -52,6 +53,12 @@ export const GradeBoundariesModal: React.FC<GradeBoundariesModalProps> = ({ onCl
     () => GRADE_BOUNDARIES[0].optionRoutes?.[0]?.id ?? ''
   );
   const [userScore, setUserScore] = useState('');
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setIsReady(true), 180);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const handleSelectQual = (qual: string) => {
     setSelectedQual(qual);
@@ -231,6 +238,14 @@ export const GradeBoundariesModal: React.FC<GradeBoundariesModalProps> = ({ onCl
 
         {/* Content with Smooth Transition */}
         <AnimatePresence mode="wait" initial={false}>
+          {!isReady ? (
+            <SectionLoader
+              key="boundaries-loading"
+              label="Loading grade boundaries..."
+              sublabel="2018 – 2026 Maths & Further Maths thresholds"
+              className="min-h-[340px]"
+            />
+          ) : (
           <motion.div
             key={contentTransitionKey}
             variants={contentFadeVariants}
@@ -374,6 +389,7 @@ export const GradeBoundariesModal: React.FC<GradeBoundariesModalProps> = ({ onCl
               Note: {QUALIFICATION_NOTES[selected.qualification] ?? ''}
             </div>
           </motion.div>
+          )}
         </AnimatePresence>
       </div>
     </div>

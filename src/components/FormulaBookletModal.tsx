@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useId } from 'react';
+import React, { useState, useMemo, useRef, useId, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   FORMULA_BOOKLET_CATEGORIES,
@@ -9,6 +9,7 @@ import { STATISTICAL_TABLES } from '../data/statisticalTables';
 import { MathRenderer } from './MathRenderer';
 import { assetUrl } from '../utils/assets';
 import { contentFadeVariants, PILL_SPRING, EASE_SMOOTH } from '../utils/motion';
+import { SectionLoader } from './SectionLoader';
 import {
   BookOpen,
   FileText,
@@ -65,6 +66,19 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
   // PDF Viewer state — default FitH so wider page fills legibly
   const [activePdfQual, setActivePdfQual] = useState<'maths' | 'fm'>('maths');
   const [fitMode, setFitMode] = useState<'FitH' | 'Fit'>('FitH');
+  const [isReady, setIsReady] = useState(false);
+  const [pdfLoading, setPdfLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setIsReady(true), 200);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (activeTab === 'pdf') {
+      setPdfLoading(true);
+    }
+  }, [activeTab, activePdfQual, fitMode]);
 
   const isDrawer = mode === 'drawer';
 
@@ -416,13 +430,20 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
 
                   <div ref={formulaScrollRef} className="flex-1 overflow-y-auto p-5 sm:p-6">
                     <AnimatePresence mode="wait" initial={false}>
-                      {filteredCategories.length === 0 ? (
+                      {!isReady ? (
+                        <SectionLoader
+                          key="formula-loading"
+                          label="Loading formula booklet..."
+                          sublabel="Rendering mathematical formulae & equations"
+                          className="min-h-[360px]"
+                        />
+                      ) : filteredCategories.length === 0 ? (
                         <motion.div
                           key="no-formula-results"
-                          initial={{ opacity: 0, scale: 0.98, y: 8 }}
-                          animate={{ opacity: 1, scale: 1, y: 0 }}
-                          exit={{ opacity: 0, scale: 0.98, y: -8 }}
-                          transition={{ duration: 0.18 }}
+                          variants={contentFadeVariants}
+                          initial="enter"
+                          animate="center"
+                          exit="exit"
                           className="text-center py-16 space-y-3"
                         >
                           <Sigma size={32} className="mx-auto text-[#7B8FAD]" />
@@ -449,16 +470,9 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
                           exit="exit"
                           className="space-y-8"
                         >
-                          {filteredCategories.map((category, catIdx) => (
-                            <motion.div
+                          {filteredCategories.map((category) => (
+                            <div
                               key={category.title}
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{
-                                duration: 0.22,
-                                delay: Math.min(catIdx * 0.04, 0.12),
-                                ease: [0.25, 1, 0.5, 1],
-                              }}
                               className="space-y-5"
                             >
                               <div className="border-b border-[#6382BF]/25 pb-2 flex items-center justify-between gap-2">
@@ -484,19 +498,12 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
                                           isDrawer ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'
                                         }`}
                                       >
-                                        {section.items.map((item, itemIdx) => {
+                                        {section.items.map((item) => {
                                           const itemKey = `${category.title}-${section.sectionTitle}-${item.name}`;
                                           const isCopied = copiedKey === itemKey;
                                           return (
-                                            <motion.div
+                                            <div
                                               key={item.name}
-                                              initial={{ opacity: 0, y: 6 }}
-                                              animate={{ opacity: 1, y: 0 }}
-                                              transition={{
-                                                duration: 0.18,
-                                                delay: Math.min(itemIdx * 0.025, 0.12),
-                                                ease: [0.25, 1, 0.5, 1],
-                                              }}
                                               className={`p-3.5 sm:p-4 bg-[#0A1020] border border-[#6382BF]/25 rounded-xl space-y-2.5 hover:border-[#4A7BF7]/45 transition-colors flex flex-col justify-between ${
                                                 !isDrawer && item.wide ? 'lg:col-span-2' : ''
                                               }`}
@@ -547,7 +554,7 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
                                                   {item.notes}
                                                 </div>
                                               )}
-                                            </motion.div>
+                                            </div>
                                           );
                                         })}
                                       </div>
@@ -555,7 +562,7 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
                                   );
                                 })}
                               </div>
-                            </motion.div>
+                            </div>
                           ))}
                         </motion.div>
                       )}
@@ -570,10 +577,10 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
           {activeTab === 'tables' && (
             <motion.div
               key="tables"
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -4 }}
-              transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+              variants={contentFadeVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
               className="flex-1 flex flex-col overflow-hidden"
             >
               {/* Centered Row Lookup Bar + Filters on the Side (Desktop) */}
@@ -670,10 +677,10 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
                   <AnimatePresence mode="wait" initial={false}>
                     <motion.div
                       key={activeTable.id}
-                      initial={{ opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -4 }}
-                      transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
+                      variants={contentFadeVariants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
                       className="flex-1 flex flex-col overflow-hidden"
                     >
                       {/* Table Details Banner */}
@@ -759,10 +766,10 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
           {activeTab === 'pdf' && (
             <motion.div
               key="pdf"
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -4 }}
-              transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+              variants={contentFadeVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
               className="flex-1 flex flex-col h-full overflow-hidden"
             >
               {/* Qualification Selector & Controls for PDF */}
@@ -839,21 +846,33 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
                 </div>
               </div>
 
-              {/* Iframe Viewport with Smooth Cross-Fade */}
-              <div className="relative flex-1 w-full h-full min-h-[540px] bg-white overflow-hidden">
+              {/* Iframe Viewport with Loading Overlay & Smooth Cross-Fade */}
+              <div className="relative flex-1 w-full h-full min-h-[540px] bg-[#0A1020] overflow-hidden">
+                <AnimatePresence>
+                  {pdfLoading && (
+                    <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#0A1020]">
+                      <SectionLoader
+                        label="Loading official PDF booklet..."
+                        sublabel={activePdfQual === 'maths' ? 'A Level Mathematics Formulae' : 'Further Mathematics Formulae'}
+                        className="min-h-[240px]"
+                      />
+                    </div>
+                  )}
+                </AnimatePresence>
                 <AnimatePresence mode="wait" initial={false}>
                   <motion.iframe
                     key={`${activePdfQual}-${fitMode}`}
                     initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
+                    animate={{ opacity: pdfLoading ? 0 : 1 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.18 }}
+                    transition={{ duration: 0.2, ease: EASE_SMOOTH }}
+                    onLoad={() => setPdfLoading(false)}
                     src={`${assetUrl(
                       activePdfQual === 'maths'
                         ? FORMULA_BOOKLET_PDF_URL
                         : FURTHER_MATHS_FORMULA_BOOKLET_PDF_URL
                     )}#view=${fitMode}&toolbar=0&navpanes=0`}
-                    className="absolute inset-0 w-full h-full border-0"
+                    className="absolute inset-0 w-full h-full border-0 bg-white"
                     title="Official Formula Booklet PDF"
                   />
                 </AnimatePresence>

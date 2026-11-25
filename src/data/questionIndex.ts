@@ -590,6 +590,10 @@ const tokenizeSearch = (query: string): string[] => {
 let _cachedAllQuestions: IndexedQuestion[] | null = null;
 const _cachedTopicGroupsByFilter = new Map<string, TopicGroup[]>();
 
+export function isTopicIndexCached(): boolean {
+  return _cachedAllQuestions !== null && _cachedTopicGroupsByFilter.size > 0;
+}
+
 /**
  * Warms up the topic index and default topic groups cache during browser idle time.
  */
