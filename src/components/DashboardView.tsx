@@ -77,12 +77,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const [targetFm, setTargetFm] = useState(profile?.targetGradeFm || 'A*');
 
   useEffect(() => {
-    if (profile) {
+    if (profile && !editingProfile) {
       setNameInput(profile.displayName);
       setTargetMaths(profile.targetGradeMaths);
       setTargetFm(profile.targetGradeFm);
     }
-  }, [profile]);
+  }, [profile, editingProfile]);
 
   useEffect(() => {
     const reload = () => {

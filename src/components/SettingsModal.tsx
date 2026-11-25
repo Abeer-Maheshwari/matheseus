@@ -91,6 +91,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [weeklyGoalPapers, setWeeklyGoalPapers] = useState<number>(profile?.weeklyGoalPapers || 2);
   const [savingProfile, setSavingProfile] = useState(false);
   const [savedNotice, setSavedNotice] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [goalsDirty, setGoalsDirty] = useState(false);
 
   // Local data state
   const [draftCount, setDraftCount] = useState<number>(() => getAllLocalDrafts().length);
@@ -98,15 +100,16 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [confirmClearDrafts, setConfirmClearDrafts] = useState(false);
   const [confirmClearAttempts, setConfirmClearAttempts] = useState(false);
 
+  // Only populate form fields from profile if the user does not have unsaved edits
   useEffect(() => {
-    if (profile) {
+    if (profile && !goalsDirty) {
       setDisplayName(profile.displayName);
       setQualFocus(profile.qualificationFocus);
       setTargetMaths(profile.targetGradeMaths);
       setTargetFm(profile.targetGradeFm);
       setWeeklyGoalPapers(profile.weeklyGoalPapers || 2);
     }
-  }, [profile]);
+  }, [profile, goalsDirty]);
 
   const updateLocalSetting = <K extends keyof typeof settings>(
     key: K,
@@ -120,7 +123,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     e.preventDefault();
     if (!user) return;
     setSavingProfile(true);
-    await updateProfile({
+    setSaveError(null);
+    const res = await updateProfile({
       displayName: displayName.trim() || profile?.displayName || 'Student',
       qualificationFocus: qualFocus,
       targetGradeMaths: targetMaths,
@@ -128,8 +132,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       weeklyGoalPapers: Math.min(10, Math.max(1, weeklyGoalPapers)),
     });
     setSavingProfile(false);
+    if (res?.error) {
+      setSaveError(res.error);
+      return;
+    }
+    setGoalsDirty(false);
     setSavedNotice(true);
-    window.setTimeout(() => setSavedNotice(false), 2000);
+    window.setTimeout(() => setSavedNotice(false), 2200);
   };
 
   const handleExportAttempts = (format: 'json' | 'csv') => {
@@ -329,7 +338,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         <input
                           type="text"
                           value={displayName}
-                          onChange={(e) => setDisplayName(e.target.value)}
+                          onChange={(e) => {
+                            setDisplayName(e.target.value);
+                            setGoalsDirty(true);
+                            setSavedNotice(false);
+                          }}
                           placeholder="Your name"
                           className="w-full px-3 py-2 rounded-lg bg-[#1A2540] border border-[#6382BF]/30 text-xs text-[#E8ECF4] focus:outline-none focus:border-[#4A7BF7]"
                         />
@@ -346,7 +359,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                             <button
                               key={val}
                               type="button"
-                              onClick={() => setQualFocus(val)}
+                              onClick={() => {
+                                setQualFocus(val);
+                                setGoalsDirty(true);
+                                setSavedNotice(false);
+                              }}
                               className={`py-1.5 rounded-lg text-[11px] font-semibold border transition-colors ${
                                 qualFocus === val
                                   ? 'bg-[#4A7BF7] text-white border-[#4A7BF7]'
@@ -367,7 +384,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                           </label>
                           <select
                             value={targetMaths}
-                            onChange={(e) => setTargetMaths(e.target.value)}
+                            onChange={(e) => {
+                              setTargetMaths(e.target.value);
+                              setGoalsDirty(true);
+                              setSavedNotice(false);
+                            }}
                             className="w-full px-3 py-2 rounded-lg bg-[#1A2540] border border-[#6382BF]/30 text-xs text-[#E8ECF4] focus:outline-none focus:border-[#4A7BF7]"
                           >
                             {GRADE_OPTIONS.map((g) => (
@@ -382,7 +403,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                           </label>
                           <select
                             value={targetFm}
-                            onChange={(e) => setTargetFm(e.target.value)}
+                            onChange={(e) => {
+                              setTargetFm(e.target.value);
+                              setGoalsDirty(true);
+                              setSavedNotice(false);
+                            }}
                             className="w-full px-3 py-2 rounded-lg bg-[#1A2540] border border-[#6382BF]/30 text-xs text-[#E8ECF4] focus:outline-none focus:border-[#4A7BF7]"
                           >
                             {GRADE_OPTIONS.map((g) => (
@@ -405,10 +430,20 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                           min={1}
                           max={10}
                           value={weeklyGoalPapers}
-                          onChange={(e) => setWeeklyGoalPapers(Number(e.target.value))}
+                          onChange={(e) => {
+                            setWeeklyGoalPapers(Number(e.target.value));
+                            setGoalsDirty(true);
+                            setSavedNotice(false);
+                          }}
                           className="w-full accent-[#4A7BF7] cursor-pointer"
                         />
                       </div>
+
+                      {saveError && (
+                        <div className="text-[11px] text-rose-300 bg-rose-500/10 border border-rose-500/30 rounded-lg px-3 py-1.5">
+                          {saveError}
+                        </div>
+                      )}
 
                       <div className="flex items-center justify-between gap-2 pt-1">
                         <button
@@ -423,7 +458,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         <button
                           type="submit"
                           disabled={savingProfile}
-                          className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-[#4A7BF7] hover:bg-[#3D6CE0] text-white font-semibold transition-colors disabled:opacity-60"
+                          className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg font-semibold transition-colors disabled:opacity-60 border ${
+                            savedNotice
+                              ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/35'
+                              : 'bg-[#4A7BF7] hover:bg-[#3D6CE0] text-white border-[#4A7BF7]'
+                          }`}
                         >
                           {savedNotice ? (
                             <>
@@ -431,7 +470,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                               <span>Saved</span>
                             </>
                           ) : (
-                            <span>{savingProfile ? 'Saving...' : 'Save Goals'}</span>
+                            <span>{savingProfile ? 'Saving...' : goalsDirty ? 'Save Goals*' : 'Save Goals'}</span>
                           )}
                         </button>
                       </div>
