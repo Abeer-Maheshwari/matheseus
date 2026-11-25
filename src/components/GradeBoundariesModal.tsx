@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { GRADE_BOUNDARIES } from '../data/gradeBoundaries';
 import { GradeThresholds } from '../types';
 import { X, Award, TrendingUp, Calculator } from 'lucide-react';
+import { contentFadeVariants, PILL_SPRING } from '../utils/motion';
 
 interface GradeBoundariesModalProps {
   onClose?: () => void;
@@ -160,7 +161,7 @@ export const GradeBoundariesModal: React.FC<GradeBoundariesModalProps> = ({ onCl
                   {isSelected && (
                     <motion.div
                       layoutId={`gb-qual-${uniqueId}`}
-                      transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                      transition={PILL_SPRING}
                       className="absolute inset-0 bg-[#4A7BF7] rounded-lg -z-0 shadow-sm shadow-[#4A7BF7]/30"
                     />
                   )}
@@ -189,7 +190,7 @@ export const GradeBoundariesModal: React.FC<GradeBoundariesModalProps> = ({ onCl
                     {isSelected && (
                       <motion.div
                         layoutId={`gb-year-${uniqueId}`}
-                        transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                        transition={PILL_SPRING}
                         className="absolute inset-0 bg-[#1E2B4A] border border-[#4A7BF7]/50 rounded-md -z-0"
                       />
                     )}
@@ -232,10 +233,10 @@ export const GradeBoundariesModal: React.FC<GradeBoundariesModalProps> = ({ onCl
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={contentTransitionKey}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
+            variants={contentFadeVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
             className="p-5 overflow-y-auto space-y-5 text-xs"
           >
             {/* Interactive Score Calculator */}

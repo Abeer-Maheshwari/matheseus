@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, Variants } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Navbar } from './components/Navbar';
 import { HomePage } from './components/HomePage';
 import { PapersView } from './components/PapersView';
@@ -20,6 +20,7 @@ import {
 } from './utils/progressSync';
 import { getInteractivePaper, InteractivePaper } from './data/interactiveQuestions';
 import { prewarmTopicIndex } from './data/questionIndex';
+import { pageVariants, overlayFadeVariants, EASE_SMOOTH } from './utils/motion';
 import { PaperEntry, ModuleSection } from './data/papersData';
 import { ExamAttempt } from './types';
 import { applyTheme, applyFont } from './utils/theme';
@@ -35,29 +36,6 @@ const TAB_INDEX_MAP: Record<string, number> = {
   topics: 3,
   formulae: 4,
   boundaries: 5,
-};
-
-const pageVariants: Variants = {
-  enter: (direction: number) => ({
-    opacity: 0,
-    x: direction > 0 ? 18 : -18,
-  }),
-  center: {
-    opacity: 1,
-    x: 0,
-    transition: {
-      duration: 0.24,
-      ease: [0.22, 1, 0.36, 1] as const,
-    },
-  },
-  exit: (direction: number) => ({
-    opacity: 0,
-    x: direction > 0 ? -18 : 18,
-    transition: {
-      duration: 0.2,
-      ease: [0.22, 1, 0.36, 1] as const,
-    },
-  }),
 };
 
 export default function App() {
@@ -283,7 +261,7 @@ export default function App() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.22, ease: EASE_SMOOTH }}
             className="bg-emerald-500/15 border-b border-emerald-500/30 px-4 py-2.5 text-xs text-emerald-200"
           >
             <div className="max-w-5xl mx-auto flex items-center justify-between gap-3">
@@ -456,10 +434,10 @@ export default function App() {
         {activeInteractivePaper && (
           <motion.div
             key={`${activeInteractivePaper.id}_${practiceConfig.reviewMode ? 'review' : 'practice'}`}
-            initial={{ opacity: 0, scale: 0.985 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.985 }}
-            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            variants={overlayFadeVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
             className="fixed inset-0 z-50 bg-[#0F1729]"
           >
             <InteractiveExamRunner
@@ -482,10 +460,10 @@ export default function App() {
         {pdfModal && (
           <motion.div
             key={pdfModal.title}
-            initial={{ opacity: 0, scale: 0.985 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.985 }}
-            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            variants={overlayFadeVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
             className="fixed inset-0 z-50 bg-[#0F1729]"
           >
             <SplitPdfModal
@@ -509,10 +487,10 @@ export default function App() {
         {showTimerModal && (
           <motion.div
             key="timer-modal"
-            initial={{ opacity: 0, scale: 0.97 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.97 }}
-            transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+            variants={overlayFadeVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
             className="fixed inset-0 z-50"
           >
             <ExamTimerModal onClose={() => setShowTimerModal(false)} />

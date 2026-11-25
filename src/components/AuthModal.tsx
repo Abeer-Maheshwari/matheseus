@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useAuth } from '../context/AuthContext';
+import { overlayFadeVariants, modalPanelVariants, contentFadeVariants, PILL_SPRING } from '../utils/motion';
 import {
   X,
   Mail,
@@ -149,18 +150,18 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+      variants={overlayFadeVariants}
+      initial="enter"
+      animate="center"
+      exit="exit"
       onClick={onClose}
       className="fixed inset-0 z-50 bg-[#0A1020]/85 backdrop-blur-sm flex items-center justify-center p-4"
     >
       <motion.div
-        initial={{ opacity: 0, scale: 0.97, y: 8 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.97, y: 8 }}
-        transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
+        variants={modalPanelVariants}
+        initial="enter"
+        animate="center"
+        exit="exit"
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-md rounded-2xl bg-[#1A2540] border border-[#6382BF]/35 shadow-2xl overflow-hidden text-[#E8ECF4] font-sans"
       >
@@ -221,7 +222,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     <motion.div
                       layoutId="auth-tab-pill"
                       className="absolute inset-0 bg-[#4A7BF7] rounded-lg shadow-sm"
-                      transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                      transition={PILL_SPRING}
                     />
                   )}
                   <span className="relative z-10">Sign In</span>
@@ -244,7 +245,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     <motion.div
                       layoutId="auth-tab-pill"
                       className="absolute inset-0 bg-[#4A7BF7] rounded-lg shadow-sm"
-                      transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                      transition={PILL_SPRING}
                     />
                   )}
                   <span className="relative z-10">Create Account</span>
@@ -254,10 +255,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                   key={view}
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                  variants={contentFadeVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
                 >
 
               <form noValidate onSubmit={handleSubmit} className="space-y-3.5">

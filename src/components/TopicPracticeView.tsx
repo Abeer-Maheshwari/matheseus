@@ -24,6 +24,7 @@ import {
   createSingleQuestionInteractivePaper,
 } from '../data/questionIndex';
 import { InteractivePaper } from '../data/interactiveQuestions';
+import { contentFadeVariants, PILL_SPRING } from '../utils/motion';
 
 interface TopicPracticeViewProps {
   onOpenPracticeInteractive: (paper: InteractivePaper, reviewMode?: boolean, questionIndex?: number) => void;
@@ -265,7 +266,7 @@ export const TopicPracticeView: React.FC<TopicPracticeViewProps> = ({
                         <motion.div
                           layoutId="sidebar-subject-pill"
                           className="absolute inset-0 bg-[#4A7BF7] rounded-xl shadow-md shadow-[#4A7BF7]/25"
-                          transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                          transition={PILL_SPRING}
                         />
                       )}
                       <span className="relative z-10 flex items-center gap-2 truncate">
@@ -345,7 +346,7 @@ export const TopicPracticeView: React.FC<TopicPracticeViewProps> = ({
                         <motion.div
                           layoutId="paper-source-pill"
                           className="absolute inset-0 bg-[#4A7BF7] rounded-lg shadow-sm"
-                          transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                          transition={PILL_SPRING}
                         />
                       )}
                       <span className="relative z-10">{source.label}</span>
@@ -491,15 +492,15 @@ export const TopicPracticeView: React.FC<TopicPracticeViewProps> = ({
             </div>
           </div>
 
-          {/* Topics Grid with Fluid Layout & Search Stagger Animations */}
+          {/* Topics Grid with Unified Fade Transition */}
           <AnimatePresence mode="wait" initial={false}>
             {topicGroups.length === 0 ? (
               <motion.div
                 key="no-results"
-                initial={{ opacity: 0, scale: 0.97, y: 10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.97, y: -10 }}
-                transition={{ duration: 0.2, ease: 'easeOut' }}
+                variants={contentFadeVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
                 className="rounded-2xl bg-[#1A2540]/50 border border-[#6382BF]/20 p-12 text-center space-y-3"
               >
                 <FileQuestion size={40} className="mx-auto text-[#7B8FAD]" />
@@ -515,7 +516,14 @@ export const TopicPracticeView: React.FC<TopicPracticeViewProps> = ({
                 </button>
               </motion.div>
             ) : (
-              <div key="topic-results" className="space-y-4">
+              <motion.div
+                key={`${selectedSubject}-${selectedModule}-${sourceFilter}-${searchQuery.trim() ? 'search' : 'all'}`}
+                variants={contentFadeVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                className="space-y-4"
+              >
                 {(showAllTopics ? topicGroups : topicGroups.slice(0, 14)).map((group) => {
                   const isExpanded = expandedTopicIds.has(group.id);
 
@@ -661,7 +669,7 @@ export const TopicPracticeView: React.FC<TopicPracticeViewProps> = ({
                       </div>
                     );
                   })}
-              </div>
+              </motion.div>
             )}
           </AnimatePresence>
         </main>

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'motion/react';
 import { PastPaper } from '../types';
 import { playExamChime } from '../utils/audio';
+import { modalPanelVariants } from '../utils/motion';
 
 interface ExamTimerModalProps {
   paper?: PastPaper | null;
@@ -74,7 +76,13 @@ export const ExamTimerModal: React.FC<ExamTimerModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0F1729]/80 backdrop-blur-sm">
-      <div className="bg-[#1A2540] border border-[#6382BF]/30 rounded-xl w-full max-w-md overflow-hidden text-[#E8ECF4] shadow-2xl">
+      <motion.div
+        variants={modalPanelVariants}
+        initial="enter"
+        animate="center"
+        exit="exit"
+        className="bg-[#1A2540] border border-[#6382BF]/30 rounded-xl w-full max-w-md overflow-hidden text-[#E8ECF4] shadow-2xl"
+      >
         {/* Header */}
         <div className="px-5 py-3.5 border-b border-[#6382BF]/20 flex items-center justify-between bg-[#0A1020]/60">
           <div>
@@ -164,7 +172,7 @@ export const ExamTimerModal: React.FC<ExamTimerModalProps> = ({
             </button>
           )}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

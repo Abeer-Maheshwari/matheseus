@@ -8,6 +8,7 @@ import {
 import { STATISTICAL_TABLES } from '../data/statisticalTables';
 import { MathRenderer } from './MathRenderer';
 import { assetUrl } from '../utils/assets';
+import { contentFadeVariants, PILL_SPRING, EASE_SMOOTH } from '../utils/motion';
 import {
   BookOpen,
   FileText,
@@ -198,7 +199,7 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
                     <motion.div
                       layoutId={`formula-tab-pill-${uniqueId}`}
                       className="absolute inset-0 bg-[#4A7BF7] rounded-lg shadow-sm shadow-[#4A7BF7]/30"
-                      transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                      transition={PILL_SPRING}
                     />
                   )}
                   <span className="relative z-10 flex items-center gap-1.5">
@@ -230,10 +231,10 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
           {activeTab === 'formulas' && (
             <motion.div
               key="formulas"
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -4 }}
-              transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+              variants={contentFadeVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
               className="flex-1 flex flex-col overflow-hidden"
             >
               {/* Mobile / Drawer Compact Controls */}
@@ -278,7 +279,7 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
                           <motion.div
                             layoutId={`formula-qual-mobile-${uniqueId}`}
                             className="absolute inset-0 bg-[#4A7BF7] rounded-lg"
-                            transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                            transition={PILL_SPRING}
                           />
                         )}
                         <span className="relative z-10">{label}</span>
@@ -335,7 +336,7 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
                                 <motion.div
                                   layoutId={`formula-qual-side-${uniqueId}`}
                                   className="absolute inset-0 bg-[#4A7BF7] rounded-lg shadow-sm"
-                                  transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                                  transition={PILL_SPRING}
                                 />
                               )}
                               <span className="relative z-10">{label}</span>
@@ -442,10 +443,10 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
                       ) : (
                         <motion.div
                           key={`${activeQual}-${search.trim() ? 'filtered' : 'full'}`}
-                          initial={{ opacity: 0, y: 8 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                          variants={contentFadeVariants}
+                          initial="enter"
+                          animate="center"
+                          exit="exit"
                           className="space-y-8"
                         >
                           {filteredCategories.map((category, catIdx) => (
@@ -597,7 +598,7 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
                               <motion.div
                                 layoutId={`table-tab-side-${uniqueId}`}
                                 className="absolute inset-0 bg-[#4A7BF7] rounded-lg shadow-sm"
-                                transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                                transition={PILL_SPRING}
                               />
                             )}
                             <span className="relative z-10 block truncate">
@@ -629,7 +630,7 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
                             <motion.div
                               layoutId={`table-tab-mobile-${uniqueId}`}
                               className="absolute inset-0 bg-[#4A7BF7] rounded-lg"
-                              transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                              transition={PILL_SPRING}
                             />
                           )}
                           <span className="relative z-10">
@@ -784,7 +785,7 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
                           <motion.div
                             layoutId={`pdf-qual-pill-${uniqueId}`}
                             className="absolute inset-0 bg-[#4A7BF7] rounded-lg shadow-sm"
-                            transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                            transition={PILL_SPRING}
                           />
                         )}
                         <span className="relative z-10 flex items-center gap-1.5">
@@ -817,7 +818,7 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
                             <motion.div
                               layoutId={`pdf-fit-pill-${uniqueId}`}
                               className="absolute inset-0 bg-[#4A7BF7] rounded-lg"
-                              transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                              transition={PILL_SPRING}
                             />
                           )}
                           <span className="relative z-10">{label}</span>

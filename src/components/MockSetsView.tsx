@@ -5,6 +5,7 @@ import { MOCK_MODULES_DATA, MOCK_SETS_BY_SERIES, MockSetGroup } from '../data/mo
 import { ExamAttempt } from '../types';
 import { getAllLatestAttemptsMap, deleteExamAttempt } from '../utils/attempts';
 import { ScoreReportModal } from './ScoreReportModal';
+import { subTabVariants, contentFadeVariants, overlayFadeVariants, PILL_SPRING } from '../utils/motion';
 import {
   FileText,
   Columns,
@@ -29,45 +30,8 @@ const SUBJECT_ORDER: Record<string, number> = {
   'further-maths': 1,
 };
 
-const subjectVariants = {
-  enter: (dir: number) => ({
-    opacity: 0,
-    x: dir * 18,
-    scale: 0.994,
-  }),
-  center: {
-    opacity: 1,
-    x: 0,
-    scale: 1,
-    transition: {
-      duration: 0.24,
-      ease: [0.22, 1, 0.36, 1] as const,
-    },
-  },
-  exit: (dir: number) => ({
-    opacity: 0,
-    x: dir * -18,
-    scale: 0.994,
-    transition: {
-      duration: 0.2,
-      ease: [0.4, 0, 0.2, 1] as const,
-    },
-  }),
-};
-
-const contentVariants = {
-  enter: { opacity: 0, y: 8 },
-  center: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.22, ease: [0.22, 1, 0.36, 1] as const },
-  },
-  exit: {
-    opacity: 0,
-    y: -6,
-    transition: { duration: 0.18, ease: [0.4, 0, 0.2, 1] as const },
-  },
-};
+const subjectVariants = subTabVariants;
+const contentVariants = contentFadeVariants;
 
 const getCategoryIcon = (title: string) => {
   const lower = title.toLowerCase();
@@ -209,7 +173,7 @@ export const MockSetsView: React.FC<MockSetsViewProps> = ({
               <motion.div
                 layoutId="mock-subject-pill"
                 className="absolute inset-0 bg-[#4A7BF7] rounded-xl shadow-md shadow-[#4A7BF7]/25"
-                transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                transition={PILL_SPRING}
               />
             )}
             <span className="relative z-10 flex items-center gap-2">
@@ -233,7 +197,7 @@ export const MockSetsView: React.FC<MockSetsViewProps> = ({
               <motion.div
                 layoutId="mock-subject-pill"
                 className="absolute inset-0 bg-[#4A7BF7] rounded-xl shadow-md shadow-[#4A7BF7]/25"
-                transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                transition={PILL_SPRING}
               />
             )}
             <span className="relative z-10 flex items-center gap-2">
@@ -261,7 +225,7 @@ export const MockSetsView: React.FC<MockSetsViewProps> = ({
                 <motion.div
                   layoutId="mock-viewmode-pill"
                   className="absolute inset-0 bg-[#4A7BF7] rounded-lg shadow-sm"
-                  transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                  transition={PILL_SPRING}
                 />
               )}
               <span className="relative z-10">Module</span>
@@ -278,7 +242,7 @@ export const MockSetsView: React.FC<MockSetsViewProps> = ({
                 <motion.div
                   layoutId="mock-viewmode-pill"
                   className="absolute inset-0 bg-[#4A7BF7] rounded-lg shadow-sm"
-                  transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                  transition={PILL_SPRING}
                 />
               )}
               <span className="relative z-10">Mock Set</span>
@@ -739,10 +703,10 @@ export const MockSetsView: React.FC<MockSetsViewProps> = ({
       <AnimatePresence>
         {selectedAttempt && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.985 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.985 }}
-            transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
+            variants={overlayFadeVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
             className="fixed inset-0 z-50 bg-[#0F1729]"
           >
             <ScoreReportModal

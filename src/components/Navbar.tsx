@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useAuth } from '../context/AuthContext';
+import { PILL_SPRING, EASE_SMOOTH } from '../utils/motion';
 import {
   Home,
   BookOpen,
@@ -96,7 +97,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <motion.div
                     layoutId="navbar-pill"
                     className="absolute inset-0 bg-[#0A1020] border border-[#6382BF]/40 rounded-lg shadow-sm"
-                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                    transition={PILL_SPRING}
                   />
                 )}
                 <span className="relative z-10 flex items-center gap-1.5">
@@ -117,7 +118,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <motion.div
                     layoutId="navbar-pill"
                     className="absolute inset-0 bg-[#0A1020] border border-[#6382BF]/40 rounded-lg shadow-sm"
-                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                    transition={PILL_SPRING}
                   />
                 )}
                 <span className="relative z-10 flex items-center gap-1.5">
@@ -145,7 +146,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <motion.div
                   layoutId="navbar-pill"
                   className="absolute inset-0 bg-[#0A1020] border border-[#6382BF]/40 rounded-lg shadow-sm"
-                  transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                  transition={PILL_SPRING}
                 />
               )}
               <span className="relative z-10 flex items-center gap-1.5">
@@ -166,7 +167,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <motion.div
                   layoutId="navbar-pill"
                   className="absolute inset-0 bg-[#0A1020] border border-[#6382BF]/40 rounded-lg shadow-sm"
-                  transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                  transition={PILL_SPRING}
                 />
               )}
               <span className="relative z-10 flex items-center gap-1.5">
@@ -187,7 +188,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <motion.div
                   layoutId="navbar-pill"
                   className="absolute inset-0 bg-[#0A1020] border border-[#6382BF]/40 rounded-lg shadow-sm"
-                  transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                  transition={PILL_SPRING}
                 />
               )}
               <span className="relative z-10 flex items-center gap-1.5">
@@ -260,7 +261,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     initial={{ opacity: 0, y: 6, scale: 0.97 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 6, scale: 0.97 }}
-                    transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{ duration: 0.2, ease: EASE_SMOOTH }}
                     className="absolute right-0 mt-2 w-52 rounded-xl bg-[#1A2540] border border-[#6382BF]/35 shadow-2xl overflow-hidden z-50"
                   >
                     <div className="px-3.5 py-2.5 border-b border-[#6382BF]/20 bg-[#0A1020]/50">

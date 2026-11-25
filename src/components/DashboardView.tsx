@@ -8,6 +8,7 @@ import { MODULES_DATA, PaperEntry, ModuleSection } from '../data/papersData';
 import { MOCK_MODULES_DATA } from '../data/mockSetsData';
 import { getInteractivePaper } from '../data/interactiveQuestions';
 import { ScoreReportModal } from './ScoreReportModal';
+import { contentFadeVariants, overlayFadeVariants, PILL_SPRING } from '../utils/motion';
 import {
   User as UserIcon,
   Award,
@@ -629,35 +630,57 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       <div className="rounded-2xl bg-[#1A2540] border border-[#6382BF]/25 p-5 shadow-lg space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#6382BF]/20 pb-3">
           <h2 className="text-sm font-bold text-[#E8ECF4]">Attempt History</h2>
-          <div className="flex items-center gap-1.5 text-xs">
-            {([
-              ['all', 'All'],
-              ['maths', 'Maths'],
-              ['further-maths', 'Further Maths'],
-              ['mocks', 'Mocks'],
-            ] as const).map(([val, label]) => (
-              <button
-                key={val}
-                type="button"
-                onClick={() => setHistoryFilter(val)}
-                className={`px-3 py-1 rounded-lg font-medium border transition-colors ${
-                  historyFilter === val
-                    ? 'bg-[#4A7BF7] text-white border-[#4A7BF7]'
-                    : 'bg-[#0A1020] text-[#7B8FAD] hover:text-[#E8ECF4] border-[#6382BF]/30'
-                }`}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
+            <div className="flex items-center gap-1.5 text-xs">
+              {([
+                ['all', 'All'],
+                ['maths', 'Maths'],
+                ['further-maths', 'Further Maths'],
+                ['mocks', 'Mocks'],
+              ] as const).map(([val, label]) => (
+                <button
+                  key={val}
+                  type="button"
+                  onClick={() => setHistoryFilter(val)}
+                  className={`relative px-3 py-1 rounded-lg font-medium border transition-colors ${
+                    historyFilter === val
+                      ? 'text-white border-[#4A7BF7]'
+                      : 'bg-[#0A1020] text-[#7B8FAD] hover:text-[#E8ECF4] border-[#6382BF]/30'
+                  }`}
+                >
+                  {historyFilter === val && (
+                    <motion.div
+                      layoutId="dashboard-history-pill"
+                      transition={PILL_SPRING}
+                      className="absolute inset-0 bg-[#4A7BF7] rounded-lg"
+                    />
+                  )}
+                  <span className="relative z-10">{label}</span>
+                </button>
+              ))}
+            </div>
         </div>
 
+        <AnimatePresence mode="wait" initial={false}>
         {filteredAttempts.length === 0 ? (
-          <div className="py-10 text-center text-xs text-[#7B8FAD]">
+          <motion.div
+            key={`empty-${historyFilter}`}
+            variants={contentFadeVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            className="py-10 text-center text-xs text-[#7B8FAD]"
+          >
             No recorded attempts yet.
-          </div>
+          </motion.div>
         ) : (
-          <div className="border border-[#6382BF]/25 rounded-xl overflow-hidden bg-[#0A1020]">
+          <motion.div
+            key={`list-${historyFilter}`}
+            variants={contentFadeVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            className="border border-[#6382BF]/25 rounded-xl overflow-hidden bg-[#0A1020]"
+          >
             <div className="divide-y divide-[#6382BF]/15">
               {filteredAttempts.map((a) => {
                 const dateLabel = (() => {
@@ -703,18 +726,19 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 );
               })}
             </div>
-          </div>
+          </motion.div>
         )}
+        </AnimatePresence>
       </div>
 
       {/* Inline Review Modal */}
       <AnimatePresence>
         {selectedAttempt && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.985 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.985 }}
-            transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
+            variants={overlayFadeVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
             className="fixed inset-0 z-50 bg-[#0F1729]"
           >
             <ScoreReportModal
