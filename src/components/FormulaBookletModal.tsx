@@ -71,8 +71,14 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
   const [pdfLoading, setPdfLoading] = useState(true);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setIsReady(true), 200);
-    return () => window.clearTimeout(timer);
+    let raf2 = 0;
+    const raf1 = window.requestAnimationFrame(() => {
+      raf2 = window.requestAnimationFrame(() => setIsReady(true));
+    });
+    return () => {
+      window.cancelAnimationFrame(raf1);
+      if (raf2) window.cancelAnimationFrame(raf2);
+    };
   }, []);
 
   useEffect(() => {

@@ -10,6 +10,7 @@ import { saveExamAttempt, getExamAttempts } from '../utils/attempts';
 import { assetUrl } from '../utils/assets';
 import { saveExamDraft, clearExamDraft } from '../utils/progressSync';
 import { ScoreReportScreen } from './ScoreReportModal';
+import { SectionLoader } from './SectionLoader';
 import { getSettings } from '../utils/settings';
 import { EASE_SMOOTH, overlayFadeVariants, modalPanelVariants } from '../utils/motion';
 import { 
@@ -130,18 +131,17 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
   const [currentIndex, setCurrentIndex] = useState(initialQuestionIndex);
   const mainStageRef = useRef<HTMLDivElement | null>(null);
 
-  // Fluidity, image preloading & transition masking states
+  // Image preloading & real loading completion states (no artificial timers)
   const [isScreenTransitioning, setIsScreenTransitioning] = useState(false);
   const [transitionMessage, setTransitionMessage] = useState('Preparing exam environment...');
   const [isImgReady, setIsImgReady] = useState(false);
-  const [isImgDelayDone, setIsImgDelayDone] = useState(false);
   const [isMsImgReady, setIsMsImgReady] = useState(false);
-  const [isMsDelayDone, setIsMsDelayDone] = useState(false);
+  const [pdfDrawerLoading, setPdfDrawerLoading] = useState(true);
   const qImgRef = useRef<HTMLImageElement | null>(null);
   const msImgRef = useRef<HTMLImageElement | null>(null);
 
-  const isImgLoaded = isImgReady && isImgDelayDone;
-  const isMsImgLoaded = isMsImgReady && isMsDelayDone;
+  const isImgLoaded = isImgReady;
+  const isMsImgLoaded = isMsImgReady;
 
   // Preload next and previous question images & mark schemes into browser cache
   useEffect(() => {
@@ -184,6 +184,12 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
   // Side drawers
   const [showFormulaDrawer, setShowFormulaDrawer] = useState(false);
   const [showPdfDrawer, setShowPdfDrawer] = useState(false);
+
+  useEffect(() => {
+    if (showPdfDrawer) {
+      setPdfDrawerLoading(true);
+    }
+  }, [showPdfDrawer, paper.qpUrl]);
 
   // Modals
   const [showFinishConfirm, setShowFinishConfirm] = useState(false);
@@ -372,42 +378,31 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
   const paperMaxMarks = paper.totalMarks || paper.questions.reduce((sum, q) => sum + q.totalMarks, 0);
   const isMsPanelOpen = Boolean(currentQ && (revealedSolutions[currentQ.number] || isReviewMode));
 
-  // Slight deliberate loading delay for question sheets (ensures smooth spinner reveal even when preloaded)
+  // Check actual question image completion without artificial fixed delay
   useEffect(() => {
     if (!isStarted || (isFinished && !isReviewMode)) return;
     setIsImgReady(false);
-    setIsImgDelayDone(false);
-    const delayTimer = window.setTimeout(() => setIsImgDelayDone(true), 200);
     const raf = window.requestAnimationFrame(() => {
       if (qImgRef.current?.complete && qImgRef.current.naturalWidth > 0) {
         setIsImgReady(true);
       }
     });
-    return () => {
-      window.clearTimeout(delayTimer);
-      window.cancelAnimationFrame(raf);
-    };
+    return () => window.cancelAnimationFrame(raf);
   }, [currentIndex, isStarted, isFinished, isReviewMode]);
 
-  // Slight deliberate loading delay when exam mark scheme is revealed or switched in review mode
+  // Check actual mark scheme image completion without artificial fixed delay
   useEffect(() => {
     if (!isStarted || (isFinished && !isReviewMode) || !isMsPanelOpen) {
       setIsMsImgReady(false);
-      setIsMsDelayDone(false);
       return;
     }
     setIsMsImgReady(false);
-    setIsMsDelayDone(false);
-    const delayTimer = window.setTimeout(() => setIsMsDelayDone(true), 380);
     const raf = window.requestAnimationFrame(() => {
       if (msImgRef.current?.complete && msImgRef.current.naturalWidth > 0) {
         setIsMsImgReady(true);
       }
     });
-    return () => {
-      window.clearTimeout(delayTimer);
-      window.cancelAnimationFrame(raf);
-    };
+    return () => window.cancelAnimationFrame(raf);
   }, [currentIndex, isMsPanelOpen, isStarted, isFinished, isReviewMode]);
 
   // Score calculations
@@ -508,29 +503,19 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
   const handleNavigateQuestion = (targetIdx: number) => {
     if (targetIdx === currentIndex || targetIdx < 0 || targetIdx >= paper.questions.length) return;
     setIsImgReady(false);
-    setIsImgDelayDone(false);
     setIsMsImgReady(false);
-    setIsMsDelayDone(false);
     setCurrentIndex(targetIdx);
   };
 
   const handleStartPracticeWithTransition = () => {
-    setIsScreenTransitioning(true);
-    setTransitionMessage('Starting...');
-    setTimeout(() => {
-      setIsStarted(true);
-      setIsScreenTransitioning(false);
-    }, 300);
+    setIsScreenTransitioning(false);
+    setIsStarted(true);
   };
 
   const handleFinishExamWithTransition = () => {
     setShowFinishConfirm(false);
-    setIsScreenTransitioning(true);
-    setTransitionMessage('Grading...');
-    setTimeout(() => {
-      handleFinishExam();
-      setIsScreenTransitioning(false);
-    }, 320);
+    setIsScreenTransitioning(false);
+    handleFinishExam();
   };
 
   const handleRestart = () => {
@@ -736,11 +721,9 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
         onReview={(qIdx) => {
           setIsScreenTransitioning(true);
           setTransitionMessage('Loading Review Mode...');
-          setTimeout(() => {
-            if (qIdx !== undefined) setCurrentIndex(qIdx);
-            setIsReviewMode(true);
-            setIsScreenTransitioning(false);
-          }, 320);
+          if (qIdx !== undefined) setCurrentIndex(qIdx);
+          setIsReviewMode(true);
+          setIsScreenTransitioning(false);
         }}
         erUrl={paper.erUrl || (paper.qpUrl ? paper.qpUrl.replace(/qp/g, 'er') : undefined)}
         onOpenSingleDoc={(title, url) => window.open(url, '_blank')}
@@ -1136,7 +1119,6 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                     const willReveal = !revealedSolutions[currentQ.number];
                     if (willReveal) {
                       setIsMsImgReady(false);
-                      setIsMsDelayDone(false);
                     }
                     setRevealedSolutions((prev) => ({
                       ...prev,
@@ -1560,11 +1542,19 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
               </button>
             </div>
           </div>
-          <iframe
-            src={`${assetUrl(paper.qpUrl)}#toolbar=0&navpanes=0&view=FitH`}
-            className="flex-1 w-full border-0"
-            title={`${paper.title} PDF reference`}
-          />
+          <div className="relative flex-1 w-full overflow-hidden bg-[#0F1729]">
+            {pdfDrawerLoading && (
+              <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#0F1729]">
+                <SectionLoader label="Loading Question Paper PDF..." className="min-h-[200px]" />
+              </div>
+            )}
+            <iframe
+              src={`${assetUrl(paper.qpUrl)}#toolbar=0&navpanes=0&view=FitH`}
+              onLoad={() => setPdfDrawerLoading(false)}
+              className="w-full h-full border-0"
+              title={`${paper.title} PDF reference`}
+            />
+          </div>
             </motion.div>
           </>
         )}

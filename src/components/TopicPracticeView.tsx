@@ -22,6 +22,7 @@ import {
   getTopicGroups,
   createTopicInteractivePaper,
   createSingleQuestionInteractivePaper,
+  prewarmTopicIndex,
 } from '../data/questionIndex';
 import { InteractivePaper } from '../data/interactiveQuestions';
 import { contentFadeVariants, PILL_SPRING, EASE_SMOOTH } from '../utils/motion';
@@ -47,19 +48,29 @@ export const TopicPracticeView: React.FC<TopicPracticeViewProps> = ({
 
   // Expanded topic IDs
   const [expandedTopicIds, setExpandedTopicIds] = useState<Set<string>>(new Set());
-  // Defer topic card list render briefly until page transition completes (matches Formulae & Boundaries loader)
+  // Paint SectionLoader first, then warm question index and reveal real topics once ready
   const [indexReady, setIndexReady] = useState<boolean>(false);
-  // Defer off-screen cards until shortly after initial topics fade in
   const [showAllTopics, setShowAllTopics] = useState<boolean>(false);
 
   useEffect(() => {
-    const readyTimer = window.setTimeout(() => setIndexReady(true), 180);
-    const expandTimer = window.setTimeout(() => setShowAllTopics(true), 280);
+    let raf2 = 0;
+    const raf1 = window.requestAnimationFrame(() => {
+      raf2 = window.requestAnimationFrame(() => {
+        prewarmTopicIndex();
+        setIndexReady(true);
+      });
+    });
     return () => {
-      window.clearTimeout(readyTimer);
-      window.clearTimeout(expandTimer);
+      window.cancelAnimationFrame(raf1);
+      if (raf2) window.cancelAnimationFrame(raf2);
     };
   }, []);
+
+  useEffect(() => {
+    if (!indexReady) return;
+    const raf = window.requestAnimationFrame(() => setShowAllTopics(true));
+    return () => window.cancelAnimationFrame(raf);
+  }, [indexReady]);
 
   const toggleTopicExpand = (topicId: string) => {
     setExpandedTopicIds((prev) => {

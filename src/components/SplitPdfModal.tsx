@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { FlipClock } from './FlipClock';
 import { FormulaBookletModal } from './FormulaBookletModal';
+import { SectionLoader } from './SectionLoader';
 import { playExamChime } from '../utils/audio';
 import { assetUrl } from '../utils/assets';
 import { saveExamAttempt } from '../utils/attempts';
@@ -73,8 +74,10 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
   const [enteredScore, setEnteredScore] = useState<string>('');
   const [isSaved, setIsSaved] = useState(false);
 
-  // Formula Booklet Side Drawer
+  // Formula Booklet Side Drawer & PDF loading states
   const [showFormulaDrawer, setShowFormulaDrawer] = useState(false);
+  const [qpLoading, setQpLoading] = useState(true);
+  const [msLoading, setMsLoading] = useState(true);
 
   // Timer loop for Practice Mode
   useEffect(() => {
@@ -328,11 +331,22 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
                 <ExternalLink size={11} />
               </a>
             </div>
-            <iframe
-              src={resolvedQpUrl}
-              className="w-full flex-1 bg-[#0F1729] border-none"
-              title={`${title} - Question Paper`}
-            />
+            <div className="relative flex-1 flex flex-col bg-[#0F1729] overflow-hidden">
+              {qpLoading && (
+                <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#0F1729]">
+                  <SectionLoader
+                    label="Loading Question Paper PDF..."
+                    className="min-h-[200px]"
+                  />
+                </div>
+              )}
+              <iframe
+                src={resolvedQpUrl}
+                onLoad={() => setQpLoading(false)}
+                className="w-full flex-1 bg-[#0F1729] border-none"
+                title={`${title} - Question Paper`}
+              />
+            </div>
           </div>
 
           {/* Mark Scheme Container (Persistently mounted, never reloaded) */}
@@ -365,11 +379,22 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
                   <ExternalLink size={11} />
                 </a>
               </div>
-              <iframe
-                src={resolvedMsUrl}
-                className="w-full flex-1 bg-[#0F1729] border-none"
-                title={`${title} - Mark Scheme`}
-              />
+              <div className="relative flex-1 flex flex-col bg-[#0F1729] overflow-hidden">
+                {msLoading && (
+                  <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#0F1729]">
+                    <SectionLoader
+                      label="Loading Mark Scheme PDF..."
+                      className="min-h-[200px]"
+                    />
+                  </div>
+                )}
+                <iframe
+                  src={resolvedMsUrl}
+                  onLoad={() => setMsLoading(false)}
+                  className="w-full flex-1 bg-[#0F1729] border-none"
+                  title={`${title} - Mark Scheme`}
+                />
+              </div>
             </div>
           )}
         </div>

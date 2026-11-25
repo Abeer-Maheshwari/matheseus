@@ -56,8 +56,14 @@ export const GradeBoundariesModal: React.FC<GradeBoundariesModalProps> = ({ onCl
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setIsReady(true), 180);
-    return () => window.clearTimeout(timer);
+    let raf2 = 0;
+    const raf1 = window.requestAnimationFrame(() => {
+      raf2 = window.requestAnimationFrame(() => setIsReady(true));
+    });
+    return () => {
+      window.cancelAnimationFrame(raf1);
+      if (raf2) window.cancelAnimationFrame(raf2);
+    };
   }, []);
 
   const handleSelectQual = (qual: string) => {
