@@ -26,26 +26,24 @@ import { Sigma, BarChart3, ListFilter, CheckCircle2, X } from 'lucide-react';
 
 const TAB_INDEX_MAP: Record<string, number> = {
   home: 0,
+  dashboard: 0,
   maths: 1,
   'further-maths': 1,
   'more-papers': 1,
   'mock-sets': 2,
   topics: 3,
-  dashboard: 4,
-  formulae: 5,
-  boundaries: 6,
+  formulae: 4,
+  boundaries: 5,
 };
 
 const pageVariants: Variants = {
   enter: (direction: number) => ({
     opacity: 0,
     x: direction > 0 ? 18 : -18,
-    scale: 0.992,
   }),
   center: {
     opacity: 1,
     x: 0,
-    scale: 1,
     transition: {
       duration: 0.24,
       ease: [0.22, 1, 0.36, 1] as const,
@@ -54,10 +52,9 @@ const pageVariants: Variants = {
   exit: (direction: number) => ({
     opacity: 0,
     x: direction > 0 ? -18 : 18,
-    scale: 0.992,
     transition: {
       duration: 0.2,
-      ease: [0.4, 0, 0.2, 1] as const,
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   }),
 };

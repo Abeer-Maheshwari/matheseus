@@ -516,19 +516,18 @@ export const TopicPracticeView: React.FC<TopicPracticeViewProps> = ({
                 className="space-y-4"
               >
                 <AnimatePresence initial={false}>
-                  {topicGroups.map((group, index) => {
+                  {topicGroups.map((group) => {
                     const isExpanded = expandedTopicIds.has(group.id);
 
                     return (
                       <motion.div
                         key={group.id}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, transition: { duration: 0.15 } }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0, transition: { duration: 0.14 } }}
                         transition={{
                           duration: 0.18,
-                          delay: Math.min(index * 0.015, 0.1),
-                          ease: [0.25, 1, 0.5, 1],
+                          ease: [0.22, 1, 0.36, 1],
                         }}
                         className="rounded-2xl bg-[#1A2540]/80 border border-[#6382BF]/20 hover:border-[#6382BF]/40 transition-colors duration-200 overflow-hidden shadow-sm"
                       >
