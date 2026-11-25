@@ -79,6 +79,22 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
   const [qpLoading, setQpLoading] = useState(true);
   const [msLoading, setMsLoading] = useState(true);
 
+  useEffect(() => {
+    setQpLoading(true);
+    const fallback = window.setTimeout(() => setQpLoading(false), 7000);
+    return () => window.clearTimeout(fallback);
+  }, [resolvedQpUrl]);
+
+  useEffect(() => {
+    if (!resolvedMsUrl) {
+      setMsLoading(false);
+      return;
+    }
+    setMsLoading(true);
+    const fallback = window.setTimeout(() => setMsLoading(false), 7000);
+    return () => window.clearTimeout(fallback);
+  }, [resolvedMsUrl]);
+
   // Timer loop for Practice Mode
   useEffect(() => {
     if (!isPractice || isTimerPaused || isTimerFinished || secondsRemaining <= 0) return;
@@ -343,6 +359,7 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
               <iframe
                 src={resolvedQpUrl}
                 onLoad={() => setQpLoading(false)}
+                onError={() => setQpLoading(false)}
                 className="w-full flex-1 bg-[#0F1729] border-none"
                 title={`${title} - Question Paper`}
               />
@@ -391,6 +408,7 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
                 <iframe
                   src={resolvedMsUrl}
                   onLoad={() => setMsLoading(false)}
+                  onError={() => setMsLoading(false)}
                   className="w-full flex-1 bg-[#0F1729] border-none"
                   title={`${title} - Mark Scheme`}
                 />

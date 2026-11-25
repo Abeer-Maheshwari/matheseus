@@ -1,6 +1,29 @@
 import React, { useMemo } from 'react';
 import katex from 'katex';
 
+// Module-level cache so repeated mounts (Formula Booklet drawer/tab switches) reuse precomputed HTML
+const _katexHtmlCache = new Map<string, string>();
+
+export function renderKatexCached(math: string, displayMode = false): string {
+  const key = `${displayMode ? '1' : '0'}:${math}`;
+  const cached = _katexHtmlCache.get(key);
+  if (cached !== undefined) return cached;
+
+  let html: string;
+  try {
+    html = katex.renderToString(math, {
+      displayMode,
+      throwOnError: false,
+      strict: false,
+    });
+  } catch (e) {
+    console.warn('KaTeX render error:', e);
+    html = math;
+  }
+  _katexHtmlCache.set(key, html);
+  return html;
+}
+
 interface MathRendererProps {
   math: string;
   displayMode?: boolean;
@@ -12,18 +35,7 @@ export const MathRenderer: React.FC<MathRendererProps> = ({
   displayMode = false,
   className = '',
 }) => {
-  const html = useMemo(() => {
-    try {
-      return katex.renderToString(math, {
-        displayMode,
-        throwOnError: false,
-        strict: false,
-      });
-    } catch (e) {
-      console.warn('KaTeX render error:', e);
-      return math;
-    }
-  }, [math, displayMode]);
+  const html = useMemo(() => renderKatexCached(math, displayMode), [math, displayMode]);
 
   return (
     <span
@@ -87,40 +99,24 @@ export const FormattedMathText: React.FC<{ text: string; className?: string }> =
     return parts.map((part, idx) => {
       if (part.startsWith('$$') && part.endsWith('$$')) {
         const math = part.slice(2, -2).trim();
-        try {
-          const html = katex.renderToString(math, { 
-            displayMode: true, 
-            throwOnError: false,
-            strict: false 
-          });
-          return (
-            <div
-              key={idx}
-              className="my-3 overflow-x-auto py-1 text-center"
-              dangerouslySetInnerHTML={{ __html: html }}
-            />
-          );
-        } catch {
-          return <pre key={idx} className="font-mono text-xs text-rose-300">{math}</pre>;
-        }
+        const html = renderKatexCached(math, true);
+        return (
+          <div
+            key={idx}
+            className="my-3 overflow-x-auto py-1 text-center"
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
+        );
       } else if (part.startsWith('$') && part.endsWith('$')) {
         const math = part.slice(1, -1).trim();
-        try {
-          const html = katex.renderToString(math, { 
-            displayMode: false, 
-            throwOnError: false,
-            strict: false 
-          });
-          return (
-            <span
-              key={idx}
-              className="inline-block px-0.5 align-baseline"
-              dangerouslySetInnerHTML={{ __html: html }}
-            />
-          );
-        } catch {
-          return <code key={idx} className="font-mono text-xs text-rose-300">{math}</code>;
-        }
+        const html = renderKatexCached(math, false);
+        return (
+          <span
+            key={idx}
+            className="inline-block px-0.5 align-baseline"
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
+        );
       }
       // Process markdown bold/code on non-math portions
       return <RenderTextWithMarkdown key={idx} content={part} />;

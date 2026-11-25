@@ -9,6 +9,7 @@ import { STATISTICAL_TABLES } from '../data/statisticalTables';
 import { MathRenderer } from './MathRenderer';
 import { assetUrl } from '../utils/assets';
 import { getSettings } from '../utils/settings';
+import { isFormulaKatexWarmed, prewarmFormulaBookletKatexSync } from '../utils/prewarm';
 import { contentFadeVariants, PILL_SPRING, EASE_SMOOTH } from '../utils/motion';
 import { SectionLoader } from './SectionLoader';
 import {
@@ -67,24 +68,23 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
   // PDF Viewer state — uses preferred Fit setting from SettingsModal
   const [activePdfQual, setActivePdfQual] = useState<'maths' | 'fm'>('maths');
   const [fitMode, setFitMode] = useState<'FitH' | 'Fit'>(() => getSettings().defaultPdfFit);
-  const [isReady, setIsReady] = useState(false);
+  const [isReady, setIsReady] = useState<boolean>(() => isFormulaKatexWarmed());
   const [pdfLoading, setPdfLoading] = useState(true);
 
   useEffect(() => {
-    let raf2 = 0;
-    const raf1 = window.requestAnimationFrame(() => {
-      raf2 = window.requestAnimationFrame(() => setIsReady(true));
-    });
-    return () => {
-      window.cancelAnimationFrame(raf1);
-      if (raf2) window.cancelAnimationFrame(raf2);
-    };
-  }, []);
+    if (isReady) return;
+    const timer = window.setTimeout(() => {
+      prewarmFormulaBookletKatexSync();
+      setIsReady(true);
+    }, 270);
+    return () => window.clearTimeout(timer);
+  }, [isReady]);
 
   useEffect(() => {
-    if (activeTab === 'pdf') {
-      setPdfLoading(true);
-    }
+    if (activeTab !== 'pdf') return;
+    setPdfLoading(true);
+    const fallback = window.setTimeout(() => setPdfLoading(false), 7000);
+    return () => window.clearTimeout(fallback);
   }, [activeTab, activePdfQual, fitMode]);
 
   const isDrawer = mode === 'drawer';
@@ -857,13 +857,20 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
               <div className="relative flex-1 w-full h-full min-h-[540px] bg-[#0A1020] overflow-hidden">
                 <AnimatePresence>
                   {pdfLoading && (
-                    <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#0A1020]">
+                    <motion.div
+                      key="pdf-loading-overlay"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.16, ease: EASE_SMOOTH }}
+                      className="absolute inset-0 z-10 flex items-center justify-center bg-[#0A1020]"
+                    >
                       <SectionLoader
                         label="Loading official PDF booklet..."
                         sublabel={activePdfQual === 'maths' ? 'A Level Mathematics Formulae' : 'Further Mathematics Formulae'}
                         className="min-h-[240px]"
                       />
-                    </div>
+                    </motion.div>
                   )}
                 </AnimatePresence>
                 <AnimatePresence mode="wait" initial={false}>
@@ -874,6 +881,7 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.2, ease: EASE_SMOOTH }}
                     onLoad={() => setPdfLoading(false)}
+                    onError={() => setPdfLoading(false)}
                     src={`${assetUrl(
                       activePdfQual === 'maths'
                         ? FORMULA_BOOKLET_PDF_URL

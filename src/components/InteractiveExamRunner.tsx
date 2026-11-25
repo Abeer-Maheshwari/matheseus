@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { InteractivePaper, InteractiveQuestion } from '../data/interactiveQuestions';
 import { FormattedMathText } from './MathRenderer';
@@ -186,9 +186,10 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
   const [showPdfDrawer, setShowPdfDrawer] = useState(false);
 
   useEffect(() => {
-    if (showPdfDrawer) {
-      setPdfDrawerLoading(true);
-    }
+    if (!showPdfDrawer) return;
+    setPdfDrawerLoading(true);
+    const fallback = window.setTimeout(() => setPdfDrawerLoading(false), 7000);
+    return () => window.clearTimeout(fallback);
   }, [showPdfDrawer, paper.qpUrl]);
 
   // Modals
@@ -377,33 +378,33 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
   const currentQInfo = getQuestionDisplayInfo(paper, currentQ, currentIndex);
   const paperMaxMarks = paper.totalMarks || paper.questions.reduce((sum, q) => sum + q.totalMarks, 0);
   const isMsPanelOpen = Boolean(currentQ && (revealedSolutions[currentQ.number] || isReviewMode));
+  const resolvedQImgUrl = currentQ?.questionImageUrl ? assetUrl(currentQ.questionImageUrl) : '';
+  const resolvedMsImgUrl = currentQ?.markSchemeImageUrl ? assetUrl(currentQ.markSchemeImageUrl) : '';
 
-  // Check actual question image completion without artificial fixed delay
-  useEffect(() => {
-    if (!isStarted || (isFinished && !isReviewMode)) return;
-    setIsImgReady(false);
-    const raf = window.requestAnimationFrame(() => {
-      if (qImgRef.current?.complete && qImgRef.current.naturalWidth > 0) {
-        setIsImgReady(true);
-      }
-    });
-    return () => window.cancelAnimationFrame(raf);
-  }, [currentIndex, isStarted, isFinished, isReviewMode]);
+  // Sync question image readiness synchronously before paint so cached images never flash a spinner
+  useLayoutEffect(() => {
+    if (!isStarted || (isFinished && !isReviewMode) || !resolvedQImgUrl) return;
+    const el = qImgRef.current;
+    if (el && el.complete && el.naturalWidth > 0) {
+      setIsImgReady(true);
+    } else {
+      setIsImgReady(false);
+    }
+  }, [resolvedQImgUrl, isStarted, isFinished, isReviewMode]);
 
-  // Check actual mark scheme image completion without artificial fixed delay
-  useEffect(() => {
-    if (!isStarted || (isFinished && !isReviewMode) || !isMsPanelOpen) {
+  // Sync mark scheme image readiness synchronously before paint so cached images never flash a spinner
+  useLayoutEffect(() => {
+    if (!isStarted || (isFinished && !isReviewMode) || !isMsPanelOpen || !resolvedMsImgUrl) {
       setIsMsImgReady(false);
       return;
     }
-    setIsMsImgReady(false);
-    const raf = window.requestAnimationFrame(() => {
-      if (msImgRef.current?.complete && msImgRef.current.naturalWidth > 0) {
-        setIsMsImgReady(true);
-      }
-    });
-    return () => window.cancelAnimationFrame(raf);
-  }, [currentIndex, isMsPanelOpen, isStarted, isFinished, isReviewMode]);
+    const el = msImgRef.current;
+    if (el && el.complete && el.naturalWidth > 0) {
+      setIsMsImgReady(true);
+    } else {
+      setIsMsImgReady(false);
+    }
+  }, [resolvedMsImgUrl, isMsPanelOpen, isStarted, isFinished, isReviewMode]);
 
   // Score calculations
   const totalAchievedScore = Object.values(scores).reduce((sum, val) => sum + (val || 0), 0);
@@ -502,8 +503,6 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
 
   const handleNavigateQuestion = (targetIdx: number) => {
     if (targetIdx === currentIndex || targetIdx < 0 || targetIdx >= paper.questions.length) return;
-    setIsImgReady(false);
-    setIsMsImgReady(false);
     setCurrentIndex(targetIdx);
   };
 
@@ -1026,15 +1025,13 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                     </div>
                   )}
                   <img
-                    ref={(el) => {
-                      qImgRef.current = el;
-                      if (el?.complete && el.naturalWidth > 0) setIsImgReady(true);
-                    }}
-                    src={assetUrl(currentQ.questionImageUrl)}
+                    key={resolvedQImgUrl}
+                    ref={qImgRef}
+                    src={resolvedQImgUrl}
                     alt={`Question ${currentQ.number}`}
                     onLoad={() => setIsImgReady(true)}
                     onError={() => setIsImgReady(true)}
-                    className={`w-full max-h-[620px] object-contain select-none mx-auto block transition-opacity duration-300 ${
+                    className={`w-full max-h-[620px] object-contain select-none mx-auto block transition-opacity duration-200 ${
                       isImgLoaded ? 'opacity-100' : 'opacity-0'
                     }`}
                   />
@@ -1197,15 +1194,13 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                           </div>
                         )}
                         <img
-                          ref={(el) => {
-                            msImgRef.current = el;
-                            if (el?.complete && el.naturalWidth > 0) setIsMsImgReady(true);
-                          }}
-                          src={assetUrl(currentQ.markSchemeImageUrl)}
+                          key={resolvedMsImgUrl}
+                          ref={msImgRef}
+                          src={resolvedMsImgUrl}
                           alt={`Question ${currentQ.number} Mark Scheme`}
                           onLoad={() => setIsMsImgReady(true)}
                           onError={() => setIsMsImgReady(true)}
-                          className={`w-full max-h-[620px] object-contain select-none mx-auto block transition-opacity duration-300 ${
+                          className={`w-full max-h-[620px] object-contain select-none mx-auto block transition-opacity duration-200 ${
                             isMsImgLoaded ? 'opacity-100' : 'opacity-0'
                           }`}
                         />
@@ -1551,6 +1546,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
             <iframe
               src={`${assetUrl(paper.qpUrl)}#toolbar=0&navpanes=0&view=FitH`}
               onLoad={() => setPdfDrawerLoading(false)}
+              onError={() => setPdfDrawerLoading(false)}
               className="w-full h-full border-0"
               title={`${paper.title} PDF reference`}
             />

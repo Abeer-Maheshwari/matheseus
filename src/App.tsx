@@ -21,6 +21,7 @@ import {
 } from './utils/progressSync';
 import { getInteractivePaper, InteractivePaper } from './data/interactiveQuestions';
 import { prewarmTopicIndex } from './data/questionIndex';
+import { prewarmFormulaBookletKatexAsync } from './utils/prewarm';
 import { getSettings } from './utils/settings';
 import { pageVariants, overlayFadeVariants, EASE_SMOOTH } from './utils/motion';
 import { PaperEntry, ModuleSection } from './data/papersData';
@@ -78,14 +79,18 @@ export default function App() {
     applyTheme('midnight');
     applyFont('manrope');
 
-    // Build question/topic index when idle so switching to By Topic is instant
+    // Build question/topic index and pre-render formula booklet KaTeX when idle
+    const warm = () => {
+      prewarmTopicIndex();
+      void prewarmFormulaBookletKatexAsync();
+    };
     const ric = (window as unknown as { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback;
     const cancelRic = (window as unknown as { cancelIdleCallback?: (id: number) => void }).cancelIdleCallback;
     if (ric) {
-      const id = ric(() => prewarmTopicIndex(), { timeout: 1200 });
+      const id = ric(warm, { timeout: 1200 });
       return () => cancelRic?.(id);
     }
-    const timer = window.setTimeout(() => prewarmTopicIndex(), 600);
+    const timer = window.setTimeout(warm, 600);
     return () => window.clearTimeout(timer);
   }, []);
 
