@@ -333,6 +333,7 @@ export default function App() {
           {currentTab === 'home' ? (
             <HomePage
               onSelectSubject={handleSelectSubject}
+              onOpenMocks={() => navigateToTab('mock-sets', { scrollToTop: true })}
               onOpenFormulas={() => handleOpenScreen('formulae')}
               onOpenBoundaries={() => handleOpenScreen('boundaries')}
               onOpenTopics={(level) => {
