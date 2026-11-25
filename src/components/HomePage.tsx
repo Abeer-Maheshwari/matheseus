@@ -813,7 +813,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             <div className="rounded-2xl border border-[#6382BF]/25 bg-[#1A2540] p-4 sm:p-5 shadow-2xl space-y-4">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
-                  <span className="font-serif font-bold text-sm text-[#E8ECF4]">Question 1</span>
+                  <span className="font-bold text-sm text-[#E8ECF4]">Question 1</span>
                   <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#4A7BF7]/15 text-[#4A7BF7] border border-[#4A7BF7]/30">
                     Algebra &amp; Functions · June 2024 P1
                   </span>

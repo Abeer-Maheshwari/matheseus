@@ -25,7 +25,7 @@ import {
   isTopicIndexCached,
 } from '../data/questionIndex';
 import { InteractivePaper } from '../data/interactiveQuestions';
-import { contentFadeVariants, PILL_SPRING } from '../utils/motion';
+import { contentFadeVariants, PILL_SPRING, EASE_SMOOTH } from '../utils/motion';
 import { SectionLoader } from './SectionLoader';
 
 interface TopicPracticeViewProps {
@@ -166,7 +166,7 @@ export const TopicPracticeView: React.FC<TopicPracticeViewProps> = ({
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 py-8 space-y-6">
+    <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6">
       {/* Header Banner */}
       <div className="relative overflow-hidden rounded-2xl bg-[#1A2540] border border-[#6382BF]/25 p-6 sm:p-7 shadow-xl">
         <div className="relative z-10">
@@ -386,7 +386,7 @@ export const TopicPracticeView: React.FC<TopicPracticeViewProps> = ({
                     initial={{ opacity: 0, scale: 0.7 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.7 }}
-                    transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                    transition={PILL_SPRING}
                     onClick={() => setSearchQuery('')}
                     className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#7B8FAD] hover:text-[#E8ECF4] p-1 rounded-lg transition-colors"
                   >
@@ -404,7 +404,7 @@ export const TopicPracticeView: React.FC<TopicPracticeViewProps> = ({
                 initial={{ opacity: 0, y: -6 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.18 }}
+                transition={{ duration: 0.18, ease: EASE_SMOOTH }}
                 className="flex flex-wrap items-center gap-1.5 p-3 rounded-xl bg-[#1A2540]/60 border border-[#6382BF]/20 text-xs"
               >
                 <span className="text-[#7B8FAD] font-medium text-[11px] mr-1">Active:</span>
@@ -416,7 +416,7 @@ export const TopicPracticeView: React.FC<TopicPracticeViewProps> = ({
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.8 }}
-                      transition={{ duration: 0.15 }}
+                      transition={{ duration: 0.16, ease: EASE_SMOOTH }}
                       className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#4A7BF7]/15 text-[#4A7BF7] border border-[#4A7BF7]/30"
                     >
                       <span>
@@ -440,7 +440,7 @@ export const TopicPracticeView: React.FC<TopicPracticeViewProps> = ({
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.8 }}
-                      transition={{ duration: 0.15 }}
+                      transition={{ duration: 0.16, ease: EASE_SMOOTH }}
                       className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#4A7BF7]/15 text-[#4A7BF7] border border-[#4A7BF7]/30"
                     >
                       <span>{MODULE_FILTER_OPTIONS.find((m) => m.id === selectedModule)?.name || selectedModule}</span>
@@ -456,7 +456,7 @@ export const TopicPracticeView: React.FC<TopicPracticeViewProps> = ({
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.8 }}
-                      transition={{ duration: 0.15 }}
+                      transition={{ duration: 0.16, ease: EASE_SMOOTH }}
                       className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#4A7BF7]/15 text-[#4A7BF7] border border-[#4A7BF7]/30"
                     >
                       <span>{sourceFilter === 'past-papers' ? 'Past Papers Only' : 'Mock Sets Only'}</span>

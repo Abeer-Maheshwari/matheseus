@@ -115,7 +115,7 @@ export const GradeBoundariesModal: React.FC<GradeBoundariesModalProps> = ({ onCl
 
   const containerClasses =
     mode === 'page'
-      ? 'max-w-4xl mx-auto px-4 py-8 space-y-6 text-[#E8ECF4]'
+      ? 'max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6 text-[#E8ECF4]'
       : 'fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#0A1020]/80 backdrop-blur-sm text-[#E8ECF4]';
 
   const cardClasses =
@@ -135,7 +135,7 @@ export const GradeBoundariesModal: React.FC<GradeBoundariesModalProps> = ({ onCl
               <Award size={18} />
             </div>
             <div>
-              <h2 className="font-serif font-bold text-[#E8ECF4] text-base">Grade Boundaries & Mark Calculator</h2>
+              <h2 className="font-bold text-[#E8ECF4] text-base">Grade Boundaries & Mark Calculator</h2>
               <p className="text-xs text-[#7B8FAD]">Raw mark boundaries (2018 – 2026)</p>
             </div>
           </div>

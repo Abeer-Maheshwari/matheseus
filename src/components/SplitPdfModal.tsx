@@ -18,6 +18,7 @@ import { FormulaBookletModal } from './FormulaBookletModal';
 import { playExamChime } from '../utils/audio';
 import { assetUrl } from '../utils/assets';
 import { saveExamAttempt } from '../utils/attempts';
+import { PILL_SPRING, EASE_SMOOTH } from '../utils/motion';
 
 interface SplitPdfModalProps {
   title: string;
@@ -211,7 +212,7 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
                   <motion.div
                     layoutId="splitpdf-mode-pill"
                     className="absolute inset-0 bg-[#4A7BF7] rounded-md shadow-sm"
-                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                    transition={PILL_SPRING}
                   />
                 )}
                 <span className="relative z-10 flex items-center gap-1">
@@ -232,7 +233,7 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
                   <motion.div
                     layoutId="splitpdf-mode-pill"
                     className="absolute inset-0 bg-[#4A7BF7] rounded-md shadow-sm"
-                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                    transition={PILL_SPRING}
                   />
                 )}
                 <span className="relative z-10 flex items-center gap-1">
@@ -253,7 +254,7 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
                   <motion.div
                     layoutId="splitpdf-mode-pill"
                     className="absolute inset-0 bg-[#4A7BF7] rounded-md shadow-sm"
-                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                    transition={PILL_SPRING}
                   />
                 )}
                 <span className="relative z-10 flex items-center gap-1">
@@ -373,7 +374,7 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
               initial={{ x: 40, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: 40, opacity: 0 }}
-              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.28, ease: EASE_SMOOTH }}
               className="w-full md:w-[580px] lg:w-[680px] border-l border-[#6382BF]/30 bg-[#1A2540] flex flex-col h-full shadow-2xl shrink-0 z-30"
             >
               <FormulaBookletModal mode="drawer" onClose={() => setShowFormulaDrawer(false)} />

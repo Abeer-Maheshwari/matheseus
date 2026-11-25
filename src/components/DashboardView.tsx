@@ -8,7 +8,7 @@ import { MODULES_DATA, PaperEntry, ModuleSection } from '../data/papersData';
 import { MOCK_MODULES_DATA } from '../data/mockSetsData';
 import { getInteractivePaper } from '../data/interactiveQuestions';
 import { ScoreReportModal } from './ScoreReportModal';
-import { contentFadeVariants, overlayFadeVariants, PILL_SPRING } from '../utils/motion';
+import { contentFadeVariants, overlayFadeVariants, PILL_SPRING, EASE_SMOOTH } from '../utils/motion';
 import {
   User as UserIcon,
   Award,
@@ -311,7 +311,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-6">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6">
       {/* Header + Account Card */}
       <div className="rounded-2xl bg-[#1A2540] border border-[#6382BF]/30 p-5 sm:p-6 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3.5">
@@ -383,7 +383,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.28, ease: EASE_SMOOTH }}
             className="overflow-hidden"
           >
             <div className="rounded-2xl bg-[#1A2540] border border-[#4A7BF7]/40 p-5 grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">

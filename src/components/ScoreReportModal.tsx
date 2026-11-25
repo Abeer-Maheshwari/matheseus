@@ -5,6 +5,7 @@ import { InteractivePaper, getInteractivePaper } from '../data/interactiveQuesti
 import { getQuestionDisplayInfo } from './InteractiveExamRunner';
 import { FormattedMathText } from './MathRenderer';
 import { assetUrl } from '../utils/assets';
+import { EASE_SMOOTH, overlayFadeVariants } from '../utils/motion';
 import {
   Award,
   X,
@@ -197,7 +198,7 @@ export const ScoreReportScreen: React.FC<ScoreReportScreenProps> = ({
                     <Award size={14} />
                     <span>Score Report</span>
                   </div>
-                  <h2 className="text-xl sm:text-2xl font-bold font-serif text-[#E8ECF4] pt-1">
+                  <h2 className="text-xl sm:text-2xl font-bold text-[#E8ECF4] pt-1">
                     {attempt.paperTitle || paperData.title}
                   </h2>
                   <p className="text-xs text-[#7B8FAD] flex items-center gap-2 flex-wrap">
@@ -380,7 +381,7 @@ export const ScoreReportScreen: React.FC<ScoreReportScreenProps> = ({
                               initial={{ opacity: 0, height: 0 }}
                               animate={{ opacity: 1, height: 'auto' }}
                               exit={{ opacity: 0, height: 0 }}
-                              transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
+                              transition={{ duration: 0.3, ease: EASE_SMOOTH }}
                               className="overflow-hidden border-t border-[#6382BF]/15 bg-[#070B14]/70"
                             >
                               <div className="p-4 sm:p-5 grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -548,10 +549,10 @@ export const ScoreReportScreen: React.FC<ScoreReportScreenProps> = ({
         {lightboxDiagram && (
           <motion.div
             key="review-lightbox"
-            initial={{ opacity: 0, scale: 0.985 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.985 }}
-            transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+            variants={overlayFadeVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
             className="fixed inset-0 z-[60] bg-[#070B14] flex flex-col p-3 sm:p-4"
           >
             <div className="h-12 bg-[#1A2540] border border-[#6382BF]/30 rounded-xl px-4 flex items-center justify-between shrink-0 shadow-lg mb-3">

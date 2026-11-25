@@ -154,7 +154,7 @@ export const MockSetsView: React.FC<MockSetsViewProps> = ({
   const completedCount = activeModule.papers.filter((p) => completedMap[p.id] || !!attemptsMap[p.id]).length;
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 py-8 space-y-6">
+    <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6">
       {/* Subject Selector Tabs & View Mode Switcher */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#6382BF]/20 pb-3">
         <div className="p-1 rounded-2xl bg-[#0A1020] border border-[#6382BF]/30 inline-flex items-center gap-1 shadow-inner">

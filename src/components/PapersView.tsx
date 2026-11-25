@@ -191,7 +191,7 @@ export const PapersView: React.FC<PapersViewProps> = ({
   const filteredPapers = activeModule.papers;
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 py-8 space-y-6">
+    <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6">
       {/* Subject Selector Tabs */}
       <div className="flex items-center gap-3 border-b border-[#6382BF]/20 pb-3 overflow-x-auto scrollbar-none">
         <div className="p-1 rounded-2xl bg-[#0A1020] border border-[#6382BF]/30 inline-flex items-center gap-1 shadow-inner">

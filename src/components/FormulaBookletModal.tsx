@@ -153,7 +153,7 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
   const containerClasses = isDrawer
     ? 'w-full h-full flex flex-col overflow-hidden bg-[#1A2540]'
     : mode === 'page'
-    ? 'w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-[#E8ECF4]'
+    ? 'w-full max-w-6xl mx-auto px-4 sm:px-6 py-8 text-[#E8ECF4]'
     : 'fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-[#0A1020]/80 backdrop-blur-sm text-[#E8ECF4]';
 
   const cardClasses = isDrawer
@@ -172,7 +172,7 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
               <Sigma size={isDrawer ? 17 : 20} />
             </div>
             <div>
-              <h3 className={`font-serif font-bold text-[#E8ECF4] ${isDrawer ? 'text-sm' : 'text-base sm:text-lg'}`}>
+              <h3 className={`font-bold text-[#E8ECF4] ${isDrawer ? 'text-sm' : 'text-base sm:text-lg'}`}>
                 Formulae Booklet & Statistical Tables
               </h3>
               <p className="text-xs text-[#7B8FAD]">
@@ -415,7 +415,7 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
                               initial={{ opacity: 0, scale: 0.75 }}
                               animate={{ opacity: 1, scale: 1 }}
                               exit={{ opacity: 0, scale: 0.75 }}
-                              transition={{ duration: 0.14 }}
+                              transition={{ duration: 0.16, ease: EASE_SMOOTH }}
                               onClick={() => setSearch('')}
                               className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-lg text-[#7B8FAD] hover:text-[#E8ECF4] hover:bg-[#1E2B4A] transition-colors"
                               title="Clear search"
@@ -524,7 +524,7 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
                                                         initial={{ scale: 0.7, opacity: 0 }}
                                                         animate={{ scale: 1, opacity: 1 }}
                                                         exit={{ scale: 0.7, opacity: 0 }}
-                                                        transition={{ duration: 0.14 }}
+                                                        transition={{ duration: 0.16, ease: EASE_SMOOTH }}
                                                         className="block text-emerald-400"
                                                       >
                                                         <Check size={12} />
@@ -535,7 +535,7 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
                                                         initial={{ scale: 0.7, opacity: 0 }}
                                                         animate={{ scale: 1, opacity: 1 }}
                                                         exit={{ scale: 0.7, opacity: 0 }}
-                                                        transition={{ duration: 0.14 }}
+                                                        transition={{ duration: 0.16, ease: EASE_SMOOTH }}
                                                         className="block"
                                                       >
                                                         <Copy size={12} />

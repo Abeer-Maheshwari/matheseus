@@ -10,6 +10,7 @@ import { saveExamAttempt, getExamAttempts } from '../utils/attempts';
 import { assetUrl } from '../utils/assets';
 import { saveExamDraft, clearExamDraft } from '../utils/progressSync';
 import { ScoreReportScreen } from './ScoreReportModal';
+import { EASE_SMOOTH, overlayFadeVariants, modalPanelVariants } from '../utils/motion';
 import { 
   BookOpen, 
   Flag, 
@@ -965,7 +966,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.2, ease: EASE_SMOOTH }}
             className="max-w-4xl mx-auto space-y-6 pb-12"
           >
           {/* Question Card */}
@@ -973,7 +974,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
             {/* Question Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#6382BF]/25 gap-3">
               <div className="flex items-center gap-3 flex-wrap">
-                <span className="text-xl sm:text-2xl font-bold font-serif text-[#E8ECF4]">
+                <span className="text-xl sm:text-2xl font-bold text-[#E8ECF4]">
                   Question {currentQInfo.displayNumber}
                 </span>
                 {currentQInfo.hasSections && (
@@ -1159,7 +1160,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                     initial={{ opacity: 0, height: 0, y: -6 }}
                     animate={{ opacity: 1, height: 'auto', y: 0 }}
                     exit={{ opacity: 0, height: 0, y: -6 }}
-                    transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{ duration: 0.34, ease: EASE_SMOOTH }}
                     className="overflow-hidden"
                   >
                     <div className="p-4 sm:p-5 rounded-2xl bg-[#0A1020]/90 border border-[#4A7BF7]/40 space-y-4 shadow-lg">
@@ -1393,7 +1394,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
             initial={{ opacity: 0, scale: 0.985 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.985 }}
-            transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.24, ease: EASE_SMOOTH }}
             className="fixed inset-0 z-50 bg-[#070B14] flex flex-col p-3 sm:p-4"
           >
           {/* Lightbox Toolbar */}
@@ -1483,7 +1484,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.24 }}
+              transition={{ duration: 0.24, ease: EASE_SMOOTH }}
               className="fixed inset-0 z-40 bg-black/45 backdrop-blur-[2px]"
               onClick={() => setShowFormulaDrawer(false)}
             />
@@ -1492,7 +1493,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
               initial={{ x: '100%', opacity: 0.6 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: '100%', opacity: 0.6 }}
-              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.28, ease: EASE_SMOOTH }}
               className="fixed inset-y-0 right-0 z-50 w-full sm:w-[580px] md:w-[680px] lg:w-[760px] bg-[#1A2540] border-l border-[#6382BF]/30 shadow-2xl flex flex-col"
             >
               <FormulaBookletModal
@@ -1515,7 +1516,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.24 }}
+              transition={{ duration: 0.24, ease: EASE_SMOOTH }}
               className="fixed inset-0 z-40 bg-black/45 backdrop-blur-[2px]"
               onClick={() => setShowPdfDrawer(false)}
             />
@@ -1524,7 +1525,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
               initial={{ x: '-100%', opacity: 0.6 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: '-100%', opacity: 0.6 }}
-              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.28, ease: EASE_SMOOTH }}
               className="fixed inset-y-0 left-0 z-50 w-full sm:w-[640px] md:w-[720px] bg-[#1A2540] border-r border-[#6382BF]/30 shadow-2xl flex flex-col"
             >
           <div className="h-12 bg-[#0A1020] px-4 border-b border-[#6382BF]/30 flex items-center justify-between shrink-0">
@@ -1569,17 +1570,17 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
         {showFinishConfirm && (
           <motion.div
             key="finish-confirm-backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.22 }}
+            variants={overlayFadeVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0A1020]/90 backdrop-blur-sm"
           >
             <motion.div
-              initial={{ opacity: 0, scale: 0.96, y: 8 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96, y: 8 }}
-              transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
+              variants={modalPanelVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
               className="bg-[#1A2540] border border-[#6382BF]/40 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl"
             >
             <div className="flex items-center gap-3 text-[#E8ECF4]">
