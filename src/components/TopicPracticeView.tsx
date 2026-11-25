@@ -22,7 +22,6 @@ import {
   getTopicGroups,
   createTopicInteractivePaper,
   createSingleQuestionInteractivePaper,
-  isTopicIndexCached,
 } from '../data/questionIndex';
 import { InteractivePaper } from '../data/interactiveQuestions';
 import { contentFadeVariants, PILL_SPRING, EASE_SMOOTH } from '../utils/motion';
@@ -48,19 +47,19 @@ export const TopicPracticeView: React.FC<TopicPracticeViewProps> = ({
 
   // Expanded topic IDs
   const [expandedTopicIds, setExpandedTopicIds] = useState<Set<string>>(new Set());
-  // Defer cold index build until after mount so tab entry shows loader smoothly instead of stalling
-  const [indexReady, setIndexReady] = useState<boolean>(() => isTopicIndexCached());
-  // Defer off-screen cards until after the tab enter transition finishes so mounting is instant
+  // Defer topic card list render briefly until page transition completes (matches Formulae & Boundaries loader)
+  const [indexReady, setIndexReady] = useState<boolean>(false);
+  // Defer off-screen cards until shortly after initial topics fade in
   const [showAllTopics, setShowAllTopics] = useState<boolean>(false);
 
   useEffect(() => {
-    const timers: number[] = [];
-    if (!indexReady) {
-      timers.push(window.setTimeout(() => setIndexReady(true), 80));
-    }
-    timers.push(window.setTimeout(() => setShowAllTopics(true), 250));
-    return () => timers.forEach((id) => window.clearTimeout(id));
-  }, [indexReady]);
+    const readyTimer = window.setTimeout(() => setIndexReady(true), 180);
+    const expandTimer = window.setTimeout(() => setShowAllTopics(true), 280);
+    return () => {
+      window.clearTimeout(readyTimer);
+      window.clearTimeout(expandTimer);
+    };
+  }, []);
 
   const toggleTopicExpand = (topicId: string) => {
     setExpandedTopicIds((prev) => {
@@ -184,15 +183,15 @@ export const TopicPracticeView: React.FC<TopicPracticeViewProps> = ({
             <div className="grid grid-cols-3 gap-2.5 shrink-0">
               <div className="bg-[#0A1020]/70 border border-[#6382BF]/20 rounded-xl px-3.5 py-2 text-center">
                 <div className="text-[10px] text-[#7B8FAD] font-medium uppercase tracking-wider">Topics</div>
-                <div className="text-lg font-bold text-[#E8ECF4] mt-0.5">{topicGroups.length}</div>
+                <div className="text-lg font-bold text-[#E8ECF4] mt-0.5">{indexReady ? topicGroups.length : '–'}</div>
               </div>
               <div className="bg-[#0A1020]/70 border border-[#6382BF]/20 rounded-xl px-3.5 py-2 text-center">
                 <div className="text-[10px] text-[#7B8FAD] font-medium uppercase tracking-wider">Questions</div>
-                <div className="text-lg font-bold text-[#4A7BF7] mt-0.5">{totalQuestionsCount}</div>
+                <div className="text-lg font-bold text-[#4A7BF7] mt-0.5">{indexReady ? totalQuestionsCount : '–'}</div>
               </div>
               <div className="bg-[#0A1020]/70 border border-[#6382BF]/20 rounded-xl px-3.5 py-2 text-center">
                 <div className="text-[10px] text-[#7B8FAD] font-medium uppercase tracking-wider">Marks</div>
-                <div className="text-lg font-bold text-[#E8ECF4] mt-0.5">{totalMarksCount}</div>
+                <div className="text-lg font-bold text-[#E8ECF4] mt-0.5">{indexReady ? totalMarksCount : '–'}</div>
               </div>
             </div>
           </div>
@@ -507,7 +506,7 @@ export const TopicPracticeView: React.FC<TopicPracticeViewProps> = ({
               <SectionLoader
                 key="topic-loading"
                 label="Loading topic questions..."
-                sublabel="Indexing Past Papers & Official Mock Sets"
+                sublabel="Past Papers & Official Edexcel Mock Sets"
                 className="min-h-[320px] rounded-2xl bg-[#1A2540]/50 border border-[#6382BF]/20"
               />
             ) : topicGroups.length === 0 ? (
