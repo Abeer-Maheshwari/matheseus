@@ -12,6 +12,7 @@ import { TopicPracticeView } from './components/TopicPracticeView';
 import { ExamTimerModal } from './components/ExamTimerModal';
 import { DashboardView } from './components/DashboardView';
 import { AuthModal } from './components/AuthModal';
+import { SettingsModal } from './components/SettingsModal';
 import { useAuth } from './context/AuthContext';
 import {
   readLocalDoneMap,
@@ -133,6 +134,7 @@ export default function App() {
   const [activeInteractivePaper, setActiveInteractivePaper] = useState<InteractivePaper | null>(null);
   const [topicsInitialLevel, setTopicsInitialLevel] = useState<'all' | 'as' | 'a2'>('all');
   const [showTimerModal, setShowTimerModal] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
 
   // Completed tracking (synced with localStorage + Supabase when logged in)
   const [completedMap, setCompletedMap] = useState<Record<string, boolean>>(() =>
@@ -251,6 +253,7 @@ export default function App() {
         onOpenBoundaries={() => handleOpenScreen('boundaries')}
         onOpenFormulas={() => handleOpenScreen('formulae')}
         onOpenAuth={(mode) => setAuthModalView(mode || 'signin')}
+        onOpenSettings={() => setShowSettingsModal(true)}
         onOpenTimer={() => setShowTimerModal(true)}
       />
 
@@ -318,6 +321,10 @@ export default function App() {
                 setTopicsInitialLevel(level || 'all');
                 navigateToTab('topics', { scrollToTop: true });
               }}
+              onOpenPractice={(paper, module) => handleLaunchPractice(paper, module)}
+              onOpenSplitView={(title, qpUrl, msUrl) =>
+                setPdfModal({ title, qpUrl, msUrl, mode: 'split' })
+              }
             />
           ) : currentTab === 'topics' ? (
             <TopicPracticeView
@@ -504,6 +511,16 @@ export default function App() {
           <AuthModal
             initialView={authModalView}
             onClose={() => setAuthModalView(null)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* User Settings Modal */}
+      <AnimatePresence>
+        {showSettingsModal && (
+          <SettingsModal
+            onClose={() => setShowSettingsModal(false)}
+            onOpenAuth={(mode) => setAuthModalView(mode || 'signin')}
           />
         )}
       </AnimatePresence>

@@ -1,5 +1,8 @@
+import { getSettings } from './settings';
+
 // Simple Web Audio API beeper / chime for timer notification
-export function playExamChime() {
+export function playExamChime(forcePlay = false) {
+  if (!forcePlay && !getSettings().soundEffectsEnabled) return;
   try {
     const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
     if (!AudioContextClass) return;

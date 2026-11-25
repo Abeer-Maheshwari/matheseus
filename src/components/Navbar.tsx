@@ -14,6 +14,7 @@ import {
   User as UserIcon,
   LogOut,
   ChevronDown,
+  Settings,
 } from 'lucide-react';
 
 export type AppTab =
@@ -33,6 +34,7 @@ interface NavbarProps {
   onOpenBoundaries: () => void;
   onOpenFormulas: () => void;
   onOpenAuth: (initialView?: 'signin' | 'signup') => void;
+  onOpenSettings?: () => void;
   isExamMode?: boolean;
   onOpenTimer?: () => void;
 }
@@ -43,6 +45,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenBoundaries,
   onOpenFormulas,
   onOpenAuth,
+  onOpenSettings,
   isExamMode = false,
   onOpenTimer,
 }) => {
@@ -282,6 +285,19 @@ export const Navbar: React.FC<NavbarProps> = ({
                         <LayoutDashboard size={13} className="text-[#4A7BF7]" />
                         <span>Dashboard</span>
                       </button>
+                      {onOpenSettings && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setAccountMenuOpen(false);
+                            onOpenSettings();
+                          }}
+                          className="w-full px-3 py-2 rounded-lg text-left text-xs text-[#E8ECF4] hover:bg-[#0A1020] flex items-center gap-2"
+                        >
+                          <Settings size={13} className="text-[#4A7BF7]" />
+                          <span>Settings</span>
+                        </button>
+                      )}
                       <button
                         type="button"
                         onClick={() => {
@@ -302,14 +318,26 @@ export const Navbar: React.FC<NavbarProps> = ({
               </AnimatePresence>
             </div>
           ) : (
-            <button
-              type="button"
-              onClick={() => onOpenAuth('signin')}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#4A7BF7] hover:bg-[#3D6CE0] text-white font-semibold shadow-sm transition-colors"
-            >
-              <UserIcon size={13} />
-              <span className="hidden sm:inline">Sign In</span>
-            </button>
+            <div className="flex items-center gap-1.5">
+              {onOpenSettings && (
+                <button
+                  type="button"
+                  onClick={onOpenSettings}
+                  className="p-2 rounded-lg bg-[#0A1020] hover:bg-[#1A2540] border border-[#6382BF]/30 text-[#7B8FAD] hover:text-[#E8ECF4] transition-colors"
+                  title="Settings"
+                >
+                  <Settings size={14} />
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => onOpenAuth('signin')}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#4A7BF7] hover:bg-[#3D6CE0] text-white font-semibold shadow-sm transition-colors"
+              >
+                <UserIcon size={13} />
+                <span className="hidden sm:inline">Sign In</span>
+              </button>
+            </div>
           )}
         </div>
       </div>
