@@ -61,3 +61,12 @@ export const deleteExamAttempt = (idOrPaperId: string): ExamAttempt[] => {
     return [];
   }
 };
+
+export const clearLocalAttempts = (): void => {
+  try {
+    localStorage.setItem(ATTEMPTS_STORAGE_KEY, '[]');
+    window.dispatchEvent(new CustomEvent('matheseus_attempts_updated'));
+  } catch (e) {
+    console.warn('Failed to clear local attempts', e);
+  }
+};

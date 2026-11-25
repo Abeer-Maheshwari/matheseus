@@ -18,6 +18,7 @@ import { FormulaBookletModal } from './FormulaBookletModal';
 import { playExamChime } from '../utils/audio';
 import { assetUrl } from '../utils/assets';
 import { saveExamAttempt } from '../utils/attempts';
+import { getSettings } from '../utils/settings';
 import { PILL_SPRING, EASE_SMOOTH } from '../utils/motion';
 
 interface SplitPdfModalProps {
@@ -47,8 +48,15 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
   onSaveScore,
 }) => {
   // If in practice mode, start in QP view so student focuses on question paper without seeing MS
-  const resolvedQpUrl = assetUrl(qpUrl);
-  const resolvedMsUrl = msUrl ? assetUrl(msUrl) : undefined;
+  const defaultPdfFit = getSettings().defaultPdfFit;
+  const resolvedQpRaw = assetUrl(qpUrl);
+  const resolvedMsRaw = msUrl ? assetUrl(msUrl) : undefined;
+  const resolvedQpUrl = resolvedQpRaw.includes('#') ? resolvedQpRaw : `${resolvedQpRaw}#view=${defaultPdfFit}`;
+  const resolvedMsUrl = resolvedMsRaw
+    ? resolvedMsRaw.includes('#')
+      ? resolvedMsRaw
+      : `${resolvedMsRaw}#view=${defaultPdfFit}`
+    : undefined;
   const [mode, setMode] = useState<'split' | 'qp' | 'ms'>(
     !msUrl ? 'qp' : isPractice ? 'qp' : initialMode === 'split' ? 'split' : 'qp'
   );

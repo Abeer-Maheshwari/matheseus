@@ -21,6 +21,7 @@ import {
 } from './utils/progressSync';
 import { getInteractivePaper, InteractivePaper } from './data/interactiveQuestions';
 import { prewarmTopicIndex } from './data/questionIndex';
+import { getSettings } from './utils/settings';
 import { pageVariants, overlayFadeVariants, EASE_SMOOTH } from './utils/motion';
 import { PaperEntry, ModuleSection } from './data/papersData';
 import { ExamAttempt } from './types';
@@ -97,7 +98,9 @@ export default function App() {
     if (!didInitialAuthRouteRef.current) {
       didInitialAuthRouteRef.current = true;
       if (currId && currentTab === 'home') {
-        setCurrentTab('dashboard');
+        const preferredTab = getSettings().defaultLandingTab;
+        setCurrentTab(preferredTab);
+        if (preferredTab === 'maths') setActiveModuleId('p1');
       }
     } else if (!prevId && currId) {
       navigateToTab('dashboard', { scrollToTop: true });

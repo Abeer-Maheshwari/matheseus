@@ -159,6 +159,20 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     };
   }, [attempts, paperLookup]);
 
+  const weeklyProgressCount = useMemo(() => {
+    const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    const recentPapers = new Set<string>();
+    for (const a of attempts) {
+      const ts = new Date(a.completedAt).getTime();
+      if (!Number.isNaN(ts) && ts >= sevenDaysAgo) {
+        recentPapers.add(a.paperId);
+      }
+    }
+    return recentPapers.size;
+  }, [attempts]);
+
+  const weeklyGoalTarget = profile?.weeklyGoalPapers || 2;
+
   const totalTimeFormatted = useMemo(() => {
     const secs = attempts.reduce((s, a) => s + (a.timeSpentSeconds || 0), 0);
     const hrs = Math.floor(secs / 3600);
@@ -329,7 +343,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               </span>
             </div>
             <p className="text-xs text-[#7B8FAD] mt-0.5">
-              {`${user.email} · Targets: Maths ${profile?.targetGradeMaths || 'A*'} · FM ${profile?.targetGradeFm || 'A*'}`}
+              {`${user.email} · Targets: Maths ${profile?.targetGradeMaths || 'A*'} · FM ${profile?.targetGradeFm || 'A*'} · Weekly Goal: ${weeklyProgressCount}/${weeklyGoalTarget}`}
             </p>
           </div>
         </div>

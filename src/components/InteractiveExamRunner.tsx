@@ -10,6 +10,7 @@ import { saveExamAttempt, getExamAttempts } from '../utils/attempts';
 import { assetUrl } from '../utils/assets';
 import { saveExamDraft, clearExamDraft } from '../utils/progressSync';
 import { ScoreReportScreen } from './ScoreReportModal';
+import { getSettings } from '../utils/settings';
 import { EASE_SMOOTH, overlayFadeVariants, modalPanelVariants } from '../utils/motion';
 import { 
   BookOpen, 
@@ -121,7 +122,9 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
 }) => {
   // Pre-exam setup
   const [isStarted, setIsStarted] = useState(initialReviewMode);
-  const [timingMode, setTimingMode] = useState<TimingMode>(initialAttempt?.timingMode || 'timed');
+  const [timingMode, setTimingMode] = useState<TimingMode>(
+    () => initialAttempt?.timingMode || getSettings().defaultTimingMode
+  );
 
   // Active question index & scroll ref
   const [currentIndex, setCurrentIndex] = useState(initialQuestionIndex);
@@ -760,7 +763,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                 handleCloseRunner();
               } else if (isReviewMode) {
                 setIsReviewMode(false);
-              } else if (Object.keys(scores).length > 0 && !isFinished) {
+              } else if (getSettings().confirmBeforeExit && Object.keys(scores).length > 0 && !isFinished) {
                 setShowFinishConfirm(true);
               } else {
                 handleCloseRunner();
@@ -959,7 +962,11 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
         <AnimatePresence
           mode="wait"
           initial={false}
-          onExitComplete={() => mainStageRef.current?.scrollTo({ top: 0 })}
+          onExitComplete={() => {
+            if (getSettings().autoScrollNextQuestion) {
+              mainStageRef.current?.scrollTo({ top: 0 });
+            }
+          }}
         >
           <motion.div
             key={currentQ.number}

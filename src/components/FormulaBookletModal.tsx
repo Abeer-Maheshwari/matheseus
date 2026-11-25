@@ -8,6 +8,7 @@ import {
 import { STATISTICAL_TABLES } from '../data/statisticalTables';
 import { MathRenderer } from './MathRenderer';
 import { assetUrl } from '../utils/assets';
+import { getSettings } from '../utils/settings';
 import { contentFadeVariants, PILL_SPRING, EASE_SMOOTH } from '../utils/motion';
 import { SectionLoader } from './SectionLoader';
 import {
@@ -63,9 +64,9 @@ export const FormulaBookletModal: React.FC<FormulaBookletModalProps> = ({ onClos
   const [highlightedRowIdx, setHighlightedRowIdx] = useState<number | null>(null);
   const activeTable = STATISTICAL_TABLES.find((t) => t.id === activeTableId) || STATISTICAL_TABLES[0];
 
-  // PDF Viewer state — default FitH so wider page fills legibly
+  // PDF Viewer state — uses preferred Fit setting from SettingsModal
   const [activePdfQual, setActivePdfQual] = useState<'maths' | 'fm'>('maths');
-  const [fitMode, setFitMode] = useState<'FitH' | 'Fit'>('FitH');
+  const [fitMode, setFitMode] = useState<'FitH' | 'Fit'>(() => getSettings().defaultPdfFit);
   const [isReady, setIsReady] = useState(false);
   const [pdfLoading, setPdfLoading] = useState(true);
 
