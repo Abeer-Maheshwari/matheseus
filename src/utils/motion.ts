@@ -2,6 +2,15 @@ import type { Variants } from 'motion/react';
 
 export const EASE_SMOOTH = [0.22, 1, 0.36, 1] as const;
 
+/**
+ * Global backup transition applied automatically by <MotionConfig> whenever
+ * an individual motion element does not specify its own timing.
+ */
+export const DEFAULT_TRANSITION = {
+  duration: 0.22,
+  ease: EASE_SMOOTH,
+} as const;
+
 export const PILL_SPRING = {
   type: 'spring' as const,
   stiffness: 460,
