@@ -39,8 +39,8 @@ const FEATURES = [
   },
   {
     icon: FileCheck2,
-    title: '59 Curated Mock Sets',
-    body: 'Dedicated Maths and Further Maths mock series structured by paper code with full practice and mark scheme support.',
+    title: '59 Official Mock Sets',
+    body: 'Official Pearson Edexcel Maths and Further Maths mock sets structured by paper code with full mark schemes.',
   },
   {
     icon: ListFilter,
@@ -125,7 +125,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         <p className="mx-auto mt-5 max-w-2xl text-sm sm:text-base text-[#7B8FAD] leading-relaxed">
           matheseus brings together the latest A Level Maths &amp; Further Maths past papers up to{' '}
           <span className="text-[#E8ECF4] font-medium">June 2026</span>,{' '}
-          <span className="text-[#E8ECF4] font-medium">59 curated mock sets</span>, topic-indexed question runs, and official mark schemes in one fast workspace.
+          <span className="text-[#E8ECF4] font-medium">59 official Pearson Edexcel mock sets</span>, topic-indexed question runs, and official mark schemes in one fast workspace.
         </p>
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5">
@@ -313,7 +313,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 </span>
               </div>
               <p className="text-xs text-[#7B8FAD] mb-4 leading-relaxed">
-                Exam-style mock series plus Grade Boundaries and the Edexcel Formula Booklet.
+                Official Pearson Edexcel mock sets plus Grade Boundaries and the Formula Booklet.
               </p>
 
               <div className="space-y-2 mb-5 text-xs">

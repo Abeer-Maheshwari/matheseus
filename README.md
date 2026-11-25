@@ -20,7 +20,7 @@
 </p>
 
 **matheseus** brings the latest **Pearson Edexcel A Level Maths (`9MA0`)** and **Further Maths (`9FM0`)**
-past papers (including **2025 & 2026** series) together with **59 curated Mock Sets**, question-by-question
+past papers (including **2025 & 2026** series) together with **59 official Pearson Edexcel Mock Sets**, question-by-question
 practice, official mark schemes, and cross-device progress tracking at [matheseus.freedev.app](https://matheseus.freedev.app).
 
 </div>
@@ -45,9 +45,9 @@ practice, official mark schemes, and cross-device progress tracking at [matheseu
 
 **Mock Sets**
 
-- **59 Mock Sets** spanning Maths and Further Maths (`Set 1` onwards)
+- **59 official Pearson Edexcel Mock Sets** spanning Maths and Further Maths (`Set 1` onwards)
 - Organised by mock series alongside module breakdowns
-- Full Interactive Practice Mode and Mark Scheme review for mock papers
+- Full Interactive Practice Mode and Mark Scheme review for official mock papers
 - Tracked separately in Dashboard Module Coverage and Attempt History
 
 </td>
