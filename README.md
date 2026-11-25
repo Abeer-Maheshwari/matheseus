@@ -10,7 +10,7 @@
   <a href="https://matheseus.freedev.app"><img alt="Live Site" src="https://img.shields.io/badge/WEBSITE-matheseus.freedev.app-4A7BF7?style=for-the-badge"></a>
   <img alt="Specs" src="https://img.shields.io/badge/EDEXCEL-9MA0_%26_9FM0-1A2540?style=for-the-badge">
   <img alt="Latest Papers" src="https://img.shields.io/badge/PAST_PAPERS-2018--2026-2EA44F?style=for-the-badge">
-  <img alt="Mock Sets" src="https://img.shields.io/badge/MOCK_SETS-59_PAPERS-6a3fb5?style=for-the-badge">
+  <img alt="Mock Sets" src="https://img.shields.io/badge/MOCK_SETS-50%2B_PAPERS-6a3fb5?style=for-the-badge">
   <br>
   <img alt="React 19" src="https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB">
   <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
@@ -20,7 +20,7 @@
 </p>
 
 **matheseus** brings the latest **Pearson Edexcel A Level Maths (`9MA0`)** and **Further Maths (`9FM0`)**
-past papers (including **2025 & 2026** series) together with **59 official Pearson Edexcel Mock Sets**, question-by-question
+past papers (including **2025 & 2026** series) together with **50+ official Pearson Edexcel Mock Sets**, question-by-question
 practice, official mark schemes, and cross-device progress tracking at [matheseus.freedev.app](https://matheseus.freedev.app).
 
 </div>
@@ -45,7 +45,7 @@ practice, official mark schemes, and cross-device progress tracking at [matheseu
 
 **Mock Sets**
 
-- **59 official Pearson Edexcel Mock Sets** spanning Maths and Further Maths (`Set 1` onwards)
+- **50+ official Pearson Edexcel Mock Sets** spanning Maths and Further Maths (`Set 1` onwards)
 - Organised by mock series alongside module breakdowns
 - Full Interactive Practice Mode and Mark Scheme review for official mock papers
 - Tracked separately in Dashboard Module Coverage and Attempt History
@@ -57,7 +57,7 @@ practice, official mark schemes, and cross-device progress tracking at [matheseu
 
 **Questions by Topic**
 
-- **1,478 questions** (**12,775 marks**) indexed across **68 topics**
+- **1,400+ questions** (**12,000+ marks**) indexed across **65+ topics**
 - Filter by subject (`9MA0`, `9FM0`, `8MA0`, `8FM0`), module, or keyword
 - Switch source between All, Past Papers only, or Mock Sets only
 - Launch focused topic runs under exam conditions
@@ -79,7 +79,7 @@ practice, official mark schemes, and cross-device progress tracking at [matheseu
 
 **Dashboard & Sync**
 
-- Completion progress across `166` tracked papers and mocks
+- Completion progress across `160+` tracked papers and mocks
 - Average score, practice time, and live predicted A Level grades
 - Topic Accuracy breakdown (`>80%` green, `50–80%` amber, `<50%` red)
 - Optional Supabase accounts to sync progress across devices
@@ -129,8 +129,8 @@ practice, official mark schemes, and cross-device progress tracking at [matheseu
 | Section | What's inside |
 |---|---|
 | Past Papers | Series from 2018 through June 2026 across `9MA0` and `9FM0` |
-| Mock Sets | Timed mock series across Maths and Further Maths (`59` papers) |
-| By Topic | `68` topic sets with combined Past Paper and Mock Set filtering |
+| Mock Sets | Official Pearson Edexcel mock sets across Maths and Further Maths (`50+` papers) |
+| By Topic | `65+` topic sets with combined Past Paper and Mock Set filtering |
 | Dashboard | Synced stats, predicted grades, Module Coverage, and Attempt History |
 
 ---
@@ -162,7 +162,7 @@ npm run build:infinityfree
 
 ## How It Works
 
-- All past papers (`2018–2026`), mock sets, and `1,478` question entries live in typed TypeScript indexes under `src/data/`, powering instant client-side filtering and KaTeX formula rendering.
+- All past papers (`2018–2026`), mock sets, and `1,400+` question entries live in typed TypeScript indexes under `src/data/`, powering instant client-side filtering and KaTeX formula rendering.
 - Large PDF papers and cropped question/mark-scheme images are excluded from Git and served from Cloudflare R2 via `VITE_ASSET_BASE_URL`, while the static SPA shell deploys cleanly anywhere.
 - Progress works offline in local storage and syncs to Supabase (`auth` + `profiles`/`attempts`) once signed in.
 

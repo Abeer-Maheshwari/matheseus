@@ -39,13 +39,13 @@ const FEATURES = [
   },
   {
     icon: FileCheck2,
-    title: '59 Official Mock Sets',
+    title: '50+ Official Mock Sets',
     body: 'Official Pearson Edexcel Maths and Further Maths mock sets structured by paper code with full mark schemes.',
   },
   {
     icon: ListFilter,
-    title: '1,478 Questions by Topic',
-    body: 'Filter across 68 syllabus topics by qualification, module, theorem, or paper source (Past Papers and Mock Sets).',
+    title: '1,400+ Questions by Topic',
+    body: 'Filter across 65+ syllabus topics by qualification, module, theorem, or paper source (Past Papers and Mock Sets).',
   },
   {
     icon: SplitSquareVertical,
@@ -83,8 +83,8 @@ export const HomePage: React.FC<HomePageProps> = ({
   const showcases = [
     {
       eyebrow: 'Questions by Topic',
-      title: 'Drill 1,478 questions filtered straight to your weak spots',
-      body: 'Stop scrolling through dozens of PDFs for one integration or mechanics style. Filter 68 topics by subject, module, or theorem across both official Past Papers and Mock Sets.',
+      title: 'Drill 1,400+ questions filtered straight to your weak spots',
+      body: 'Stop scrolling through dozens of PDFs for one integration or mechanics style. Filter 65+ topics by subject, module, or theorem across both official Past Papers and Mock Sets.',
       img: topicPracticePreview,
       alt: 'Questions by Topic filter and search view in matheseus',
       ctaLabel: 'Open By Topic',
@@ -115,7 +115,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* Hero Section */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-16 text-center">
         <p className="mx-auto mb-5 w-fit rounded-full border border-[#6382BF]/30 bg-[#1A2540] px-4 py-1.5 text-[11px] font-semibold tracking-widest text-[#7B8FAD] uppercase shadow-sm">
-          Edexcel 9MA0 &amp; 9FM0 · 2018–2026 Papers · 59 Mock Sets
+          Edexcel 9MA0 &amp; 9FM0 · 2018–2026 Papers · 50+ Mock Sets
         </p>
 
         <h1 className="mx-auto max-w-3xl text-4xl sm:text-5xl md:text-6xl font-serif font-bold tracking-tight text-[#E8ECF4] leading-[1.08]">
@@ -125,7 +125,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         <p className="mx-auto mt-5 max-w-2xl text-sm sm:text-base text-[#7B8FAD] leading-relaxed">
           matheseus brings together the latest A Level Maths &amp; Further Maths past papers up to{' '}
           <span className="text-[#E8ECF4] font-medium">June 2026</span>,{' '}
-          <span className="text-[#E8ECF4] font-medium">59 official Pearson Edexcel mock sets</span>, topic-indexed question runs, and official mark schemes in one fast workspace.
+          <span className="text-[#E8ECF4] font-medium">50+ official Pearson Edexcel mock sets</span>, topic-indexed question runs, and official mark schemes in one fast workspace.
         </p>
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5">
@@ -144,7 +144,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               onClick={onOpenMocks}
               className="inline-flex items-center gap-2 rounded-full border border-[#6382BF]/35 bg-[#1A2540] hover:border-[#4A7BF7]/60 hover:bg-[#1A2540]/80 px-6 py-3 text-xs sm:text-sm font-medium text-[#E8ECF4] transition-all active:scale-[0.98]"
             >
-              <span>Mock Sets (59)</span>
+              <span>Mock Sets (50+)</span>
             </button>
           )}
 
@@ -161,7 +161,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
 
         <p className="mt-4 text-xs text-[#7B8FAD]">
-          166 tracked papers · 1,478 indexed questions · 68 syllabus topics
+          160+ tracked papers · 1,400+ indexed questions · 65+ syllabus topics
         </p>
 
         {/* Hero Preview */}
@@ -181,7 +181,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             Paper Archive
           </p>
           <h2 className="mt-2 text-2xl sm:text-3xl font-bold tracking-tight text-[#E8ECF4]">
-            Jump straight into a qualification
+            Jump straight into a paper
           </h2>
         </div>
 
@@ -309,7 +309,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   <h3 className="text-base font-bold text-[#E8ECF4]">Mock Sets &amp; Tools</h3>
                 </div>
                 <span className="text-[11px] px-2.5 py-0.5 rounded-md bg-[#0A1020] text-[#7B8FAD] border border-[#6382BF]/35 font-semibold">
-                  59 Sets
+                  50+ Sets
                 </span>
               </div>
               <p className="text-xs text-[#7B8FAD] mb-4 leading-relaxed">
@@ -324,7 +324,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                     className="w-full text-left px-3.5 py-2.5 rounded-xl bg-[#0A1020] hover:bg-[#4A7BF7]/15 text-[#E8ECF4] border border-[#6382BF]/25 hover:border-[#4A7BF7]/50 flex justify-between items-center transition-colors"
                   >
                     <span className="font-medium">Mock Sets (Maths &amp; FM)</span>
-                    <span className="text-[#7B8FAD] text-[11px]">59 papers</span>
+                    <span className="text-[#7B8FAD] text-[11px]">50+ papers</span>
                   </button>
                 )}
                 <button
@@ -454,7 +454,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               Ready to start a paper or topic run?
             </h2>
             <p className="text-xs sm:text-sm text-[#7B8FAD]">
-              Jump straight into June 2026 past papers, 59 mock sets, or sign in to sync your Dashboard.
+              Jump straight into June 2026 past papers, 50+ official mock sets, or sign in to sync your Dashboard.
             </p>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
