@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Search,
@@ -45,6 +45,13 @@ export const TopicPracticeView: React.FC<TopicPracticeViewProps> = ({
 
   // Expanded topic IDs
   const [expandedTopicIds, setExpandedTopicIds] = useState<Set<string>>(new Set());
+  // Defer off-screen cards until after the tab enter transition finishes so mounting is instant
+  const [showAllTopics, setShowAllTopics] = useState<boolean>(false);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setShowAllTopics(true), 250);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const toggleTopicExpand = (topicId: string) => {
     setExpandedTopicIds((prev) => {
@@ -56,6 +63,7 @@ export const TopicPracticeView: React.FC<TopicPracticeViewProps> = ({
   };
 
   const expandAll = (topics: TopicGroup[]) => {
+    setShowAllTopics(true);
     setExpandedTopicIds(new Set(topics.map((t) => t.id)));
   };
 
@@ -507,30 +515,15 @@ export const TopicPracticeView: React.FC<TopicPracticeViewProps> = ({
                 </button>
               </motion.div>
             ) : (
-              <motion.div
-                key="topic-results"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.15 }}
-                className="space-y-4"
-              >
-                <AnimatePresence initial={false}>
-                  {topicGroups.map((group) => {
-                    const isExpanded = expandedTopicIds.has(group.id);
+              <div key="topic-results" className="space-y-4">
+                {(showAllTopics ? topicGroups : topicGroups.slice(0, 14)).map((group) => {
+                  const isExpanded = expandedTopicIds.has(group.id);
 
-                    return (
-                      <motion.div
-                        key={group.id}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0, transition: { duration: 0.14 } }}
-                        transition={{
-                          duration: 0.18,
-                          ease: [0.22, 1, 0.36, 1],
-                        }}
-                        className="rounded-2xl bg-[#1A2540]/80 border border-[#6382BF]/20 hover:border-[#6382BF]/40 transition-colors duration-200 overflow-hidden shadow-sm"
-                      >
+                  return (
+                    <div
+                      key={group.id}
+                      className="rounded-2xl bg-[#1A2540]/80 border border-[#6382BF]/20 hover:border-[#6382BF]/40 transition-colors duration-200 overflow-hidden shadow-sm"
+                    >
                         {/* Topic Header Card */}
                         <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                           {/* Left: Info */}
@@ -594,90 +587,81 @@ export const TopicPracticeView: React.FC<TopicPracticeViewProps> = ({
                         </div>
 
                         {/* Collapsible Question List Drawer */}
-                        <AnimatePresence initial={false}>
-                          {isExpanded && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.2, ease: 'easeOut' }}
-                              className="overflow-hidden border-t border-[#6382BF]/20 bg-[#0A1020]/60"
-                            >
-                              <div className="p-4 sm:p-5 space-y-3">
-                                <div className="text-xs font-semibold text-[#7B8FAD] uppercase tracking-wider">
-                                  Questions in this Topic ({group.questions.length})
-                                </div>
+                        {isExpanded && (
+                          <div className="border-t border-[#6382BF]/20 bg-[#0A1020]/60">
+                            <div className="p-4 sm:p-5 space-y-3">
+                              <div className="text-xs font-semibold text-[#7B8FAD] uppercase tracking-wider">
+                                Questions in this Topic ({group.questions.length})
+                              </div>
 
-                                <div className="grid grid-cols-1 gap-2.5">
-                                  {group.questions.map((q) => (
-                                    <div
-                                      key={q.id}
-                                      className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-[#1A2540]/60 border border-[#6382BF]/20 hover:border-[#4A7BF7]/40 transition-colors"
-                                    >
-                                      {/* Question details */}
-                                      <div className="space-y-1 flex-1">
-                                        <div className="flex flex-wrap items-center gap-2">
-                                          <span className="font-semibold text-xs text-[#E8ECF4]">
-                                            {q.paperTitle}
-                                          </span>
-                                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#4A7BF7]/15 text-[#4A7BF7] border border-[#4A7BF7]/30">
-                                            Q{q.number}
-                                          </span>
-                                          <span className="text-xs text-[#7B8FAD] font-medium">
-                                            {q.totalMarks} marks
-                                          </span>
+                              <div className="grid grid-cols-1 gap-2.5">
+                                {group.questions.map((q) => (
+                                  <div
+                                    key={q.id}
+                                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-[#1A2540]/60 border border-[#6382BF]/20 hover:border-[#4A7BF7]/40 transition-colors"
+                                  >
+                                    {/* Question details */}
+                                    <div className="space-y-1 flex-1">
+                                      <div className="flex flex-wrap items-center gap-2">
+                                        <span className="font-semibold text-xs text-[#E8ECF4]">
+                                          {q.paperTitle}
+                                        </span>
+                                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#4A7BF7]/15 text-[#4A7BF7] border border-[#4A7BF7]/30">
+                                          Q{q.number}
+                                        </span>
+                                        <span className="text-xs text-[#7B8FAD] font-medium">
+                                          {q.totalMarks} marks
+                                        </span>
+                                        <span className="px-1.5 py-0.2 rounded text-[10px] font-medium bg-[#0A1020] text-[#7B8FAD] border border-[#6382BF]/25">
+                                          {q.level === 'AS' ? 'AS' : q.level === 'A2' ? 'A2' : 'AS & A2'}
+                                        </span>
+                                        {q.isMock && (
                                           <span className="px-1.5 py-0.2 rounded text-[10px] font-medium bg-[#0A1020] text-[#7B8FAD] border border-[#6382BF]/25">
-                                            {q.level === 'AS' ? 'AS' : q.level === 'A2' ? 'A2' : 'AS & A2'}
+                                            Mock
                                           </span>
-                                          {q.isMock && (
-                                            <span className="px-1.5 py-0.2 rounded text-[10px] font-medium bg-[#0A1020] text-[#7B8FAD] border border-[#6382BF]/25">
-                                              Mock
-                                            </span>
-                                          )}
-                                        </div>
-
-                                        {q.parts && q.parts.length > 1 && (
-                                          <div className="text-[11px] text-[#7B8FAD]">
-                                            Subparts:{' '}
-                                            {q.parts
-                                              .map((p) => `${p.partLabel || 'part'} (${p.marks}m)`)
-                                              .join(', ')}
-                                          </div>
                                         )}
                                       </div>
 
-                                      {/* Question Actions */}
-                                      <div className="flex items-center gap-2 shrink-0">
-                                        <button
-                                          onClick={() => handleViewMarkScheme(q)}
-                                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#0A1020] text-[#7B8FAD] hover:text-[#E8ECF4] border border-[#6382BF]/25 hover:border-[#6382BF]/45 transition-colors"
-                                          title="View question snippet and official mark scheme"
-                                        >
-                                          <Eye size={13} />
-                                          <span>Mark Scheme</span>
-                                        </button>
-
-                                        <button
-                                          onClick={() => handleSolveSingleQuestion(q)}
-                                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#4A7BF7]/15 hover:bg-[#4A7BF7] text-[#4A7BF7] hover:text-white border border-[#4A7BF7]/30 transition-all active:scale-95"
-                                          title="Solve this single question in practice mode"
-                                        >
-                                          <span>Solve</span>
-                                          <ArrowRight size={13} />
-                                        </button>
-                                      </div>
+                                      {q.parts && q.parts.length > 1 && (
+                                        <div className="text-[11px] text-[#7B8FAD]">
+                                          Subparts:{' '}
+                                          {q.parts
+                                            .map((p) => `${p.partLabel || 'part'} (${p.marks}m)`)
+                                            .join(', ')}
+                                        </div>
+                                      )}
                                     </div>
-                                  ))}
-                                </div>
+
+                                    {/* Question Actions */}
+                                    <div className="flex items-center gap-2 shrink-0">
+                                      <button
+                                        onClick={() => handleViewMarkScheme(q)}
+                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#0A1020] text-[#7B8FAD] hover:text-[#E8ECF4] border border-[#6382BF]/25 hover:border-[#6382BF]/45 transition-colors"
+                                        title="View question snippet and official mark scheme"
+                                      >
+                                        <Eye size={13} />
+                                        <span>Mark Scheme</span>
+                                      </button>
+
+                                      <button
+                                        onClick={() => handleSolveSingleQuestion(q)}
+                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#4A7BF7]/15 hover:bg-[#4A7BF7] text-[#4A7BF7] hover:text-white border border-[#4A7BF7]/30 transition-all active:scale-95"
+                                        title="Solve this single question in practice mode"
+                                      >
+                                        <span>Solve</span>
+                                        <ArrowRight size={13} />
+                                      </button>
+                                    </div>
+                                  </div>
+                                ))}
                               </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </motion.div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     );
                   })}
-                </AnimatePresence>
-              </motion.div>
+              </div>
             )}
           </AnimatePresence>
         </main>

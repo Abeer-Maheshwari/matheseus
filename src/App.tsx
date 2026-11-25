@@ -19,6 +19,7 @@ import {
   persistPaperStatusToCloud,
 } from './utils/progressSync';
 import { getInteractivePaper, InteractivePaper } from './data/interactiveQuestions';
+import { prewarmTopicIndex } from './data/questionIndex';
 import { PaperEntry, ModuleSection } from './data/papersData';
 import { ExamAttempt } from './types';
 import { applyTheme, applyFont } from './utils/theme';
@@ -91,11 +92,21 @@ export default function App() {
     setCurrentTab(nextTab);
   };
 
-  // Initialize Midnight theme, Manrope font, and tab title on mount
+  // Initialize Midnight theme, Manrope font, tab title, and idle topic index warm-up
   useEffect(() => {
     document.title = 'matheseus.';
     applyTheme('midnight');
     applyFont('manrope');
+
+    // Build question/topic index when idle so switching to By Topic is instant
+    const ric = (window as unknown as { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback;
+    const cancelRic = (window as unknown as { cancelIdleCallback?: (id: number) => void }).cancelIdleCallback;
+    if (ric) {
+      const id = ric(() => prewarmTopicIndex(), { timeout: 1200 });
+      return () => cancelRic?.(id);
+    }
+    const timer = window.setTimeout(() => prewarmTopicIndex(), 600);
+    return () => window.clearTimeout(timer);
   }, []);
 
   // Route signed-in users to Dashboard initially/on login, and back to Home on sign out

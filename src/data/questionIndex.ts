@@ -588,6 +588,15 @@ const tokenizeSearch = (query: string): string[] => {
 };
 
 let _cachedAllQuestions: IndexedQuestion[] | null = null;
+const _cachedTopicGroupsByFilter = new Map<string, TopicGroup[]>();
+
+/**
+ * Warms up the topic index and default topic groups cache during browser idle time.
+ */
+export function prewarmTopicIndex(): void {
+  getAllIndexedQuestions();
+  getTopicGroups();
+}
 
 /**
  * Builds and returns all indexed authentic & mock questions with full metadata
@@ -694,6 +703,14 @@ export function getTopicGroups(criteria: TopicFilterCriteria = {}): TopicGroup[]
 
   const effectiveSource = source ?? (includeMocks ? 'all' : 'past-papers');
   const qTrimmed = searchQuery.trim();
+  const filterCacheKey = !qTrimmed
+    ? `${subject}|${moduleId}|${effectiveSource}|${category}|${level}`
+    : null;
+  if (filterCacheKey) {
+    const cached = _cachedTopicGroupsByFilter.get(filterCacheKey);
+    if (cached) return cached;
+  }
+
   const searchTokens = qTrimmed ? tokenizeSearch(qTrimmed) : [];
   const cleanQuery = qTrimmed.toLowerCase().replace(/[^a-z0-9]/g, '');
   const useCompactMatch = cleanQuery.length >= 3;
@@ -795,7 +812,11 @@ export function getTopicGroups(criteria: TopicFilterCriteria = {}): TopicGroup[]
   });
 
   // Sort groups by total number of questions descending
-  return topicGroups.sort((a, b) => b.totalQuestions - a.totalQuestions);
+  const sorted = topicGroups.sort((a, b) => b.totalQuestions - a.totalQuestions);
+  if (filterCacheKey) {
+    _cachedTopicGroupsByFilter.set(filterCacheKey, sorted);
+  }
+  return sorted;
 }
 
 /**
