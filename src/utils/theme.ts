@@ -1,5 +1,5 @@
 export type ThemeId = 'midnight';
-export type FontId = 'space';
+export type FontId = 'manrope' | 'space';
 
 export const applyTheme = (themeId: ThemeId = 'midnight') => {
   try {
@@ -10,7 +10,7 @@ export const applyTheme = (themeId: ThemeId = 'midnight') => {
   }
 };
 
-export const applyFont = (fontId: FontId = 'space') => {
+export const applyFont = (fontId: FontId = 'manrope') => {
   try {
     localStorage.setItem('matheseus_font', fontId);
     document.documentElement.setAttribute('data-font', fontId);

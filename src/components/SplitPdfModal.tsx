@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { 
   Columns, 
   FileText, 
@@ -15,6 +16,8 @@ import {
 import { FlipClock } from './FlipClock';
 import { FormulaBookletModal } from './FormulaBookletModal';
 import { playExamChime } from '../utils/audio';
+import { assetUrl } from '../utils/assets';
+import { saveExamAttempt } from '../utils/attempts';
 
 interface SplitPdfModalProps {
   title: string;
@@ -43,6 +46,8 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
   onSaveScore,
 }) => {
   // If in practice mode, start in QP view so student focuses on question paper without seeing MS
+  const resolvedQpUrl = assetUrl(qpUrl);
+  const resolvedMsUrl = msUrl ? assetUrl(msUrl) : undefined;
   const [mode, setMode] = useState<'split' | 'qp' | 'ms'>(
     !msUrl ? 'qp' : isPractice ? 'qp' : initialMode === 'split' ? 'split' : 'qp'
   );
@@ -99,24 +104,16 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
 
   const handleSaveResult = () => {
     if (!paperId) return;
-    try {
-      // Save to exam attempts history
-      const saved = localStorage.getItem('matheseus_exam_attempts');
-      const attempts = saved ? JSON.parse(saved) : [];
-      const newAttempt = {
-        id: `attempt_${Date.now()}`,
-        paperId,
-        paperTitle: title,
-        completedAt: new Date().toISOString(),
-        achievedScore: scoreNum,
-        maxScore: totalMarks,
-        percentage,
-        predictedGrade,
-      };
-      localStorage.setItem('matheseus_exam_attempts', JSON.stringify([newAttempt, ...attempts]));
-    } catch (e) {
-      console.warn('Failed to save attempt', e);
-    }
+    saveExamAttempt({
+      id: `attempt_${Date.now()}`,
+      paperId,
+      paperTitle: title,
+      completedAt: new Date().toISOString(),
+      achievedScore: scoreNum,
+      maxScore: totalMarks,
+      percentage,
+      predictedGrade,
+    });
 
     if (onSaveScore) {
       onSaveScore(paperId, scoreNum, totalMarks);
@@ -125,7 +122,7 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-[#0F1729] text-[#E8ECF4] animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex flex-col bg-[#0F1729] text-[#E8ECF4]">
       {/* Top Header */}
       <div className="h-14 px-4 bg-[#1A2540] border-b border-[#6382BF]/25 flex items-center justify-between gap-3 shrink-0 shadow-md">
         {/* Paper Title & Badges */}
@@ -203,39 +200,66 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
             <div className="flex items-center bg-[#0A1020] p-1 rounded-lg border border-[#6382BF]/30 text-xs">
               <button
                 onClick={() => setMode('split')}
-                className={`flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition-colors ${
+                className={`relative flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition-colors ${
                   mode === 'split'
-                    ? 'bg-[#4A7BF7] text-white font-semibold shadow-sm'
+                    ? 'text-white'
                     : 'text-[#7B8FAD] hover:text-[#E8ECF4]'
                 }`}
                 title="Split View side-by-side"
               >
-                <Columns size={13} />
-                <span className="hidden lg:inline">Split</span>
+                {mode === 'split' && (
+                  <motion.div
+                    layoutId="splitpdf-mode-pill"
+                    className="absolute inset-0 bg-[#4A7BF7] rounded-md shadow-sm"
+                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                  />
+                )}
+                <span className="relative z-10 flex items-center gap-1">
+                  <Columns size={13} />
+                  <span className="hidden lg:inline">Split</span>
+                </span>
               </button>
               <button
                 onClick={() => setMode('qp')}
-                className={`flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition-colors ${
+                className={`relative flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition-colors ${
                   mode === 'qp'
-                    ? 'bg-[#4A7BF7] text-white font-semibold shadow-sm'
+                    ? 'text-white'
                     : 'text-[#7B8FAD] hover:text-[#E8ECF4]'
                 }`}
                 title="Question Paper only"
               >
-                <FileText size={13} />
-                <span className="hidden lg:inline">Paper</span>
+                {mode === 'qp' && (
+                  <motion.div
+                    layoutId="splitpdf-mode-pill"
+                    className="absolute inset-0 bg-[#4A7BF7] rounded-md shadow-sm"
+                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                  />
+                )}
+                <span className="relative z-10 flex items-center gap-1">
+                  <FileText size={13} />
+                  <span className="hidden lg:inline">Paper</span>
+                </span>
               </button>
               <button
                 onClick={() => setMode('ms')}
-                className={`flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition-colors ${
+                className={`relative flex items-center gap-1 px-2.5 py-1 rounded-md font-medium transition-colors ${
                   mode === 'ms'
-                    ? 'bg-[#4A7BF7] text-white font-semibold shadow-sm'
+                    ? 'text-white'
                     : 'text-[#7B8FAD] hover:text-[#E8ECF4]'
                 }`}
                 title="Mark Scheme only"
               >
-                <BookOpen size={13} />
-                <span className="hidden lg:inline">Marks</span>
+                {mode === 'ms' && (
+                  <motion.div
+                    layoutId="splitpdf-mode-pill"
+                    className="absolute inset-0 bg-[#4A7BF7] rounded-md shadow-sm"
+                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                  />
+                )}
+                <span className="relative z-10 flex items-center gap-1">
+                  <BookOpen size={13} />
+                  <span className="hidden lg:inline">Marks</span>
+                </span>
               </button>
             </div>
           )}
@@ -286,7 +310,7 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
                 Question Paper
               </span>
               <a
-                href={qpUrl}
+                href={resolvedQpUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-1 text-[#7B8FAD] hover:text-[#E8ECF4] text-[11px] transition-colors"
@@ -296,14 +320,14 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
               </a>
             </div>
             <iframe
-              src={qpUrl}
+              src={resolvedQpUrl}
               className="w-full flex-1 bg-[#0F1729] border-none"
               title={`${title} - Question Paper`}
             />
           </div>
 
           {/* Mark Scheme Container (Persistently mounted, never reloaded) */}
-          {msUrl && (
+          {resolvedMsUrl && (
             <div
               className={`flex flex-col overflow-hidden transition-none ${
                 mode === 'qp'
@@ -323,7 +347,7 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
                   Mark Scheme
                 </span>
                 <a
-                  href={msUrl}
+                  href={resolvedMsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-1 text-[#7B8FAD] hover:text-[#E8ECF4] text-[11px] transition-colors"
@@ -333,7 +357,7 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
                 </a>
               </div>
               <iframe
-                src={msUrl}
+                src={resolvedMsUrl}
                 className="w-full flex-1 bg-[#0F1729] border-none"
                 title={`${title} - Mark Scheme`}
               />
@@ -342,11 +366,20 @@ export const SplitPdfModal: React.FC<SplitPdfModalProps> = ({
         </div>
 
         {/* Docked Formula Booklet Drawer */}
-        {showFormulaDrawer && (
-          <div className="w-full md:w-[460px] border-l border-[#6382BF]/30 bg-[#1A2540] flex flex-col h-full shadow-2xl shrink-0 z-30 transition-all">
-            <FormulaBookletModal mode="drawer" onClose={() => setShowFormulaDrawer(false)} />
-          </div>
-        )}
+        <AnimatePresence>
+          {showFormulaDrawer && (
+            <motion.div
+              key="split-formula-drawer"
+              initial={{ x: 40, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: 40, opacity: 0 }}
+              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              className="w-full md:w-[580px] lg:w-[680px] border-l border-[#6382BF]/30 bg-[#1A2540] flex flex-col h-full shadow-2xl shrink-0 z-30"
+            >
+              <FormulaBookletModal mode="drawer" onClose={() => setShowFormulaDrawer(false)} />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Docked Self-Marking Bar (Bottom) */}

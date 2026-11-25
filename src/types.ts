@@ -37,28 +37,31 @@ export interface PaperProgress {
   isFavorite?: boolean;
 }
 
+export interface GradeThresholds {
+  'A*'?: number;
+  'A': number;
+  'B': number;
+  'C': number;
+  'D': number;
+  'E': number;
+}
+
+export interface GradeBoundaryOptionRoute {
+  id: string;
+  label: string;
+  boundaries: GradeThresholds;
+}
+
 export interface GradeBoundaryItem {
   qualification: string;
   year: string;
   overallMax: number;
-  boundaries: {
-    'A*': number;
-    'A': number;
-    'B': number;
-    'C': number;
-    'D': number;
-    'E': number;
-  };
-  paperBoundaries?: {
+  boundaries: GradeThresholds;
+  optionRoutes?: GradeBoundaryOptionRoute[];
+  paperBoundaries?: ({
     paper: string;
     maxMarks: number;
-    'A*'?: number;
-    'A': number;
-    'B': number;
-    'C': number;
-    'D': number;
-    'E': number;
-  }[];
+  } & GradeThresholds)[];
 }
 
 export interface ExamAttempt {
@@ -74,4 +77,29 @@ export interface ExamAttempt {
   timingMode?: 'timed' | 'untimed';
   timeSpentSeconds?: number;
   questionScores?: Record<number, number>;
+  subpartScores?: Record<string, number>;
+}
+
+export interface UserProfile {
+  id: string;
+  displayName: string;
+  qualificationFocus: 'maths' | 'further-maths' | 'both';
+  targetGradeMaths: string;
+  targetGradeFm: string;
+  weeklyGoalPapers: number;
+}
+
+export interface ExamDraftData {
+  scores: Record<number, number>;
+  subpartScores?: Record<string, number>;
+  flagged: Record<number, boolean>;
+  currentIndex: number;
+  timeSpent: number;
+  secondsRemaining: number;
+  timingMode: 'timed' | 'untimed';
+  timestamp: number;
+}
+
+export interface ExamDraftItem extends ExamDraftData {
+  paperId: string;
 }

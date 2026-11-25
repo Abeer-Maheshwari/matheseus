@@ -1,28 +1,136 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, Variants } from 'motion/react';
 import { Navbar } from './components/Navbar';
 import { HomePage } from './components/HomePage';
 import { PapersView } from './components/PapersView';
+import { MockSetsView } from './components/MockSetsView';
 import { SplitPdfModal } from './components/SplitPdfModal';
 import { GradeBoundariesModal } from './components/GradeBoundariesModal';
 import { FormulaBookletModal } from './components/FormulaBookletModal';
 import { InteractiveExamRunner } from './components/InteractiveExamRunner';
+import { TopicPracticeView } from './components/TopicPracticeView';
 import { ExamTimerModal } from './components/ExamTimerModal';
+import { DashboardView } from './components/DashboardView';
+import { AuthModal } from './components/AuthModal';
+import { useAuth } from './context/AuthContext';
+import {
+  readLocalDoneMap,
+  writeLocalDoneMap,
+  persistPaperStatusToCloud,
+} from './utils/progressSync';
 import { getInteractivePaper, InteractivePaper } from './data/interactiveQuestions';
 import { PaperEntry, ModuleSection } from './data/papersData';
 import { ExamAttempt } from './types';
 import { applyTheme, applyFont } from './utils/theme';
-import { Sigma, BarChart3 } from 'lucide-react';
+import { Sigma, BarChart3, ListFilter, CheckCircle2, X } from 'lucide-react';
+
+const TAB_INDEX_MAP: Record<string, number> = {
+  home: 0,
+  maths: 1,
+  'further-maths': 1,
+  'more-papers': 1,
+  'mock-sets': 2,
+  topics: 3,
+  dashboard: 4,
+  formulae: 5,
+  boundaries: 6,
+};
+
+const pageVariants: Variants = {
+  enter: (direction: number) => ({
+    opacity: 0,
+    x: direction > 0 ? 18 : -18,
+    scale: 0.992,
+  }),
+  center: {
+    opacity: 1,
+    x: 0,
+    scale: 1,
+    transition: {
+      duration: 0.24,
+      ease: [0.22, 1, 0.36, 1] as const,
+    },
+  },
+  exit: (direction: number) => ({
+    opacity: 0,
+    x: direction > 0 ? -18 : 18,
+    scale: 0.992,
+    transition: {
+      duration: 0.2,
+      ease: [0.4, 0, 0.2, 1] as const,
+    },
+  }),
+};
 
 export default function App() {
-  const [currentTab, setCurrentTab] = useState<'home' | 'maths' | 'further-maths'>('home');
-  const [activeModuleId, setActiveModuleId] = useState<string>('p1');
+  const { user, loading, verifiedNotice, dismissVerifiedNotice } = useAuth();
+  const [authModalView, setAuthModalView] = useState<'signin' | 'signup' | null>(null);
+  const prevUserIdRef = useRef<string | null>(null);
+  const didInitialAuthRouteRef = useRef(false);
 
-  // Initialize Midnight theme, Contemporary font, and tab title on mount
+  const [currentTab, setCurrentTab] = useState<
+    'home' | 'maths' | 'further-maths' | 'more-papers' | 'mock-sets' | 'topics' | 'dashboard' | 'formulae' | 'boundaries'
+  >('home');
+  const [previousTab, setPreviousTab] = useState<
+    'home' | 'maths' | 'further-maths' | 'more-papers' | 'mock-sets' | 'topics' | 'dashboard'
+  >('home');
+  const [tabDirection, setTabDirection] = useState<number>(1);
+  const [activeModuleId, setActiveModuleId] = useState<string>('p1');
+  const pendingScrollTopRef = useRef(false);
+
+  // Centralized tab navigation with directional tracking & smooth post-exit scroll reset
+  const navigateToTab = (
+    nextTab: typeof currentTab,
+    options?: { scrollToTop?: boolean }
+  ) => {
+    const prevIdx = TAB_INDEX_MAP[currentTab] ?? 1;
+    const nextIdx = TAB_INDEX_MAP[nextTab] ?? 1;
+    if (nextIdx !== prevIdx) {
+      setTabDirection(nextIdx > prevIdx ? 1 : -1);
+    }
+    if (options?.scrollToTop) {
+      pendingScrollTopRef.current = true;
+    }
+    setCurrentTab(nextTab);
+  };
+
+  // Initialize Midnight theme, Manrope font, and tab title on mount
   useEffect(() => {
     document.title = 'matheseus.';
     applyTheme('midnight');
-    applyFont('space');
+    applyFont('manrope');
   }, []);
+
+  // Route signed-in users to Dashboard initially/on login, and back to Home on sign out
+  useEffect(() => {
+    if (loading) return;
+    const prevId = prevUserIdRef.current;
+    const currId = user?.id ?? null;
+
+    if (!didInitialAuthRouteRef.current) {
+      didInitialAuthRouteRef.current = true;
+      if (currId && currentTab === 'home') {
+        setCurrentTab('dashboard');
+      }
+    } else if (!prevId && currId) {
+      navigateToTab('dashboard', { scrollToTop: true });
+    } else if (prevId && !currId) {
+      navigateToTab('home', { scrollToTop: true });
+    }
+
+    prevUserIdRef.current = currId;
+  }, [loading, user]);
+
+  const handleOpenScreen = (screen: 'formulae' | 'boundaries') => {
+    if (currentTab !== 'formulae' && currentTab !== 'boundaries') {
+      setPreviousTab(currentTab);
+    }
+    navigateToTab(screen, { scrollToTop: true });
+  };
+
+  const handleCloseScreen = () => {
+    navigateToTab(previousTab || 'home', { scrollToTop: true });
+  };
 
   // Modals
   const [pdfModal, setPdfModal] = useState<{
@@ -37,43 +145,52 @@ export default function App() {
   } | null>(null);
 
   const [activeInteractivePaper, setActiveInteractivePaper] = useState<InteractivePaper | null>(null);
-  const [showBoundariesModal, setShowBoundariesModal] = useState(false);
-  const [showFormulasModal, setShowFormulasModal] = useState(false);
+  const [topicsInitialLevel, setTopicsInitialLevel] = useState<'all' | 'as' | 'a2'>('all');
   const [showTimerModal, setShowTimerModal] = useState(false);
 
-  // Completed tracking
-  const [completedMap, setCompletedMap] = useState<Record<string, boolean>>(() => {
-    try {
-      const saved = localStorage.getItem('matheseus_done');
-      return saved ? JSON.parse(saved) : {};
-    } catch {
-      return {};
-    }
-  });
+  // Completed tracking (synced with localStorage + Supabase when logged in)
+  const [completedMap, setCompletedMap] = useState<Record<string, boolean>>(() =>
+    readLocalDoneMap()
+  );
 
   useEffect(() => {
-    try {
-      localStorage.setItem('matheseus_done', JSON.stringify(completedMap));
-    } catch (e) {
-      console.warn('Failed to save to localStorage', e);
-    }
-  }, [completedMap]);
+    const syncDoneFromStorage = () => {
+      setCompletedMap(readLocalDoneMap());
+    };
+    window.addEventListener('matheseus_done_updated', syncDoneFromStorage);
+    window.addEventListener('matheseus_sync_updated', syncDoneFromStorage);
+    return () => {
+      window.removeEventListener('matheseus_done_updated', syncDoneFromStorage);
+      window.removeEventListener('matheseus_sync_updated', syncDoneFromStorage);
+    };
+  }, []);
 
   const handleToggleCompleted = (paperId: string) => {
-    setCompletedMap((prev) => ({
-      ...prev,
-      [paperId]: !prev[paperId],
-    }));
+    setCompletedMap((prev) => {
+      const nextVal = !prev[paperId];
+      const next = { ...prev, [paperId]: nextVal };
+      writeLocalDoneMap(next);
+      void persistPaperStatusToCloud(paperId, nextVal);
+      return next;
+    });
   };
 
-  const handleSelectSubject = (subject: 'maths' | 'further-maths', moduleId?: string) => {
-    setCurrentTab(subject);
+  const handleSelectSubject = (
+    subject: 'maths' | 'further-maths' | 'more-papers',
+    moduleId?: string
+  ) => {
+    const isPastPapersView =
+      currentTab === 'maths' ||
+      currentTab === 'further-maths' ||
+      currentTab === 'more-papers';
+    navigateToTab(subject, { scrollToTop: !isPastPapersView });
     if (moduleId) {
       setActiveModuleId(moduleId);
     } else {
-      setActiveModuleId(subject === 'maths' ? 'p1' : 'cp1');
+      if (subject === 'maths') setActiveModuleId('p1');
+      else if (subject === 'further-maths') setActiveModuleId('cp1');
+      else setActiveModuleId('more-al-cp1');
     }
-    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   const [practiceConfig, setPracticeConfig] = useState<{
@@ -90,9 +207,16 @@ export default function App() {
     initialAttempt?: ExamAttempt
   ) => {
     // Launch actual digital Practice Mode for all papers with module-matched questions
+    const isSample = paper.year === 'Sample';
+    const seriesLabel = isSample
+      ? 'Sample Paper'
+      : paper.season === 'Sample' || !paper.season
+        ? `${paper.year}`
+        : `${paper.season} ${paper.year}`;
+    const displayTitle = `${seriesLabel} · ${module.title} (${module.code})`;
     const interactive = getInteractivePaper(
       paper.id,
-      `${paper.season} ${paper.year} · ${module.title} (${module.code})`,
+      displayTitle,
       module.code,
       paper.year,
       paper.season,
@@ -111,10 +235,12 @@ export default function App() {
   };
 
   const handleSaveScore = (paperId: string) => {
-    setCompletedMap((prev) => ({
-      ...prev,
-      [paperId]: true,
-    }));
+    setCompletedMap((prev) => {
+      const next = { ...prev, [paperId]: true };
+      writeLocalDoneMap(next);
+      void persistPaperStatusToCloud(paperId, true);
+      return next;
+    });
   };
 
   return (
@@ -123,41 +249,157 @@ export default function App() {
       <Navbar
         currentTab={currentTab}
         onNavigate={(tab) => {
-          setCurrentTab(tab);
+          const isCurrentPastPapers =
+            currentTab === 'maths' ||
+            currentTab === 'further-maths' ||
+            currentTab === 'more-papers';
+          const isTargetPastPapers =
+            tab === 'maths' ||
+            tab === 'further-maths' ||
+            tab === 'more-papers';
+          navigateToTab(tab, { scrollToTop: !(isCurrentPastPapers && isTargetPastPapers) });
           if (tab === 'maths') setActiveModuleId('p1');
           if (tab === 'further-maths') setActiveModuleId('cp1');
+          if (tab === 'more-papers') setActiveModuleId('more-al-cp1');
         }}
-        onOpenBoundaries={() => setShowBoundariesModal(true)}
-        onOpenFormulas={() => setShowFormulasModal(true)}
+        onOpenBoundaries={() => handleOpenScreen('boundaries')}
+        onOpenFormulas={() => handleOpenScreen('formulae')}
+        onOpenAuth={(mode) => setAuthModalView(mode || 'signin')}
         onOpenTimer={() => setShowTimerModal(true)}
       />
 
-      {/* Main View */}
-      <main key={currentTab} className="flex-1 animate-fadeIn">
-        {currentTab === 'home' ? (
-          <HomePage
-            onSelectSubject={handleSelectSubject}
-            onOpenFormulas={() => setShowFormulasModal(true)}
-            onOpenBoundaries={() => setShowBoundariesModal(true)}
-          />
-        ) : (
-          <PapersView
-            currentSubject={currentTab}
-            onSelectSubject={(subj) => handleSelectSubject(subj)}
-            activeModuleId={activeModuleId}
-            onSelectModule={setActiveModuleId}
-            onOpenSplitView={(title, qpUrl, msUrl) =>
-              setPdfModal({ title, qpUrl, msUrl, mode: 'split' })
-            }
-            onOpenSingleDoc={(title, url) =>
-              setPdfModal({ title, qpUrl: url, mode: 'single' })
-            }
-            onOpenPractice={handleLaunchPractice}
-            completedMap={completedMap}
-            onToggleCompleted={handleToggleCompleted}
-          />
+      {/* Email Verified Confirmation Toast */}
+      <AnimatePresence>
+        {verifiedNotice && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+            className="bg-emerald-500/15 border-b border-emerald-500/30 px-4 py-2.5 text-xs text-emerald-200"
+          >
+            <div className="max-w-5xl mx-auto flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
+                <span>Email verified. Your exam progress is synced.</span>
+              </div>
+              <button
+                type="button"
+                onClick={dismissVerifiedNotice}
+                className="text-emerald-300 hover:text-white p-1"
+              >
+                <X size={13} />
+              </button>
+            </div>
+          </motion.div>
         )}
-      </main>
+      </AnimatePresence>
+
+      {/* Main View with Fluid Screen Transitions */}
+      <AnimatePresence
+        mode="wait"
+        custom={tabDirection}
+        initial={false}
+        onExitComplete={() => {
+          if (pendingScrollTopRef.current) {
+            pendingScrollTopRef.current = false;
+            window.scrollTo({ top: 0, behavior: 'instant' });
+          }
+        }}
+      >
+        <motion.main
+          key={
+            currentTab === 'maths' ||
+            currentTab === 'further-maths' ||
+            currentTab === 'more-papers'
+              ? 'past-papers'
+              : currentTab
+          }
+          custom={tabDirection}
+          variants={pageVariants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          className="flex-1 flex flex-col w-full overflow-x-hidden"
+        >
+          {currentTab === 'home' ? (
+            <HomePage
+              onSelectSubject={handleSelectSubject}
+              onOpenFormulas={() => handleOpenScreen('formulae')}
+              onOpenBoundaries={() => handleOpenScreen('boundaries')}
+              onOpenTopics={(level) => {
+                setTopicsInitialLevel(level || 'all');
+                navigateToTab('topics', { scrollToTop: true });
+              }}
+            />
+          ) : currentTab === 'topics' ? (
+            <TopicPracticeView
+              initialLevel={topicsInitialLevel}
+              onOpenPracticeInteractive={(paper, reviewMode, qIndex) => {
+                setPracticeConfig({
+                  reviewMode,
+                  questionIndex: qIndex,
+                });
+                setActiveInteractivePaper(paper);
+              }}
+            />
+          ) : currentTab === 'mock-sets' ? (
+            <MockSetsView
+              onOpenSplitView={(title, qpUrl, msUrl) =>
+                setPdfModal({ title, qpUrl, msUrl, mode: 'split' })
+              }
+              onOpenSingleDoc={(title, url) =>
+                setPdfModal({ title, qpUrl: url, mode: 'single' })
+              }
+              onOpenPractice={handleLaunchPractice}
+              completedMap={completedMap}
+              onToggleCompleted={handleToggleCompleted}
+            />
+          ) : currentTab === 'dashboard' ? (
+            <DashboardView
+              completedMap={completedMap}
+              onOpenAuth={(mode) => setAuthModalView(mode || 'signin')}
+              onNavigateModule={(subject, moduleId) => {
+                if (subject === 'mock-sets') {
+                  navigateToTab('mock-sets', { scrollToTop: true });
+                } else {
+                  handleSelectSubject(subject, moduleId);
+                }
+              }}
+              onLaunchPaper={handleLaunchPractice}
+              onOpenSingleDoc={(title, url) =>
+                setPdfModal({ title, qpUrl: url, mode: 'single' })
+              }
+            />
+          ) : currentTab === 'formulae' ? (
+            <FormulaBookletModal
+              mode="page"
+              onClose={handleCloseScreen}
+            />
+          ) : currentTab === 'boundaries' ? (
+            <GradeBoundariesModal
+              mode="page"
+              onClose={handleCloseScreen}
+            />
+          ) : (
+            <PapersView
+              currentSubject={currentTab}
+              onSelectSubject={(subj) => handleSelectSubject(subj)}
+              activeModuleId={activeModuleId}
+              onSelectModule={setActiveModuleId}
+              onOpenSplitView={(title, qpUrl, msUrl) =>
+                setPdfModal({ title, qpUrl, msUrl, mode: 'split' })
+              }
+              onOpenSingleDoc={(title, url) =>
+                setPdfModal({ title, qpUrl: url, mode: 'single' })
+              }
+              onOpenPractice={handleLaunchPractice}
+              completedMap={completedMap}
+              onToggleCompleted={handleToggleCompleted}
+            />
+          )}
+        </motion.main>
+      </AnimatePresence>
 
       {/* Footer */}
       <footer className="border-t border-[#6382BF]/20 bg-[#1A2540] py-6 text-xs text-[#7B8FAD]">
@@ -170,18 +412,27 @@ export default function App() {
             />
             <span className="font-serif font-semibold text-[#E8ECF4]">matheseus.</span>
             <span className="text-[#6382BF]/50">·</span>
-            <span>Edexcel A Level & Further Maths Past Papers Archive</span>
+            <span>Edexcel Maths & Further Maths</span>
           </div>
           <div className="flex items-center gap-4">
             <button
-              onClick={() => setShowFormulasModal(true)}
+              onClick={() => {
+                navigateToTab('topics', { scrollToTop: true });
+              }}
               className="hover:text-[#E8ECF4] transition-colors flex items-center gap-1.5"
             >
-              <Sigma size={13} className="text-[#4A7BF7]" />
+              <ListFilter size={13} className="text-[#4A7BF7]" />
+              <span>Questions by Topic</span>
+            </button>
+            <button
+              onClick={() => handleOpenScreen('formulae')}
+              className="hover:text-[#E8ECF4] transition-colors flex items-center gap-1.5"
+            >
+              <Sigma size={13} className="text-[#7B8FAD]" />
               <span>Formula Booklets</span>
             </button>
             <button
-              onClick={() => setShowBoundariesModal(true)}
+              onClick={() => handleOpenScreen('boundaries')}
               className="hover:text-[#E8ECF4] transition-colors flex items-center gap-1.5"
             >
               <BarChart3 size={13} className="text-[#7B8FAD]" />
@@ -192,51 +443,83 @@ export default function App() {
       </footer>
 
       {/* Interactive Question-by-Question Exam Runner (for papers with digitized questions) */}
-      {activeInteractivePaper && (
-        <InteractiveExamRunner
-          key={`${activeInteractivePaper.id}_${practiceConfig.reviewMode ? 'review' : 'practice'}`}
-          paper={activeInteractivePaper}
-          initialReviewMode={practiceConfig.reviewMode}
-          initialQuestionIndex={practiceConfig.questionIndex}
-          initialAttempt={practiceConfig.attempt}
-          onClose={() => {
-            setActiveInteractivePaper(null);
-            setPracticeConfig({});
-          }}
-          onSaveResult={handleSaveScore}
-        />
-      )}
+      <AnimatePresence>
+        {activeInteractivePaper && (
+          <motion.div
+            key={`${activeInteractivePaper.id}_${practiceConfig.reviewMode ? 'review' : 'practice'}`}
+            initial={{ opacity: 0, scale: 0.985 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.985 }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-0 z-50 bg-[#0F1729]"
+          >
+            <InteractiveExamRunner
+              paper={activeInteractivePaper}
+              initialReviewMode={practiceConfig.reviewMode}
+              initialQuestionIndex={practiceConfig.questionIndex}
+              initialAttempt={practiceConfig.attempt}
+              onClose={() => {
+                setActiveInteractivePaper(null);
+                setPracticeConfig({});
+              }}
+              onSaveResult={handleSaveScore}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* PDF Modal (Split, Single, or Exam Practice View) */}
-      {pdfModal && (
-        <SplitPdfModal
-          title={pdfModal.title}
-          qpUrl={pdfModal.qpUrl}
-          msUrl={pdfModal.msUrl}
-          initialMode={pdfModal.mode}
-          isPractice={pdfModal.isPractice}
-          paperId={pdfModal.paperId}
-          durationMinutes={pdfModal.durationMinutes}
-          totalMarks={pdfModal.totalMarks}
-          onSaveScore={handleSaveScore}
-          onClose={() => setPdfModal(null)}
-        />
-      )}
-
-      {/* Grade Boundaries Modal */}
-      {showBoundariesModal && (
-        <GradeBoundariesModal onClose={() => setShowBoundariesModal(false)} />
-      )}
-
-      {/* Formula Booklet Modal */}
-      {showFormulasModal && (
-        <FormulaBookletModal onClose={() => setShowFormulasModal(false)} />
-      )}
+      <AnimatePresence>
+        {pdfModal && (
+          <motion.div
+            key={pdfModal.title}
+            initial={{ opacity: 0, scale: 0.985 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.985 }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-0 z-50 bg-[#0F1729]"
+          >
+            <SplitPdfModal
+              title={pdfModal.title}
+              qpUrl={pdfModal.qpUrl}
+              msUrl={pdfModal.msUrl}
+              initialMode={pdfModal.mode}
+              isPractice={pdfModal.isPractice}
+              paperId={pdfModal.paperId}
+              durationMinutes={pdfModal.durationMinutes}
+              totalMarks={pdfModal.totalMarks}
+              onSaveScore={handleSaveScore}
+              onClose={() => setPdfModal(null)}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Standalone Exam Timer Modal */}
-      {showTimerModal && (
-        <ExamTimerModal onClose={() => setShowTimerModal(false)} />
-      )}
+      <AnimatePresence>
+        {showTimerModal && (
+          <motion.div
+            key="timer-modal"
+            initial={{ opacity: 0, scale: 0.97 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.97 }}
+            transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-0 z-50"
+          >
+            <ExamTimerModal onClose={() => setShowTimerModal(false)} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Authentication Modal */}
+      <AnimatePresence>
+        {authModalView && (
+          <AuthModal
+            initialView={authModalView}
+            onClose={() => setAuthModalView(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

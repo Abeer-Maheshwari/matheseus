@@ -1,0 +1,25 @@
+# Ensure Vite's index.html takes priority over any default index.php / index2.html
+DirectoryIndex index.html
+
+# SPA fallback for Vite build on Apache / InfinityFree
+Options -MultiViews
+RewriteEngine On
+RewriteBase /
+
+# Serve existing files directly
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Fallback all routes cleanly to index.html (preserves query/hash params for Supabase email verification)
+RewriteRule ^ index.html [L]
+
+# Long-term immutable cache for hashed JS/CSS chunks
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css|woff2?|ttf)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "index\.html$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+  </FilesMatch>
+</IfModule>

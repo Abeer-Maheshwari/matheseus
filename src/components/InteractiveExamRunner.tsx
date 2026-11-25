@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { InteractivePaper, InteractiveQuestion } from '../data/interactiveQuestions';
 import { FormattedMathText } from './MathRenderer';
 import { FormulaBookletModal } from './FormulaBookletModal';
@@ -6,6 +7,8 @@ import { FlipClock } from './FlipClock';
 import { playExamChime } from '../utils/audio';
 import { ExamAttempt } from '../types';
 import { saveExamAttempt, getExamAttempts } from '../utils/attempts';
+import { assetUrl } from '../utils/assets';
+import { saveExamDraft, clearExamDraft } from '../utils/progressSync';
 import { ScoreReportScreen } from './ScoreReportModal';
 import { 
   BookOpen, 
@@ -27,14 +30,76 @@ import {
   FileText,
   Columns,
   Maximize2,
+  Minimize2,
   ZoomIn,
   ZoomOut,
   ExternalLink,
   HelpCircle,
-  AlertCircle
+  AlertCircle,
+  Pause
 } from 'lucide-react';
 
 export type TimingMode = 'timed' | 'untimed';
+
+export const getQuestionDisplayInfo = (paper: InteractivePaper, q: InteractiveQuestion, index: number) => {
+  const isJointAppliedPaper = 
+    paper.paperCode === '9MA0/03' || 
+    paper.id.includes('p3') || 
+    paper.title.toLowerCase().includes('statistics & mechanics') || 
+    paper.title.toLowerCase().includes('stats & mechanics');
+
+  if (q.section && q.sectionQuestionNumber) {
+    const isStats = q.section.toLowerCase().includes('stat');
+    return {
+      hasSections: true,
+      section: q.section,
+      sectionShort: isStats ? 'Stats' : 'Mech',
+      sectionLetter: isStats ? 'Section A' : 'Section B',
+      displayNumber: q.sectionQuestionNumber,
+      fullTitle: `${isStats ? 'Section A: Statistics' : 'Section B: Mechanics'} · Question ${q.sectionQuestionNumber}`,
+      shortLabel: `${isStats ? 'Stats' : 'Mech'} Q${q.sectionQuestionNumber}`,
+    };
+  }
+
+  if (isJointAppliedPaper) {
+    const totalQ = paper.questions.length;
+    const statsCount = totalQ >= 11 ? 6 : 5;
+    const isStats = index < statsCount;
+    const section = isStats ? 'Section A: Statistics' : 'Section B: Mechanics';
+    const displayNumber = isStats ? index + 1 : index + 1 - statsCount;
+
+    return {
+      hasSections: true,
+      section,
+      sectionShort: isStats ? 'Stats' : 'Mech',
+      sectionLetter: isStats ? 'Section A' : 'Section B',
+      displayNumber,
+      fullTitle: `${section} · Question ${displayNumber}`,
+      shortLabel: `${isStats ? 'Stats' : 'Mech'} Q${displayNumber}`,
+    };
+  }
+
+  return {
+    hasSections: false,
+    section: '',
+    sectionShort: '',
+    sectionLetter: '',
+    displayNumber: q.number,
+    fullTitle: `Question ${q.number}`,
+    shortLabel: `Q${q.number}`,
+  };
+};
+
+const renderPartLabel = (rawLabel: string | undefined, index: number): React.ReactNode => {
+  if (!rawLabel) return <span>Part {index + 1}</span>;
+  const clean = rawLabel.replace(/[()]/g, '').trim();
+  if (!clean) return <span>Part {index + 1}</span>;
+  return (
+    <span className="[font-variant-ligatures:none]" style={{ fontVariantLigatures: 'none' }}>
+      Part (<span>{clean}</span>)
+    </span>
+  );
+};
 
 interface InteractiveExamRunnerProps {
   paper: InteractivePaper;
@@ -57,15 +122,51 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
   const [isStarted, setIsStarted] = useState(initialReviewMode);
   const [timingMode, setTimingMode] = useState<TimingMode>(initialAttempt?.timingMode || 'timed');
 
-  // Active question index
+  // Active question index & scroll ref
   const [currentIndex, setCurrentIndex] = useState(initialQuestionIndex);
+  const mainStageRef = useRef<HTMLDivElement | null>(null);
+
+  // Fluidity, image preloading & transition masking states
+  const [isScreenTransitioning, setIsScreenTransitioning] = useState(false);
+  const [transitionMessage, setTransitionMessage] = useState('Preparing exam environment...');
+  const [isImgReady, setIsImgReady] = useState(false);
+  const [isImgDelayDone, setIsImgDelayDone] = useState(false);
+  const [isMsImgReady, setIsMsImgReady] = useState(false);
+  const [isMsDelayDone, setIsMsDelayDone] = useState(false);
+  const qImgRef = useRef<HTMLImageElement | null>(null);
+  const msImgRef = useRef<HTMLImageElement | null>(null);
+
+  const isImgLoaded = isImgReady && isImgDelayDone;
+  const isMsImgLoaded = isMsImgReady && isMsDelayDone;
+
+  // Preload next and previous question images & mark schemes into browser cache
+  useEffect(() => {
+    if (!paper?.questions?.length) return;
+    const targets = [currentIndex + 1, currentIndex + 2, currentIndex - 1];
+    targets.forEach((idx) => {
+      if (idx >= 0 && idx < paper.questions.length) {
+        const q = paper.questions[idx];
+        if (q.questionImageUrl) {
+          const img = new Image();
+          img.src = assetUrl(q.questionImageUrl);
+        }
+        if (q.markSchemeImageUrl) {
+          const msImg = new Image();
+          msImg.src = assetUrl(q.markSchemeImageUrl);
+        }
+      }
+    });
+  }, [currentIndex, paper.questions]);
 
   // User input states per question & subpart
   const [scores, setScores] = useState<Record<number, number>>(() => {
     if (initialAttempt?.questionScores) return initialAttempt.questionScores;
     return {};
   });
-  const [subpartScores, setSubpartScores] = useState<Record<string, number>>({});
+  const [subpartScores, setSubpartScores] = useState<Record<string, number>>(() => {
+    if (initialAttempt?.subpartScores) return initialAttempt.subpartScores;
+    return {};
+  });
   const [revealedSolutions, setRevealedSolutions] = useState<Record<number, boolean>>({});
   const [revealedParts, setRevealedParts] = useState<Record<string, boolean>>({});
   const [flagged, setFlagged] = useState<Record<number, boolean>>({});
@@ -89,9 +190,50 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
   } | null>(null);
   const [lightboxZoom, setLightboxZoom] = useState(1);
 
+  // Fullscreen mode state
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const handleFsChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFsChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFsChange);
+    };
+  }, []);
+
+  const toggleFullscreen = () => {
+    try {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen?.().catch((err) => {
+          console.warn('Error entering fullscreen:', err);
+        });
+      } else {
+        document.exitFullscreen?.().catch((err) => {
+          console.warn('Error exiting fullscreen:', err);
+        });
+      }
+    } catch (e) {
+      console.warn('Fullscreen toggle error:', e);
+    }
+  };
+
+  const handleCloseRunner = () => {
+    if (document.fullscreenElement) {
+      try {
+        document.exitFullscreen?.();
+      } catch {
+        // ignore
+      }
+    }
+    onClose();
+  };
+
   // Completed exam summary view
   const [isFinished, setIsFinished] = useState(initialReviewMode);
   const [isReviewMode, setIsReviewMode] = useState(initialReviewMode);
+  const isQuickReview = initialReviewMode && !initialAttempt;
 
   // Past attempts history
   const [pastAttempts, setPastAttempts] = useState<ExamAttempt[]>([]);
@@ -122,28 +264,22 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
     setPastAttempts(getExamAttempts());
   }, []);
 
-  // Auto-save ongoing draft
+  // Auto-save ongoing draft (local + Supabase when signed in)
   useEffect(() => {
     if (isStarted && !isFinished) {
-      try {
-        localStorage.setItem(
-          draftStorageKey,
-          JSON.stringify({
-            scores,
-            subpartScores,
-            flagged,
-            currentIndex,
-            timeSpent,
-            secondsRemaining,
-            timingMode,
-            timestamp: Date.now(),
-          })
-        );
-      } catch (e) {
-        console.warn('Failed to auto-save exam draft', e);
-      }
+      saveExamDraft(paper.id, {
+        scores,
+        subpartScores,
+        flagged,
+        currentIndex,
+        timeSpent,
+        secondsRemaining,
+        timingMode,
+        timestamp: Date.now(),
+      });
     }
   }, [
+    paper.id,
     isStarted,
     isFinished,
     scores,
@@ -153,38 +289,42 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
     timeSpent,
     secondsRemaining,
     timingMode,
-    draftStorageKey,
   ]);
 
-  // Main countdown timer
+  // Check if viewing mark scheme (timer pauses when viewing mark scheme ONLY in timed mode)
+  const isViewingMs = Boolean(
+    timingMode === 'timed' &&
+    !isReviewMode && (
+      (paper.questions[currentIndex] && revealedSolutions[paper.questions[currentIndex].number]) ||
+      (lightboxDiagram && (
+        (paper.questions[currentIndex] && lightboxDiagram.url === paper.questions[currentIndex].markSchemeImageUrl) ||
+        lightboxDiagram.caption?.toLowerCase().includes('mark scheme')
+      ))
+    )
+  );
+
+  // Main countdown timer (pauses if manually paused or if viewing mark scheme)
   useEffect(() => {
-    if (!isStarted || isFinished || isTimerPaused) return;
+    if (!isStarted || isFinished || isTimerPaused || isViewingMs) return;
 
     const interval = setInterval(() => {
       setTimeSpent((prev) => prev + 1);
 
       if (timingMode === 'timed') {
-        setSecondsRemaining((prev) => {
-          if (prev <= 1) {
-            clearInterval(interval);
-            handleAutoTimeUp();
-            return 0;
-          }
-          if (prev === 600 || prev === 300 || prev === 60) {
-            playExamChime();
-          }
-          return prev - 1;
-        });
+        setSecondsRemaining((prev) => (prev <= 1 ? 0 : prev - 1));
       }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isStarted, isFinished, isTimerPaused, timingMode]);
+  }, [isStarted, isFinished, isTimerPaused, isViewingMs, timingMode]);
 
-  const handleAutoTimeUp = () => {
-    playExamChime();
-    setIsFinished(true);
-  };
+  // Save and finish automatically when countdown hits zero
+  useEffect(() => {
+    if (isStarted && !isFinished && timingMode === 'timed' && secondsRemaining === 0) {
+      playExamChime();
+      handleFinishExam();
+    }
+  }, [secondsRemaining, isStarted, isFinished, timingMode]);
 
   // Keyboard navigation & shortcuts
   useEffect(() => {
@@ -197,9 +337,9 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
       }
 
       if (e.key === 'ArrowRight' || e.key === 'l' || e.key === 'L') {
-        setCurrentIndex((prev) => Math.min(paper.questions.length - 1, prev + 1));
+        handleNavigateQuestion(currentIndex + 1);
       } else if (e.key === 'ArrowLeft' || e.key === 'h' || e.key === 'H') {
-        setCurrentIndex((prev) => Math.max(0, prev - 1));
+        handleNavigateQuestion(currentIndex - 1);
       } else if (e.key === 'f' || e.key === 'F') {
         const qNum = paper.questions[currentIndex]?.number || (currentIndex + 1);
         setFlagged((prev) => ({ ...prev, [qNum]: !prev[qNum] }));
@@ -224,7 +364,47 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
 
   // Current Question
   const currentQ = paper.questions[currentIndex] || paper.questions[0];
+  const currentQInfo = getQuestionDisplayInfo(paper, currentQ, currentIndex);
   const paperMaxMarks = paper.totalMarks || paper.questions.reduce((sum, q) => sum + q.totalMarks, 0);
+  const isMsPanelOpen = Boolean(currentQ && (revealedSolutions[currentQ.number] || isReviewMode));
+
+  // Slight deliberate loading delay for question sheets (ensures smooth spinner reveal even when preloaded)
+  useEffect(() => {
+    if (!isStarted || (isFinished && !isReviewMode)) return;
+    setIsImgReady(false);
+    setIsImgDelayDone(false);
+    const delayTimer = window.setTimeout(() => setIsImgDelayDone(true), 200);
+    const raf = window.requestAnimationFrame(() => {
+      if (qImgRef.current?.complete && qImgRef.current.naturalWidth > 0) {
+        setIsImgReady(true);
+      }
+    });
+    return () => {
+      window.clearTimeout(delayTimer);
+      window.cancelAnimationFrame(raf);
+    };
+  }, [currentIndex, isStarted, isFinished, isReviewMode]);
+
+  // Slight deliberate loading delay when exam mark scheme is revealed or switched in review mode
+  useEffect(() => {
+    if (!isStarted || (isFinished && !isReviewMode) || !isMsPanelOpen) {
+      setIsMsImgReady(false);
+      setIsMsDelayDone(false);
+      return;
+    }
+    setIsMsImgReady(false);
+    setIsMsDelayDone(false);
+    const delayTimer = window.setTimeout(() => setIsMsDelayDone(true), 380);
+    const raf = window.requestAnimationFrame(() => {
+      if (msImgRef.current?.complete && msImgRef.current.naturalWidth > 0) {
+        setIsMsImgReady(true);
+      }
+    });
+    return () => {
+      window.clearTimeout(delayTimer);
+      window.cancelAnimationFrame(raf);
+    };
+  }, [currentIndex, isMsPanelOpen, isStarted, isFinished, isReviewMode]);
 
   // Score calculations
   const totalAchievedScore = Object.values(scores).reduce((sum, val) => sum + (val || 0), 0);
@@ -265,22 +445,29 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
     });
   };
 
-  const handleSubpartScoreChange = (qNum: number, partIdx: number, partMax: number, score: number) => {
+  const handleSubpartScoreChange = (qNum: number, partIdx: number, _partMax: number, score: number) => {
     const key = `${qNum}_${partIdx}`;
-    const newSubScores = { ...subpartScores, [key]: score };
+    const newSubScores = { ...subpartScores };
+    if (newSubScores[key] === score) {
+      delete newSubScores[key];
+    } else {
+      newSubScores[key] = score;
+    }
     setSubpartScores(newSubScores);
 
-    // Recompute total score for this question by summing its parts
+    // Recompute total score for this question; clear total if no subparts remain marked
     const q = paper.questions.find((item) => item.number === qNum);
     if (q) {
       let sum = 0;
+      let hasAny = false;
       q.parts.forEach((_, idx) => {
         const k = `${qNum}_${idx}`;
         if (newSubScores[k] !== undefined) {
           sum += newSubScores[k];
+          hasAny = true;
         }
       });
-      handleScoreChange(qNum, String(sum), q.totalMarks);
+      handleScoreChange(qNum, hasAny ? String(sum) : '', q.totalMarks);
     }
   };
 
@@ -288,9 +475,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
     setShowFinishConfirm(false);
     setIsFinished(true);
 
-    try {
-      localStorage.removeItem(draftStorageKey);
-    } catch {}
+    clearExamDraft(paper.id);
 
     const newAttempt: ExamAttempt = {
       id: `${paper.id}_${Date.now()}`,
@@ -305,6 +490,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
       timingMode,
       timeSpentSeconds: timeSpent,
       questionScores: scores,
+      subpartScores,
     };
 
     const updated = saveExamAttempt(newAttempt);
@@ -313,6 +499,34 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
     if (onSaveResult) {
       onSaveResult(paper.id, totalAchievedScore, paperMaxMarks);
     }
+  };
+
+  const handleNavigateQuestion = (targetIdx: number) => {
+    if (targetIdx === currentIndex || targetIdx < 0 || targetIdx >= paper.questions.length) return;
+    setIsImgReady(false);
+    setIsImgDelayDone(false);
+    setIsMsImgReady(false);
+    setIsMsDelayDone(false);
+    setCurrentIndex(targetIdx);
+  };
+
+  const handleStartPracticeWithTransition = () => {
+    setIsScreenTransitioning(true);
+    setTransitionMessage('Starting...');
+    setTimeout(() => {
+      setIsStarted(true);
+      setIsScreenTransitioning(false);
+    }, 300);
+  };
+
+  const handleFinishExamWithTransition = () => {
+    setShowFinishConfirm(false);
+    setIsScreenTransitioning(true);
+    setTransitionMessage('Grading...');
+    setTimeout(() => {
+      handleFinishExam();
+      setIsScreenTransitioning(false);
+    }, 320);
   };
 
   const handleRestart = () => {
@@ -340,8 +554,8 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
     const paperAttempts = pastAttempts.filter((a) => a.paperId === paper.id);
 
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0A1020]/90 backdrop-blur-sm text-[#E8ECF4] animate-fadeIn">
-        <div className="bg-[#1A2540] border border-[#6382BF]/40 rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl animate-modalFadeIn">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0A1020]/90 backdrop-blur-sm text-[#E8ECF4]">
+        <div className="bg-[#1A2540] border border-[#6382BF]/40 rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl">
           {/* Header */}
           <div className="border-b border-[#6382BF]/25 pb-4">
             <div className="flex items-center justify-between">
@@ -363,7 +577,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
             </div>
             <h2 className="text-xl font-bold text-[#E8ECF4] mt-3">{paper.title}</h2>
             <p className="text-xs text-[#7B8FAD] mt-1">
-              Interactive Practice Mode · {paper.questions.length} questions · {paperMaxMarks} marks total · {paper.durationMinutes} minutes
+              {paper.questions.length} questions · {paperMaxMarks} marks · {paper.durationMinutes} min
             </p>
           </div>
 
@@ -383,9 +597,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                 <button
                   type="button"
                   onClick={() => {
-                    try {
-                      localStorage.removeItem(draftStorageKey);
-                    } catch {}
+                    clearExamDraft(paper.id);
                     setSavedDraft(null);
                   }}
                   className="px-2 py-1 text-[11px] text-[#7B8FAD] hover:text-[#E8ECF4] transition-colors"
@@ -480,7 +692,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
             </button>
             <button
               type="button"
-              onClick={() => setIsStarted(true)}
+              onClick={handleStartPracticeWithTransition}
               className="px-6 py-2.5 rounded-xl bg-[#4A7BF7] hover:bg-[#6382BF] text-[#E8ECF4] font-semibold text-xs shadow-md transition-colors flex items-center gap-2"
             >
               <span>Start Practice Mode</span>
@@ -515,11 +727,16 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
       <ScoreReportScreen
         attempt={latestAttempt}
         paper={paper}
-        onClose={onClose}
+        onClose={handleCloseRunner}
         onRetake={handleRestart}
         onReview={(qIdx) => {
-          if (qIdx !== undefined) setCurrentIndex(qIdx);
-          setIsReviewMode(true);
+          setIsScreenTransitioning(true);
+          setTransitionMessage('Loading Review Mode...');
+          setTimeout(() => {
+            if (qIdx !== undefined) setCurrentIndex(qIdx);
+            setIsReviewMode(true);
+            setIsScreenTransitioning(false);
+          }, 320);
         }}
         erUrl={paper.erUrl || (paper.qpUrl ? paper.qpUrl.replace(/qp/g, 'er') : undefined)}
         onOpenSingleDoc={(title, url) => window.open(url, '_blank')}
@@ -531,23 +748,25 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
   // Main Interactive Exam Workspace
   // --------------------------------------------------------------------------
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-[#0F1729] text-[#E8ECF4] overflow-hidden animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex flex-col bg-[#0F1729] text-[#E8ECF4] overflow-hidden">
       {/* Top Header Bar */}
       <header className="h-14 bg-[#1A2540] border-b border-[#6382BF]/30 px-4 flex items-center justify-between shrink-0 z-30">
         {/* Left: Brand & Paper Code */}
         <div className="flex items-center gap-3">
           <button
             onClick={() => {
-              if (isReviewMode) {
+              if (isQuickReview) {
+                handleCloseRunner();
+              } else if (isReviewMode) {
                 setIsReviewMode(false);
               } else if (Object.keys(scores).length > 0 && !isFinished) {
                 setShowFinishConfirm(true);
               } else {
-                onClose();
+                handleCloseRunner();
               }
             }}
             className="p-1.5 rounded-lg hover:bg-[#0A1020] text-[#7B8FAD] hover:text-[#E8ECF4] transition-colors"
-            title={isReviewMode ? "Return to Score Report" : "Exit Practice Mode"}
+            title={isQuickReview ? "Back to Topics" : isReviewMode ? "Return to Score Report" : "Exit Practice Mode"}
           >
             {isReviewMode ? <ArrowLeft size={18} /> : <X size={18} />}
           </button>
@@ -571,23 +790,42 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
               <span className="text-[11px] text-[#7B8FAD] hidden sm:inline">· Official Mark Scheme Active</span>
             </div>
           ) : timingMode === 'timed' ? (
-            <div className="flex items-center bg-[#0A1020] px-3 py-1.5 rounded-xl border border-[#6382BF]/30 shadow-inner">
-              <FlipClock
-                secondsRemaining={secondsRemaining}
-                isPaused={isTimerPaused}
-                onTogglePause={() => setIsTimerPaused(!isTimerPaused)}
-              />
+            <div className="flex items-center gap-2">
+              <div className="flex items-center bg-[#0A1020] px-3 py-1.5 rounded-xl border border-[#6382BF]/30 shadow-inner">
+                <FlipClock
+                  secondsRemaining={secondsRemaining}
+                  isPaused={isTimerPaused || isViewingMs}
+                  onTogglePause={() => setIsTimerPaused(!isTimerPaused)}
+                />
+              </div>
             </div>
           ) : (
-            <div className="flex items-center gap-1.5 text-xs text-[#7B8FAD] bg-[#0A1020] px-3 py-1.5 rounded-xl border border-[#6382BF]/30 tabular-nums">
-              <Sparkles size={13} className="text-[#4A7BF7]" />
-              <span>{Math.floor(timeSpent / 60)}m {timeSpent % 60}s</span>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 text-xs text-[#7B8FAD] bg-[#0A1020] px-3 py-1.5 rounded-xl border border-[#6382BF]/30 tabular-nums">
+                <Sparkles size={13} className="text-[#4A7BF7]" />
+                <span>{Math.floor(timeSpent / 60)}m {timeSpent % 60}s</span>
+              </div>
             </div>
           )}
         </div>
 
         {/* Right: Tools & Submit */}
         <div className="flex items-center gap-2">
+          {/* Fullscreen Mode Toggle Button */}
+          <button
+            type="button"
+            onClick={toggleFullscreen}
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-xl border font-medium transition-colors ${
+              isFullscreen
+                ? 'bg-[#4A7BF7] text-white border-[#4A7BF7] shadow-sm'
+                : 'bg-[#0A1020] hover:bg-[#1A2540] text-[#E8ECF4] border-[#6382BF]/40'
+            }`}
+            title={isFullscreen ? "Exit Fullscreen (Esc)" : "Enter Fullscreen Mode"}
+          >
+            {isFullscreen ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
+            <span className="hidden sm:inline">{isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}</span>
+          </button>
+
           {/* Formula Booklet Drawer Button */}
           <button
             onClick={() => setShowFormulaDrawer(!showFormulaDrawer)}
@@ -619,7 +857,15 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
           )}
 
           {/* Finish & Grade or Back to Report Button */}
-          {isReviewMode ? (
+          {isQuickReview ? (
+            <button
+              onClick={handleCloseRunner}
+              className="px-4 py-1.5 text-xs rounded-xl bg-[#0A1020] hover:bg-[#1A2540] text-[#E8ECF4] border border-[#6382BF]/40 font-semibold transition-colors shadow-sm shrink-0 flex items-center gap-1.5"
+            >
+              <X size={13} />
+              <span>Close</span>
+            </button>
+          ) : isReviewMode ? (
             <button
               onClick={() => setIsReviewMode(false)}
               className="px-4 py-1.5 text-xs rounded-xl bg-[#4A7BF7] hover:bg-[#6382BF] text-white font-semibold transition-colors shadow-sm shrink-0 flex items-center gap-1.5"
@@ -630,7 +876,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
           ) : (
             <button
               onClick={() => setShowFinishConfirm(true)}
-              className="px-4 py-1.5 text-xs rounded-xl bg-[#4A7BF7] hover:bg-[#6382BF] text-white font-semibold transition-colors shadow-sm shrink-0"
+              className="px-4 py-1.5 text-xs rounded-xl bg-red-600 hover:bg-red-500 text-white font-semibold transition-colors shadow-sm shadow-red-950/30 shrink-0 active:scale-[0.98]"
             >
               Finish Exam
             </button>
@@ -645,28 +891,54 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
             const isCurrent = idx === currentIndex;
             const isScored = scores[q.number] !== undefined;
             const isFlag = !!flagged[q.number];
+            const qInfo = getQuestionDisplayInfo(paper, q, idx);
+
+            const prevQInfo = idx > 0 ? getQuestionDisplayInfo(paper, paper.questions[idx - 1], idx - 1) : null;
+            const isNewSection = qInfo.hasSections && (idx === 0 || qInfo.section !== prevQInfo?.section);
 
             return (
-              <button
-                key={q.number}
-                onClick={() => setCurrentIndex(idx)}
-                className={`h-7 px-2.5 rounded-lg text-xs font-semibold relative transition-all flex items-center gap-1 shrink-0 ${
-                  isCurrent
-                    ? 'bg-[#4A7BF7] text-white shadow-md ring-2 ring-white/30'
-                    : isScored
-                    ? 'bg-emerald-600/30 border border-emerald-500/50 text-emerald-300'
-                    : 'bg-[#0A1020] border border-[#6382BF]/30 text-[#7B8FAD] hover:text-[#E8ECF4]'
-                }`}
-                title={`Question ${q.number} (${q.totalMarks} marks)`}
-              >
-                <span>Q{q.number}</span>
-                {isScored && (
-                  <span className="text-[10px] opacity-90 tabular-nums">({scores[q.number]}/{q.totalMarks})</span>
+              <React.Fragment key={q.number}>
+                {isNewSection && (
+                  <span className={`text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider shrink-0 ${
+                    qInfo.sectionShort === 'Stats'
+                      ? 'bg-[#4A7BF7]/15 text-[#4A7BF7] border border-[#4A7BF7]/30'
+                      : 'bg-amber-500/15 text-amber-300 border border-amber-500/30 ml-2'
+                  }`}>
+                    {qInfo.sectionLetter}: {qInfo.sectionShort}
+                  </span>
                 )}
-                {isFlag && (
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                )}
-              </button>
+                {(() => {
+                  const scoreRatio = isScored && q.totalMarks > 0 ? scores[q.number] / q.totalMarks : null;
+                  const scoredNavClass =
+                    scoreRatio === 1
+                      ? 'bg-emerald-600/30 border border-emerald-500/50 text-emerald-300 hover:bg-emerald-600/40'
+                      : scoreRatio !== null && scoreRatio >= 0.5
+                      ? 'bg-amber-500/20 border border-amber-500/50 text-amber-300 hover:bg-amber-500/30'
+                      : 'bg-rose-500/20 border border-rose-500/50 text-rose-300 hover:bg-rose-500/30';
+                  return (
+                    <button
+                      key={q.number}
+                      onClick={() => handleNavigateQuestion(idx)}
+                      className={`h-7 px-2.5 rounded-lg text-xs font-semibold relative transition-all flex items-center gap-1 shrink-0 ${
+                        isCurrent
+                          ? 'bg-[#4A7BF7] text-white shadow-md shadow-[#4A7BF7]/25'
+                          : isScored
+                          ? scoredNavClass
+                          : 'bg-[#0A1020] border border-[#6382BF]/30 text-[#7B8FAD] hover:text-[#E8ECF4] hover:border-[#6382BF]/50'
+                      }`}
+                      title={`${qInfo.fullTitle} (${q.totalMarks} marks)`}
+                    >
+                      <span>Q{qInfo.displayNumber}</span>
+                      {isScored && (
+                        <span className="text-[10px] opacity-90 tabular-nums">({scores[q.number]}/{q.totalMarks})</span>
+                      )}
+                      {isFlag && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                      )}
+                    </button>
+                  );
+                })()}
+              </React.Fragment>
             );
           })}
         </div>
@@ -681,17 +953,38 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
         </div>
       </div>
 
-      {/* Main Stage: Interactive Question Viewer */}
-      <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 space-y-6">
-        <div key={currentQ.number} className="max-w-4xl mx-auto space-y-6 pb-12 animate-questionFade">
+      {/* Main Stage: Interactive Question Viewer with Clean Crossfade */}
+      <div ref={mainStageRef} className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 space-y-6">
+        <AnimatePresence
+          mode="wait"
+          initial={false}
+          onExitComplete={() => mainStageRef.current?.scrollTo({ top: 0 })}
+        >
+          <motion.div
+            key={currentQ.number}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="max-w-4xl mx-auto space-y-6 pb-12"
+          >
           {/* Question Card */}
           <div className="border border-[#6382BF]/30 hover:border-[#4A7BF7]/40 rounded-2xl bg-[#1A2540] p-6 sm:p-8 shadow-xl space-y-6 transition-colors duration-200">
             {/* Question Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#6382BF]/25 gap-3">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 flex-wrap">
                 <span className="text-xl sm:text-2xl font-bold font-serif text-[#E8ECF4]">
-                  Question {currentQ.number}
+                  Question {currentQInfo.displayNumber}
                 </span>
+                {currentQInfo.hasSections && (
+                  <span className={`text-xs px-2.5 py-1 rounded-lg font-semibold border ${
+                    currentQInfo.sectionShort === 'Stats'
+                      ? 'bg-[#4A7BF7]/15 text-[#4A7BF7] border-[#4A7BF7]/30'
+                      : 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+                  }`}>
+                    {currentQInfo.section}
+                  </span>
+                )}
                 <span className="text-xs px-2.5 py-1 rounded-lg bg-[#0A1020] text-[#4A7BF7] font-semibold border border-[#6382BF]/30">
                   {currentQ.topic}
                 </span>
@@ -722,22 +1015,46 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
               <div
                 onClick={() => setLightboxDiagram({
                   url: currentQ.questionImageUrl,
-                  caption: `Question ${currentQ.number} · Authentic Question Paper (${paper.paperCode})`,
+                  caption: `${currentQInfo.hasSections ? `${currentQInfo.section} · ` : ''}Question ${currentQInfo.displayNumber} · Question Paper (${paper.paperCode})`,
                 })}
                 className="border border-[#6382BF]/30 hover:border-[#4A7BF7]/60 rounded-xl bg-[#0A1020] p-3 sm:p-4 relative group cursor-zoom-in transition-all shadow-md overflow-hidden"
               >
-                <div className="bg-white rounded-lg p-2.5 sm:p-4 mx-auto flex items-center justify-center shadow-sm">
+                <div className="relative min-h-[220px] bg-white rounded-lg p-2.5 sm:p-4 mx-auto flex items-center justify-center shadow-sm overflow-hidden">
+                  {!isImgLoaded && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#F8FAFC] rounded-lg gap-2.5 z-10 shadow-inner">
+                      <div className="relative flex items-center justify-center">
+                        <div className="w-9 h-9 rounded-full border-2 border-[#4A7BF7]/25 border-t-[#4A7BF7] animate-spin" />
+                        <FileText size={15} className="text-[#4A7BF7] absolute animate-pulse" />
+                      </div>
+                      <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#4A7BF7]/10 border border-[#4A7BF7]/25 shadow-sm">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#4A7BF7] animate-ping" />
+                        <span className="text-xs font-bold text-[#2563EB] tracking-tight">
+                          Loading question...
+                        </span>
+                      </div>
+                    </div>
+                  )}
                   <img
-                    src={currentQ.questionImageUrl}
+                    ref={(el) => {
+                      qImgRef.current = el;
+                      if (el?.complete && el.naturalWidth > 0) setIsImgReady(true);
+                    }}
+                    src={assetUrl(currentQ.questionImageUrl)}
                     alt={`Question ${currentQ.number}`}
-                    className="w-full max-h-[620px] object-contain select-none mx-auto block"
+                    onLoad={() => setIsImgReady(true)}
+                    onError={() => setIsImgReady(true)}
+                    className={`w-full max-h-[620px] object-contain select-none mx-auto block transition-opacity duration-300 ${
+                      isImgLoaded ? 'opacity-100' : 'opacity-0'
+                    }`}
                   />
                 </div>
                 <div className="text-center text-xs text-[#7B8FAD] mt-2.5 font-medium flex items-center justify-center gap-1.5">
                   <Eye size={13} className="text-[#4A7BF7]" />
-                  <span>Question {currentQ.number} Paper Sheet</span>
+                  <span>
+                    {currentQInfo.hasSections ? `${currentQInfo.sectionLetter} · ` : ''}Question {currentQInfo.displayNumber}
+                  </span>
                   <span className="text-[#4A7BF7] group-hover:underline font-semibold ml-1">
-                    · Click to Zoom / Inspect
+                    · Click to Zoom
                   </span>
                 </div>
               </div>
@@ -768,7 +1085,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                     ) : (
                       <div className="bg-white rounded-lg p-3 mx-auto max-w-2xl flex items-center justify-center shadow-sm">
                         <img
-                          src={currentQ.diagramUrl}
+                          src={assetUrl(currentQ.diagramUrl)}
                           alt={currentQ.diagramCaption || `Question ${currentQ.number} figure`}
                           className="max-h-[340px] max-w-full object-contain select-none"
                         />
@@ -793,7 +1110,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                 {currentQ.parts.map((p, pIdx) => (
                   <div key={pIdx} className="p-4 rounded-xl bg-[#0A1020]/70 border border-[#6382BF]/25 space-y-2">
                     <div className="flex items-center gap-2 text-xs font-bold text-[#E8ECF4]">
-                      <span>Part {p.partLabel}</span>
+                      <span className="[font-variant-ligatures:none]">{currentQ.parts.length === 1 ? `Question ${currentQ.number}` : renderPartLabel(p.partLabel, pIdx)}</span>
                       <span className="text-[#7B8FAD]">[{p.marks} {p.marks === 1 ? 'mark' : 'marks'}]</span>
                     </div>
                     <FormattedMathText text={p.text} className="text-sm sm:text-base text-[#E8ECF4]" />
@@ -807,10 +1124,17 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
               <div className="flex items-center justify-between gap-3 flex-wrap">
                 <button
                   type="button"
-                  onClick={() => setRevealedSolutions((prev) => ({
-                    ...prev,
-                    [currentQ.number]: !prev[currentQ.number]
-                  }))}
+                  onClick={() => {
+                    const willReveal = !revealedSolutions[currentQ.number];
+                    if (willReveal) {
+                      setIsMsImgReady(false);
+                      setIsMsDelayDone(false);
+                    }
+                    setRevealedSolutions((prev) => ({
+                      ...prev,
+                      [currentQ.number]: willReveal
+                    }));
+                  }}
                   className="px-4 py-2 rounded-xl bg-[#0A1020] hover:bg-[#1A2540] border border-[#6382BF]/30 hover:border-[#4A7BF7] text-xs font-semibold text-[#4A7BF7] flex items-center gap-2 transition-all shadow-sm"
                 >
                   {revealedSolutions[currentQ.number] || isReviewMode ? (
@@ -821,35 +1145,40 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                   ) : (
                     <>
                       <Eye size={14} />
-                      <span>Reveal Official Solution & Mark Scheme ({currentQ.totalMarks} marks)</span>
+                      <span>Reveal Mark Scheme ({currentQ.totalMarks} marks)</span>
                     </>
                   )}
                 </button>
-
-                <span className="text-[11px] text-[#7B8FAD] hidden sm:inline">
-                  Compare your working against Pearson marking criteria
-                </span>
               </div>
 
               {/* Revealed Solution & Mark Scheme Card */}
-              {(revealedSolutions[currentQ.number] || isReviewMode) && (
-                <div className="p-4 sm:p-5 rounded-2xl bg-[#0A1020]/90 border border-[#4A7BF7]/40 space-y-4 animate-fadeIn shadow-lg">
+              <AnimatePresence initial={false}>
+                {(revealedSolutions[currentQ.number] || isReviewMode) && (
+                  <motion.div
+                    key={`ms-${currentQ.number}`}
+                    initial={{ opacity: 0, height: 0, y: -6 }}
+                    animate={{ opacity: 1, height: 'auto', y: 0 }}
+                    exit={{ opacity: 0, height: 0, y: -6 }}
+                    transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
+                    className="overflow-hidden"
+                  >
+                    <div className="p-4 sm:p-5 rounded-2xl bg-[#0A1020]/90 border border-[#4A7BF7]/40 space-y-4 shadow-lg">
                   <div className="flex items-center justify-between border-b border-[#6382BF]/20 pb-3">
                     <div className="flex items-center gap-2 text-xs font-bold text-[#E8ECF4]">
                       <CheckCircle2 size={15} className="text-emerald-400" />
-                      <span>Official Pearson Edexcel Mark Scheme</span>
+                      <span>Mark Scheme</span>
                     </div>
                     {currentQ.markSchemeImageUrl && (
                       <button
                         type="button"
                         onClick={() => setLightboxDiagram({
                           url: currentQ.markSchemeImageUrl,
-                          caption: `Question ${currentQ.number} · Official Mark Scheme Table`,
+                          caption: `${currentQInfo.hasSections ? `${currentQInfo.section} · ` : ''}Question ${currentQInfo.displayNumber} · Mark Scheme`,
                         })}
                         className="text-[11px] text-[#4A7BF7] hover:underline flex items-center gap-1 font-semibold"
                       >
                         <Maximize2 size={12} />
-                        <span>Inspect in Fullscreen</span>
+                        <span>Zoom</span>
                       </button>
                     )}
                   </div>
@@ -858,22 +1187,46 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                     <div
                       onClick={() => setLightboxDiagram({
                         url: currentQ.markSchemeImageUrl,
-                        caption: `Question ${currentQ.number} · Official Mark Scheme Table`,
+                        caption: `${currentQInfo.hasSections ? `${currentQInfo.section} · ` : ''}Question ${currentQInfo.displayNumber} · Official Mark Scheme Table`,
                       })}
                       className="border border-[#6382BF]/30 hover:border-emerald-500/60 rounded-xl bg-[#0A1020] p-3 sm:p-4 relative group cursor-zoom-in transition-all shadow-md overflow-hidden"
                     >
-                      <div className="bg-white rounded-lg p-2.5 sm:p-4 mx-auto flex items-center justify-center shadow-sm">
+                      <div className="relative min-h-[200px] bg-white rounded-lg p-2.5 sm:p-4 mx-auto flex items-center justify-center shadow-sm overflow-hidden">
+                        {!isMsImgLoaded && (
+                          <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#F8FAFC] rounded-lg gap-2.5 z-10 shadow-inner">
+                            <div className="relative flex items-center justify-center">
+                              <div className="w-9 h-9 rounded-full border-2 border-emerald-500/20 border-t-emerald-600 animate-spin" />
+                              <CheckCircle2 size={15} className="text-emerald-600 absolute animate-pulse" />
+                            </div>
+                            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 shadow-sm">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+                              <span className="text-xs font-bold text-emerald-700 tracking-tight">
+                                Loading mark scheme...
+                              </span>
+                            </div>
+                          </div>
+                        )}
                         <img
-                          src={currentQ.markSchemeImageUrl}
+                          ref={(el) => {
+                            msImgRef.current = el;
+                            if (el?.complete && el.naturalWidth > 0) setIsMsImgReady(true);
+                          }}
+                          src={assetUrl(currentQ.markSchemeImageUrl)}
                           alt={`Question ${currentQ.number} Mark Scheme`}
-                          className="w-full max-h-[620px] object-contain select-none mx-auto block"
+                          onLoad={() => setIsMsImgReady(true)}
+                          onError={() => setIsMsImgReady(true)}
+                          className={`w-full max-h-[620px] object-contain select-none mx-auto block transition-opacity duration-300 ${
+                            isMsImgLoaded ? 'opacity-100' : 'opacity-0'
+                          }`}
                         />
                       </div>
                       <div className="text-center text-xs text-[#7B8FAD] mt-2.5 font-medium flex items-center justify-center gap-1.5">
                         <Eye size={13} className="text-emerald-400" />
-                        <span>Official Pearson Edexcel Criteria Table</span>
+                        <span>
+                          {currentQInfo.hasSections ? `${currentQInfo.sectionLetter} · ` : ''}Question {currentQInfo.displayNumber} Mark Scheme
+                        </span>
                         <span className="text-emerald-400 group-hover:underline font-semibold ml-1">
-                          · Click to Zoom / Inspect in Fullscreen
+                          · Click to Zoom
                         </span>
                       </div>
                     </div>
@@ -882,8 +1235,10 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                       <FormattedMathText text={currentQ.fullMarkScheme} />
                     </div>
                   )}
-                </div>
-              )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             {/* Marking / Scoring Section */}
@@ -892,13 +1247,13 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
               <div className="pt-4 border-t border-[#6382BF]/25 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <span className="text-xs font-semibold text-[#7B8FAD]">
-                    Question {currentQ.number} Score:
+                    {currentQInfo.hasSections ? `${currentQInfo.sectionLetter} · ` : ''}Question {currentQInfo.displayNumber} Score:
                   </span>
                   <span
                     className={`px-3 py-1 rounded-lg text-xs font-bold tabular-nums border ${
                       scores[currentQ.number] === currentQ.totalMarks
                         ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
-                        : (scores[currentQ.number] || 0) > 0
+                        : currentQ.totalMarks > 0 && (scores[currentQ.number] || 0) / currentQ.totalMarks >= 0.5
                         ? 'bg-amber-500/15 text-amber-300 border-amber-500/30'
                         : 'bg-rose-500/15 text-rose-400 border-rose-500/30'
                     }`}
@@ -924,7 +1279,10 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                     {currentQ.parts.map((p, pIdx) => {
                       const partKey = `${currentQ.number}_${pIdx}`;
                       const awarded = subpartScores[partKey];
-                      const label = p.partLabel || (currentQ.parts.length === 1 ? 'Total' : `Part ${pIdx + 1}`);
+                      const hasSubparts = currentQ.parts.length > 1;
+                      const label = hasSubparts
+                        ? renderPartLabel(p.partLabel, pIdx)
+                        : `${currentQInfo.hasSections ? `${currentQInfo.sectionLetter} · ` : ''}Question ${currentQInfo.displayNumber} Score`;
 
                       return (
                         <div
@@ -932,8 +1290,8 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                           className="p-3.5 rounded-xl bg-[#0A1020]/60 border border-[#6382BF]/25 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm"
                         >
                           <div className="flex items-center gap-2">
-                            <span className="font-bold text-[#E8ECF4] text-xs sm:text-sm">
-                              {label.startsWith('(') ? `Part ${label}` : label}
+                            <span className="font-bold text-[#E8ECF4] text-xs sm:text-sm [font-variant-ligatures:none]">
+                              {label}
                             </span>
                             <span className="text-[11px] text-[#7B8FAD]">
                               [{p.marks} {p.marks === 1 ? 'mark' : 'marks'}]
@@ -954,7 +1312,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                                 onClick={() => handleSubpartScoreChange(currentQ.number, pIdx, p.marks, mVal)}
                                 className={`w-7 h-7 rounded-lg text-xs font-semibold transition-all ${
                                   awarded === mVal
-                                    ? 'bg-[#4A7BF7] text-white shadow-md ring-2 ring-white/30 scale-105'
+                                    ? 'bg-[#4A7BF7] text-white shadow-md shadow-[#4A7BF7]/25'
                                     : 'bg-[#1A2540] text-[#7B8FAD] hover:text-[#E8ECF4] hover:bg-[#6382BF]/20 border border-[#6382BF]/30'
                                 }`}
                               >
@@ -972,7 +1330,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                 <div className="pt-4 border-t border-[#6382BF]/25 flex items-center justify-between gap-4">
                   <div>
                     <span className="text-xs font-semibold text-[#7B8FAD] block">
-                      Question {currentQ.number} Score
+                      {currentQInfo.hasSections ? `${currentQInfo.sectionLetter} · ` : ''}Question {currentQInfo.displayNumber} Score
                     </span>
                     <div className="text-lg font-bold text-[#E8ECF4] tabular-nums mt-0.5">
                       {scores[currentQ.number] !== undefined ? scores[currentQ.number] : 0}{' '}
@@ -987,7 +1345,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
           {/* Bottom Pagination Controls */}
           <div className="flex items-center justify-between gap-4 pt-2">
             <button
-              onClick={() => setCurrentIndex(Math.max(0, currentIndex - 1))}
+              onClick={() => handleNavigateQuestion(currentIndex - 1)}
               disabled={currentIndex === 0}
               className={`px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 border transition-colors ${
                 currentIndex === 0
@@ -1000,12 +1358,12 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
             </button>
 
             <span className="text-xs text-[#7B8FAD] font-medium hidden sm:inline">
-              Question {currentIndex + 1} of {paper.questions.length}
+              {currentQInfo.hasSections ? `${currentQInfo.sectionShort} · ` : ''}Question {currentQInfo.displayNumber} of {currentQInfo.hasSections ? (currentQInfo.sectionShort === 'Stats' ? (paper.questions.length >= 11 ? 6 : 5) : (paper.questions.length - (paper.questions.length >= 11 ? 6 : 5))) : paper.questions.length} (Q{currentIndex + 1} of {paper.questions.length} overall)
             </span>
 
             {currentIndex < paper.questions.length - 1 ? (
               <button
-                onClick={() => setCurrentIndex(currentIndex + 1)}
+                onClick={() => handleNavigateQuestion(currentIndex + 1)}
                 className="px-5 py-2.5 rounded-xl bg-[#4A7BF7] hover:bg-[#6382BF] text-white text-xs font-semibold flex items-center gap-2 transition-colors shadow-md"
               >
                 <span>Next Question</span>
@@ -1021,19 +1379,28 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
               </button>
             )}
           </div>
-        </div>
+        </motion.div>
+      </AnimatePresence>
       </div>
 
       {/* ---------------------------------------------------------------------- */}
       {/* High-Resolution Diagram Lightbox Modal (Click-to-Zoom / Inspect)       */}
       {/* ---------------------------------------------------------------------- */}
-      {lightboxDiagram && (
-        <div className="fixed inset-0 z-50 bg-[#0A1020]/95 backdrop-blur-md flex flex-col p-4 animate-fadeIn">
+      <AnimatePresence>
+        {lightboxDiagram && (
+          <motion.div
+            key="exam-lightbox"
+            initial={{ opacity: 0, scale: 0.985 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.985 }}
+            transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-0 z-50 bg-[#070B14] flex flex-col p-3 sm:p-4"
+          >
           {/* Lightbox Toolbar */}
-          <div className="h-12 bg-[#1A2540] border border-[#6382BF]/30 rounded-xl px-4 flex items-center justify-between shrink-0 shadow-lg mb-4">
-            <div className="flex items-center gap-2">
-              <Eye size={15} className="text-[#4A7BF7]" />
-              <span className="text-xs font-semibold text-[#E8ECF4] truncate max-w-md">
+          <div className="h-12 bg-[#1A2540] border border-[#6382BF]/30 rounded-xl px-4 flex items-center justify-between shrink-0 shadow-lg mb-3">
+            <div className="flex items-center gap-2 min-w-0">
+              <Eye size={15} className="text-[#4A7BF7] shrink-0" />
+              <span className="text-xs font-semibold text-[#E8ECF4] truncate max-w-xs sm:max-w-md">
                 {lightboxDiagram.caption || 'High-Resolution Diagram Inspection'}
               </span>
             </div>
@@ -1074,14 +1441,14 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
           </div>
 
           {/* Lightbox Canvas Viewport */}
-          <div className="flex-1 overflow-auto flex items-start justify-center p-4 sm:p-6 border border-[#6382BF]/20 rounded-2xl bg-[#0A1020]">
+          <div className="flex-1 overflow-y-auto overscroll-contain flex flex-col items-center p-2 sm:p-6 border border-[#6382BF]/20 rounded-2xl bg-[#0A1020]">
             <div
               style={{
                 transform: `scale(${lightboxZoom})`,
                 transformOrigin: 'top center',
-                transition: 'transform 0.15s ease-out',
+                willChange: 'transform',
               }}
-              className="max-w-4xl w-full my-auto flex items-center justify-center py-4"
+              className="max-w-4xl w-full flex flex-col items-center py-2"
             >
               {lightboxDiagram.svg ? (
                 <div
@@ -1089,48 +1456,77 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
                   dangerouslySetInnerHTML={{ __html: lightboxDiagram.svg }}
                 />
               ) : (
-                <div className="bg-white rounded-xl p-3 sm:p-4 shadow-2xl max-w-full">
+                <div className="bg-white rounded-xl p-2 sm:p-4 shadow-2xl max-w-full">
                   <img
-                    src={lightboxDiagram.url}
+                    src={assetUrl(lightboxDiagram.url)}
                     alt={lightboxDiagram.caption || 'Diagram'}
                     className="max-w-full h-auto object-contain select-none mx-auto block"
+                    style={{ transform: 'translateZ(0)' }}
                   />
                 </div>
               )}
             </div>
           </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ---------------------------------------------------------------------- */}
       {/* Formula Booklet Slide-over Drawer                                     */}
       {/* ---------------------------------------------------------------------- */}
-      {showFormulaDrawer && (
-        <>
-          {/* Subtle click-outside backdrop on smaller screens */}
-          <div
-            className="fixed inset-0 z-40 bg-black/40 backdrop-blur-[2px] xl:hidden"
-            onClick={() => setShowFormulaDrawer(false)}
-          />
-          <div className="fixed inset-y-0 right-0 z-50 w-full sm:w-[500px] md:w-[560px] bg-[#1A2540] border-l border-[#6382BF]/30 shadow-2xl flex flex-col animate-slideInRight">
-            <FormulaBookletModal
-              mode="drawer"
-              onClose={() => setShowFormulaDrawer(false)}
+      <AnimatePresence>
+        {showFormulaDrawer && (
+          <>
+            {/* Subtle click-outside backdrop on smaller screens */}
+            <motion.div
+              key="formula-drawer-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.24 }}
+              className="fixed inset-0 z-40 bg-black/45 backdrop-blur-[2px]"
+              onClick={() => setShowFormulaDrawer(false)}
             />
-          </div>
-        </>
-      )}
+            <motion.div
+              key="formula-drawer-panel"
+              initial={{ x: '100%', opacity: 0.6 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: '100%', opacity: 0.6 }}
+              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              className="fixed inset-y-0 right-0 z-50 w-full sm:w-[580px] md:w-[680px] lg:w-[760px] bg-[#1A2540] border-l border-[#6382BF]/30 shadow-2xl flex flex-col"
+            >
+              <FormulaBookletModal
+                mode="drawer"
+                onClose={() => setShowFormulaDrawer(false)}
+              />
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* ---------------------------------------------------------------------- */}
       {/* Scanned Official Question Paper Slide-over Drawer                     */}
       {/* ---------------------------------------------------------------------- */}
-      {showPdfDrawer && paper.qpUrl && (
-        <>
-          <div
-            className="fixed inset-0 z-40 bg-black/40 backdrop-blur-[2px] xl:hidden"
-            onClick={() => setShowPdfDrawer(false)}
-          />
-          <div className="fixed inset-y-0 left-0 z-50 w-full sm:w-[640px] md:w-[720px] bg-[#1A2540] border-r border-[#6382BF]/30 shadow-2xl flex flex-col animate-fadeIn">
+      <AnimatePresence>
+        {showPdfDrawer && paper.qpUrl && (
+          <>
+            <motion.div
+              key="pdf-drawer-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.24 }}
+              className="fixed inset-0 z-40 bg-black/45 backdrop-blur-[2px]"
+              onClick={() => setShowPdfDrawer(false)}
+            />
+            <motion.div
+              key="pdf-drawer-panel"
+              initial={{ x: '-100%', opacity: 0.6 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: '-100%', opacity: 0.6 }}
+              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              className="fixed inset-y-0 left-0 z-50 w-full sm:w-[640px] md:w-[720px] bg-[#1A2540] border-r border-[#6382BF]/30 shadow-2xl flex flex-col"
+            >
           <div className="h-12 bg-[#0A1020] px-4 border-b border-[#6382BF]/30 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2">
               <FileText size={15} className="text-[#4A7BF7]" />
@@ -1140,7 +1536,7 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
             </div>
             <div className="flex items-center gap-3">
               <a
-                href={paper.qpUrl}
+                href={assetUrl(paper.qpUrl)}
                 target="_blank"
                 rel="noreferrer"
                 className="text-xs text-[#7B8FAD] hover:text-[#E8ECF4] flex items-center gap-1"
@@ -1157,20 +1553,35 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
             </div>
           </div>
           <iframe
-            src={`${paper.qpUrl}#toolbar=0&navpanes=0&view=FitH`}
+            src={`${assetUrl(paper.qpUrl)}#toolbar=0&navpanes=0&view=FitH`}
             className="flex-1 w-full border-0"
             title={`${paper.title} PDF reference`}
           />
-        </div>
-        </>
-      )}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* ---------------------------------------------------------------------- */}
       {/* Finish Confirmation Dialog                                             */}
       {/* ---------------------------------------------------------------------- */}
-      {showFinishConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0A1020]/90 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-[#1A2540] border border-[#6382BF]/40 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl animate-modalFadeIn">
+      <AnimatePresence>
+        {showFinishConfirm && (
+          <motion.div
+            key="finish-confirm-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.22 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0A1020]/90 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 8 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 8 }}
+              transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
+              className="bg-[#1A2540] border border-[#6382BF]/40 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl"
+            >
             <div className="flex items-center gap-3 text-[#E8ECF4]">
               <div className="p-2.5 rounded-xl bg-[#4A7BF7]/20 text-[#4A7BF7] border border-[#4A7BF7]/30">
                 <AlertCircle size={20} />
@@ -1208,12 +1619,25 @@ export const InteractiveExamRunner: React.FC<InteractiveExamRunnerProps> = ({
               </button>
               <button
                 type="button"
-                onClick={handleFinishExam}
-                className="px-5 py-2 rounded-xl bg-[#4A7BF7] hover:bg-[#6382BF] text-white text-xs font-semibold transition-colors shadow-md"
+                onClick={handleFinishExamWithTransition}
+                className="px-5 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-semibold transition-colors shadow-md shadow-red-950/30"
               >
                 Submit Exam
               </button>
             </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ---------------------------------------------------------------------- */}
+      {/* Smooth Screen Transition Mask                                          */}
+      {/* ---------------------------------------------------------------------- */}
+      {isScreenTransitioning && (
+        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#0A1020]/95 backdrop-blur-md transition-opacity duration-200 animate-fadeIn">
+          <div className="p-6 rounded-2xl bg-[#1A2540] border border-[#6382BF]/40 shadow-2xl flex flex-col items-center gap-3 animate-modalFadeIn">
+            <div className="w-9 h-9 rounded-full border-2 border-[#4A7BF7] border-t-transparent animate-spin" />
+            <span className="text-sm font-semibold text-[#E8ECF4] tracking-wide">{transitionMessage}</span>
           </div>
         </div>
       )}

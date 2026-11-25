@@ -1283,86 +1283,21 @@ Alt 3 Using Logs Way 1:
       questionImageUrl: '/crops/maths/p1/2024-q15.png',
       markSchemeImageUrl: '/crops/maths/p1/2024-q15-ms.png',
       parts: [
-        {
-          partLabel: '',
-          marks: 6,
-          text: `(i)	 Show that  k
-2 - 4k + 5  is positive for all real values of k.
-(2)
-(ii)	 A student was asked to prove by contradiction that
-“There are no positive integers x and y such that 3
-2
-2
-5
-28
-x
-y
-x
-y
-1
-.
-/
-3
-.
-/ O
-”
-The start of the student’s proof is shown below.
-Assume that positive integers x and y exist such that
-3
-2
-2
-5
-28
-x
-y
-x
-y
-1
-.
-/
-3
-.
-/ O
-If  3x + 2y = 14 and 2x - 5y = 2
-3
-2
-14
-2
-5
-2
-74
-19
-22
-19
-x
-y
-x
-y
-x
-y
-1
-O
-3
-O
-
-
-
-O
-O
-,
-Notintegers
-Show the calculations and statements needed to complete the proof.
-(4)
-43
-
-
-44
-
-`,
-          solution: `Full method for Question 15 (6 marks).`,
-          subAnswer: `See detailed mark scheme breakdown`,
-        },
-      ],
+            {
+                "partLabel": "(i)",
+                "marks": 2,
+                "text": "15. (i) Show that \u2009k 2 \u2013 4k + 5\u2009 is positive for all real values of k.",
+                "solution": "See official Pearson mark scheme snippet above for (i) method & accuracy marks.",
+                "subAnswer": "Refer to official mark scheme"
+            },
+            {
+                "partLabel": "(ii)",
+                "marks": 4,
+                "text": "(ii) A student was asked to prove by contradiction that DO NOT \u201cThere are no positive integers x and y such that . x 1 y / . x 3 y / O \u201d 3 2 2 5 28 WRITE The start of the student\u2019s proof is shown below. Assume that positive integers x and y exist such that IN . x 1 y / . x 3 y / O THIS 3 2 2 5 28 If 3x + 2y = 14 and 2x \u2013 5y = 2 AREA 3 x 1 2 y O 14 74 22 x O , y O Notintegers 2 x 3 5 y O 2 19 19 Show the calculations and statements needed to complete the proof.  DO NOT IN THIS AREA THIS IN WRITE NOT DO NOT AREA IN DO DO NOT THIS DO NOT WRITE IN THIS AREA",
+                "solution": "See official Pearson mark scheme snippet above for (ii) method & accuracy marks.",
+                "subAnswer": "Refer to official mark scheme"
+            }
+        ],
       fullMarkScheme: `(
 )
 2

@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-serif: 'Fraunces', Georgia, serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
@@ -22,16 +22,19 @@
   --theme-signal: #F59E42;
   color-scheme: dark;
 
-  /* Contemporary Font Theme (Space Grotesk + Fraunces) */
-  --font-body: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Primary Font Theme (Manrope body + Fraunces title) */
+  --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-serif: 'Fraunces', Georgia, serif;
 }
 
 html {
   scroll-behavior: smooth;
+  scrollbar-gutter: stable;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-variant-ligatures: none;
+  font-feature-settings: "calt" 0, "dlig" 0, "liga" 0;
 }
 
 @layer base {
@@ -40,6 +43,8 @@ html {
     background-color: var(--theme-bg-page);
     color: var(--theme-text-main);
     overflow-x: hidden;
+    font-variant-ligatures: none;
+    font-feature-settings: "calt" 0, "dlig" 0, "liga" 0;
   }
   
   .font-serif {
@@ -57,22 +62,22 @@ html {
   }
 }
 
-/* Fluid interactive feedback on all buttons and actionable elements */
-button, 
-[role="button"], 
+/* Deliberate, smooth button press & release (unlayered so Tailwind utilities
+   like transition-colors/transition-all/duration-150 never override press timing) */
+button,
+[role="button"],
 a {
-  cursor: pointer !important;
-  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
-              background-color 0.18s ease,
-              border-color 0.18s ease,
-              color 0.18s ease,
-              box-shadow 0.18s ease,
-              opacity 0.18s ease;
+  cursor: pointer;
+  transition-property: transform, scale, translate, background-color, border-color, color, box-shadow, opacity;
+  transition-duration: 0.38s;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 button:active:not(:disabled),
-[role="button"]:active:not(:disabled) {
-  transform: scale(0.975);
+[role="button"]:active:not(:disabled),
+a:active {
+  scale: 0.96;
+  transition-duration: 0.28s;
 }
 
 /* Fluid, sleek scrollbars */
@@ -102,43 +107,41 @@ button:active:not(:disabled),
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(6px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
 @keyframes modalFadeIn {
   from {
     opacity: 0;
-    transform: scale(0.975) translateY(4px);
+    transform: scale3d(0.97, 0.97, 1) translate3d(0, 6px, 0);
   }
   to {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
   }
 }
 
 @keyframes slideInRight {
   from {
-    transform: translateX(100%);
+    transform: translate3d(100%, 0, 0);
     opacity: 0.3;
   }
   to {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
     opacity: 1;
   }
 }
 
 @keyframes slideInLeft {
   from {
-    transform: translateX(-100%);
+    transform: translate3d(-100%, 0, 0);
     opacity: 0.3;
   }
   to {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
     opacity: 1;
   }
 }
@@ -146,32 +149,37 @@ button:active:not(:disabled),
 @keyframes questionFade {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translate3d(0, 8px, 0);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
 .animate-fadeIn {
-  animation: fadeIn 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: opacity, transform;
 }
 
 .animate-modalFadeIn {
-  animation: modalFadeIn 0.26s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: modalFadeIn 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: opacity, transform;
 }
 
 .animate-slideInRight {
-  animation: slideInRight 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: slideInRight 0.26s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: opacity, transform;
 }
 
 .animate-slideInLeft {
-  animation: slideInLeft 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: slideInLeft 0.26s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: opacity, transform;
 }
 
 .animate-questionFade {
-  animation: questionFade 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: questionFade 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: opacity, transform;
 }
 
 /* Dynamic CSS overrides for all themes */
@@ -222,9 +230,9 @@ header {
   background-color: var(--theme-accent) !important;
   color: var(--theme-accent-text) !important;
 }
+/* Keep .bg-white genuinely white for exam sheets, mark schemes, diagrams, and PDFs */
 [data-theme] .bg-white {
-  background-color: var(--theme-accent) !important;
-  color: var(--theme-accent-text) !important;
+  background-color: #ffffff !important;
 }
 [data-theme] .bg-black\/80 {
   background-color: color-mix(in srgb, var(--theme-bg-page) 80%, transparent) !important;

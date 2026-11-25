@@ -11,6 +11,8 @@ export interface QuestionPart {
 
 export interface InteractiveQuestion {
   number: number;
+  section?: string; // e.g. "Section A: Statistics" | "Section B: Mechanics"
+  sectionQuestionNumber?: number; // e.g. 1, 2, 3... restarted for each section
   totalMarks: number;
   topic: string;
   contextText?: string;
@@ -38,19 +40,19 @@ export const SVG_CALCULUS_REGION = `<svg viewBox="0 0 600 320" className="w-full
   <rect width="600" height="320" fill="url(#grid_calc)" rx="12"/>
   <line x1="60" y1="260" x2="560" y2="260" stroke="#7B8FAD" stroke-width="2"/>
   <line x1="120" y1="290" x2="120" y2="30" stroke="#7B8FAD" stroke-width="2"/>
-  <text x="550" y="285" fill="#E8ECF4" font-family="'Space Grotesk', sans-serif" font-size="14" font-weight="600">x</text>
-  <text x="100" y="45" fill="#E8ECF4" font-family="'Space Grotesk', sans-serif" font-size="14" font-weight="600">y</text>
-  <text x="105" y="278" fill="#7B8FAD" font-family="'Space Grotesk', sans-serif" font-size="13">O</text>
+  <text x="550" y="285" fill="#E8ECF4" font-family="'Manrope', sans-serif" font-size="14" font-weight="600">x</text>
+  <text x="100" y="45" fill="#E8ECF4" font-family="'Manrope', sans-serif" font-size="14" font-weight="600">y</text>
+  <text x="105" y="278" fill="#7B8FAD" font-family="'Manrope', sans-serif" font-size="13">O</text>
   <path d="M 120 260 Q 280 60 440 260 Z" fill="rgba(74, 123, 247, 0.22)" stroke="none"/>
   <path d="M 80 280 Q 280 40 480 280" fill="none" stroke="#4A7BF7" stroke-width="3" stroke-linecap="round"/>
   <line x1="90" y1="280" x2="400" y2="100" stroke="#F59E42" stroke-width="2.5" stroke-dasharray="6,4"/>
   <circle cx="120" cy="260" r="4" fill="#E8ECF4"/>
   <circle cx="333" cy="138" r="4" fill="#F59E42"/>
-  <text x="345" y="135" fill="#E8ECF4" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="600">P (4, 8)</text>
-  <text x="435" y="280" fill="#7B8FAD" font-family="'Space Grotesk', sans-serif" font-size="12">6</text>
-  <text x="280" y="75" fill="#4A7BF7" font-family="'Space Grotesk', sans-serif" font-size="13" font-weight="600">C: y = 6x - x²</text>
-  <text x="380" y="90" fill="#F59E42" font-family="'Space Grotesk', sans-serif" font-size="13" font-weight="600">l: y = 2x</text>
-  <text x="250" y="200" fill="#E8ECF4" font-family="'Space Grotesk', sans-serif" font-size="14" font-weight="700">R</text>
+  <text x="345" y="135" fill="#E8ECF4" font-family="'Manrope', sans-serif" font-size="12" font-weight="600">P (4, 8)</text>
+  <text x="435" y="280" fill="#7B8FAD" font-family="'Manrope', sans-serif" font-size="12">6</text>
+  <text x="280" y="75" fill="#4A7BF7" font-family="'Manrope', sans-serif" font-size="13" font-weight="600">C: y = 6x - x²</text>
+  <text x="380" y="90" fill="#F59E42" font-family="'Manrope', sans-serif" font-size="13" font-weight="600">l: y = 2x</text>
+  <text x="250" y="200" fill="#E8ECF4" font-family="'Manrope', sans-serif" font-size="14" font-weight="700">R</text>
 </svg>`;
 
 export const SVG_CIRCLE_TANGENT = `<svg viewBox="0 0 600 320" className="w-full h-auto max-h-[340px] mx-auto select-none" xmlns="http://www.w3.org/2000/svg">
@@ -63,129 +65,129 @@ export const SVG_CIRCLE_TANGENT = `<svg viewBox="0 0 600 320" className="w-full 
   <rect width="600" height="320" fill="url(#grid_circ)" rx="12"/>
   <line x1="60" y1="160" x2="560" y2="160" stroke="#7B8FAD" stroke-width="2"/>
   <line x1="300" y1="290" x2="300" y2="30" stroke="#7B8FAD" stroke-width="2"/>
-  <text x="550" y="185" fill="#E8ECF4" font-family="'Space Grotesk', sans-serif" font-size="14" font-weight="600">x</text>
-  <text x="280" y="45" fill="#E8ECF4" font-family="'Space Grotesk', sans-serif" font-size="14" font-weight="600">y</text>
+  <text x="550" y="185" fill="#E8ECF4" font-family="'Manrope', sans-serif" font-size="14" font-weight="600">x</text>
+  <text x="280" y="45" fill="#E8ECF4" font-family="'Manrope', sans-serif" font-size="14" font-weight="600">y</text>
   <circle cx="380" cy="220" r="100" fill="rgba(74, 123, 247, 0.1)" stroke="#4A7BF7" stroke-width="3"/>
   <circle cx="380" cy="220" r="4" fill="#E8ECF4"/>
-  <text x="390" y="235" fill="#E8ECF4" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="600">C (4, -3)</text>
+  <text x="390" y="235" fill="#E8ECF4" font-family="'Manrope', sans-serif" font-size="12" font-weight="600">C (4, -3)</text>
   <circle cx="320" cy="140" r="4" fill="#F59E42"/>
-  <text x="250" y="135" fill="#F59E42" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="600">P (1, 1)</text>
+  <text x="250" y="135" fill="#F59E42" font-family="'Manrope', sans-serif" font-size="12" font-weight="600">P (1, 1)</text>
   <line x1="200" y1="50" x2="480" y2="260" stroke="#F59E42" stroke-width="2.5" stroke-dasharray="6,4"/>
   <line x1="380" y1="220" x2="320" y2="140" stroke="#7B8FAD" stroke-width="1.5" stroke-dasharray="4,4"/>
-  <text x="440" y="250" fill="#F59E42" font-family="'Space Grotesk', sans-serif" font-size="13" font-weight="600">Tangent L</text>
+  <text x="440" y="250" fill="#F59E42" font-family="'Manrope', sans-serif" font-size="13" font-weight="600">Tangent L</text>
 </svg>`;
 
 export const SVG_INCLINED_PLANE = `<svg viewBox="0 0 600 320" className="w-full h-auto max-h-[340px] mx-auto select-none" xmlns="http://www.w3.org/2000/svg">
   <rect width="600" height="320" fill="#0A1020" rx="12" stroke="rgba(99, 130, 191, 0.3)" stroke-width="1"/>
   <path d="M 80 260 L 520 260 L 520 120 Z" fill="rgba(99, 130, 191, 0.12)" stroke="#7B8FAD" stroke-width="2"/>
   <path d="M 140 260 A 60 60 0 0 0 135 242" fill="none" stroke="#F59E42" stroke-width="2"/>
-  <text x="148" y="252" fill="#F59E42" font-family="'Space Grotesk', sans-serif" font-size="14" font-weight="600">α</text>
+  <text x="148" y="252" fill="#F59E42" font-family="'Manrope', sans-serif" font-size="14" font-weight="600">α</text>
   <g transform="translate(300, 190) rotate(-17.65)">
     <rect x="-30" y="-30" width="60" height="30" fill="#1A2540" stroke="#4A7BF7" stroke-width="2" rx="4"/>
-    <text x="-12" y="-10" fill="#E8ECF4" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="600">4 kg</text>
+    <text x="-12" y="-10" fill="#E8ECF4" font-family="'Manrope', sans-serif" font-size="12" font-weight="600">4 kg</text>
     <line x1="0" y1="-30" x2="0" y2="-90" stroke="#4A7BF7" stroke-width="2.5"/>
-    <text x="10" y="-75" fill="#4A7BF7" font-family="'Space Grotesk', sans-serif" font-size="13" font-weight="700">R</text>
+    <text x="10" y="-75" fill="#4A7BF7" font-family="'Manrope', sans-serif" font-size="13" font-weight="700">R</text>
     <line x1="-30" y1="-15" x2="-90" y2="-15" stroke="#F59E42" stroke-width="2.5"/>
-    <text x="-95" y="-25" fill="#F59E42" font-family="'Space Grotesk', sans-serif" font-size="13" font-weight="700">F</text>
+    <text x="-95" y="-25" fill="#F59E42" font-family="'Manrope', sans-serif" font-size="13" font-weight="700">F</text>
     <line x1="30" y1="-15" x2="100" y2="-15" stroke="#10B981" stroke-width="2.5"/>
-    <text x="105" y="-10" fill="#10B981" font-family="'Space Grotesk', sans-serif" font-size="13" font-weight="700">T</text>
+    <text x="105" y="-10" fill="#10B981" font-family="'Manrope', sans-serif" font-size="13" font-weight="700">T</text>
   </g>
   <line x1="300" y1="180" x2="300" y2="270" stroke="#E8ECF4" stroke-width="2.5"/>
-  <text x="310" y="265" fill="#E8ECF4" font-family="'Space Grotesk', sans-serif" font-size="13" font-weight="700">4g</text>
+  <text x="310" y="265" fill="#E8ECF4" font-family="'Manrope', sans-serif" font-size="13" font-weight="700">4g</text>
 </svg>`;
 
 export const SVG_NORMAL_DISTRIBUTION = `<svg viewBox="0 0 600 320" className="w-full h-auto max-h-[340px] mx-auto select-none" xmlns="http://www.w3.org/2000/svg">
   <rect width="600" height="320" fill="#0A1020" rx="12" stroke="rgba(99, 130, 191, 0.3)" stroke-width="1"/>
   <line x1="60" y1="260" x2="540" y2="260" stroke="#7B8FAD" stroke-width="2"/>
-  <text x="530" y="285" fill="#E8ECF4" font-family="'Space Grotesk', sans-serif" font-size="14" font-weight="600">x</text>
+  <text x="530" y="285" fill="#E8ECF4" font-family="'Manrope', sans-serif" font-size="14" font-weight="600">x</text>
   <path d="M 80 260 C 180 260, 240 70, 300 70 C 360 70, 420 260, 520 260" fill="none" stroke="#4A7BF7" stroke-width="3"/>
   <path d="M 410 195 C 440 230, 470 255, 520 260 L 410 260 Z" fill="rgba(245, 158, 66, 0.3)" stroke="none"/>
   <line x1="410" y1="195" x2="410" y2="260" stroke="#F59E42" stroke-width="2" stroke-dasharray="4,4"/>
   <line x1="300" y1="70" x2="300" y2="260" stroke="#7B8FAD" stroke-width="1.5" stroke-dasharray="4,4"/>
-  <text x="290" y="280" fill="#7B8FAD" font-family="'Space Grotesk', sans-serif" font-size="13">μ = 50</text>
-  <text x="395" y="280" fill="#F59E42" font-family="'Space Grotesk', sans-serif" font-size="13" font-weight="600">56.58</text>
-  <text x="430" y="220" fill="#F59E42" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="600">α = 0.05</text>
-  <text x="260" y="50" fill="#4A7BF7" font-family="'Space Grotesk', sans-serif" font-size="13" font-weight="600">X ~ N(50, 4²)</text>
+  <text x="290" y="280" fill="#7B8FAD" font-family="'Manrope', sans-serif" font-size="13">μ = 50</text>
+  <text x="395" y="280" fill="#F59E42" font-family="'Manrope', sans-serif" font-size="13" font-weight="600">56.58</text>
+  <text x="430" y="220" fill="#F59E42" font-family="'Manrope', sans-serif" font-size="12" font-weight="600">α = 0.05</text>
+  <text x="260" y="50" fill="#4A7BF7" font-family="'Manrope', sans-serif" font-size="13" font-weight="600">X ~ N(50, 4²)</text>
 </svg>`;
 
 export const SVG_ACTIVITY_NETWORK = `<svg viewBox="0 0 600 320" className="w-full h-auto max-h-[340px] mx-auto select-none" xmlns="http://www.w3.org/2000/svg">
   <rect width="600" height="320" fill="#0A1020" rx="12" stroke="rgba(99, 130, 191, 0.3)" stroke-width="1"/>
   <circle cx="80" cy="160" r="22" fill="#1A2540" stroke="#4A7BF7" stroke-width="2"/>
-  <text x="75" y="152" fill="#10B981" font-family="'Space Grotesk', sans-serif" font-size="11" font-weight="700">0</text>
-  <text x="75" y="172" fill="#F59E42" font-family="'Space Grotesk', sans-serif" font-size="11" font-weight="700">0</text>
+  <text x="75" y="152" fill="#10B981" font-family="'Manrope', sans-serif" font-size="11" font-weight="700">0</text>
+  <text x="75" y="172" fill="#F59E42" font-family="'Manrope', sans-serif" font-size="11" font-weight="700">0</text>
   <circle cx="200" cy="90" r="22" fill="#1A2540" stroke="#4A7BF7" stroke-width="2"/>
-  <text x="195" y="82" fill="#10B981" font-family="'Space Grotesk', sans-serif" font-size="11" font-weight="700">4</text>
-  <text x="195" y="102" fill="#F59E42" font-family="'Space Grotesk', sans-serif" font-size="11" font-weight="700">4</text>
+  <text x="195" y="82" fill="#10B981" font-family="'Manrope', sans-serif" font-size="11" font-weight="700">4</text>
+  <text x="195" y="102" fill="#F59E42" font-family="'Manrope', sans-serif" font-size="11" font-weight="700">4</text>
   <circle cx="200" cy="230" r="22" fill="#1A2540" stroke="#4A7BF7" stroke-width="2"/>
-  <text x="195" y="222" fill="#10B981" font-family="'Space Grotesk', sans-serif" font-size="11" font-weight="700">6</text>
-  <text x="192" y="242" fill="#F59E42" font-family="'Space Grotesk', sans-serif" font-size="11" font-weight="700">11</text>
+  <text x="195" y="222" fill="#10B981" font-family="'Manrope', sans-serif" font-size="11" font-weight="700">6</text>
+  <text x="192" y="242" fill="#F59E42" font-family="'Manrope', sans-serif" font-size="11" font-weight="700">11</text>
   <circle cx="340" cy="160" r="22" fill="#1A2540" stroke="#4A7BF7" stroke-width="2"/>
-  <text x="333" y="152" fill="#10B981" font-family="'Space Grotesk', sans-serif" font-size="11" font-weight="700">11</text>
-  <text x="333" y="172" fill="#F59E42" font-family="'Space Grotesk', sans-serif" font-size="11" font-weight="700">11</text>
+  <text x="333" y="152" fill="#10B981" font-family="'Manrope', sans-serif" font-size="11" font-weight="700">11</text>
+  <text x="333" y="172" fill="#F59E42" font-family="'Manrope', sans-serif" font-size="11" font-weight="700">11</text>
   <circle cx="460" cy="160" r="22" fill="#1A2540" stroke="#4A7BF7" stroke-width="2"/>
-  <text x="453" y="152" fill="#10B981" font-family="'Space Grotesk', sans-serif" font-size="11" font-weight="700">19</text>
-  <text x="453" y="172" fill="#F59E42" font-family="'Space Grotesk', sans-serif" font-size="11" font-weight="700">19</text>
+  <text x="453" y="152" fill="#10B981" font-family="'Manrope', sans-serif" font-size="11" font-weight="700">19</text>
+  <text x="453" y="172" fill="#F59E42" font-family="'Manrope', sans-serif" font-size="11" font-weight="700">19</text>
   <circle cx="540" cy="160" r="22" fill="#1A2540" stroke="#10B981" stroke-width="2"/>
-  <text x="533" y="152" fill="#10B981" font-family="'Space Grotesk', sans-serif" font-size="11" font-weight="700">21</text>
-  <text x="533" y="172" fill="#F59E42" font-family="'Space Grotesk', sans-serif" font-size="11" font-weight="700">21</text>
+  <text x="533" y="152" fill="#10B981" font-family="'Manrope', sans-serif" font-size="11" font-weight="700">21</text>
+  <text x="533" y="172" fill="#F59E42" font-family="'Manrope', sans-serif" font-size="11" font-weight="700">21</text>
   <line x1="102" y1="148" x2="178" y2="102" stroke="#E8ECF4" stroke-width="2"/>
-  <text x="130" y="115" fill="#E8ECF4" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="600">A (4)</text>
+  <text x="130" y="115" fill="#E8ECF4" font-family="'Manrope', sans-serif" font-size="12" font-weight="600">A (4)</text>
   <line x1="102" y1="172" x2="178" y2="218" stroke="#E8ECF4" stroke-width="2"/>
-  <text x="130" y="210" fill="#E8ECF4" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="600">B (6)</text>
+  <text x="130" y="210" fill="#E8ECF4" font-family="'Manrope', sans-serif" font-size="12" font-weight="600">B (6)</text>
   <line x1="222" y1="102" x2="318" y2="148" stroke="#E8ECF4" stroke-width="2"/>
-  <text x="270" y="115" fill="#E8ECF4" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="600">D (7)</text>
+  <text x="270" y="115" fill="#E8ECF4" font-family="'Manrope', sans-serif" font-size="12" font-weight="600">D (7)</text>
   <line x1="362" y1="160" x2="438" y2="160" stroke="#EF4444" stroke-width="3"/>
-  <text x="390" y="150" fill="#EF4444" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">F (8) [Crit]</text>
+  <text x="390" y="150" fill="#EF4444" font-family="'Manrope', sans-serif" font-size="12" font-weight="700">F (8) [Crit]</text>
   <line x1="482" y1="160" x2="518" y2="160" stroke="#EF4444" stroke-width="3"/>
-  <text x="495" y="150" fill="#EF4444" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">H (2)</text>
+  <text x="495" y="150" fill="#EF4444" font-family="'Manrope', sans-serif" font-size="12" font-weight="700">H (2)</text>
 </svg>`;
 
 export const SVG_WEIGHTED_NETWORK = `<svg viewBox="0 0 600 320" className="w-full h-auto max-h-[340px] mx-auto select-none" xmlns="http://www.w3.org/2000/svg">
   <rect width="600" height="320" fill="#0A1020" rx="12" stroke="rgba(99, 130, 191, 0.3)" stroke-width="1"/>
   <line x1="100" y1="160" x2="220" y2="80" stroke="#7B8FAD" stroke-width="2"/>
-  <text x="150" y="110" fill="#F59E42" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">8</text>
+  <text x="150" y="110" fill="#F59E42" font-family="'Manrope', sans-serif" font-size="12" font-weight="700">8</text>
   <line x1="100" y1="160" x2="220" y2="240" stroke="#7B8FAD" stroke-width="2"/>
-  <text x="150" y="215" fill="#F59E42" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">12</text>
+  <text x="150" y="215" fill="#F59E42" font-family="'Manrope', sans-serif" font-size="12" font-weight="700">12</text>
   <line x1="220" y1="80" x2="380" y2="80" stroke="#7B8FAD" stroke-width="2"/>
-  <text x="300" y="70" fill="#F59E42" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">14</text>
+  <text x="300" y="70" fill="#F59E42" font-family="'Manrope', sans-serif" font-size="12" font-weight="700">14</text>
   <line x1="220" y1="80" x2="300" y2="160" stroke="#7B8FAD" stroke-width="2"/>
-  <text x="245" y="130" fill="#F59E42" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">9</text>
+  <text x="245" y="130" fill="#F59E42" font-family="'Manrope', sans-serif" font-size="12" font-weight="700">9</text>
   <line x1="220" y1="240" x2="380" y2="240" stroke="#7B8FAD" stroke-width="2"/>
-  <text x="300" y="255" fill="#F59E42" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">11</text>
+  <text x="300" y="255" fill="#F59E42" font-family="'Manrope', sans-serif" font-size="12" font-weight="700">11</text>
   <line x1="380" y1="80" x2="500" y2="160" stroke="#7B8FAD" stroke-width="2"/>
-  <text x="445" y="110" fill="#F59E42" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">6</text>
+  <text x="445" y="110" fill="#F59E42" font-family="'Manrope', sans-serif" font-size="12" font-weight="700">6</text>
   <line x1="380" y1="240" x2="500" y2="160" stroke="#7B8FAD" stroke-width="2"/>
-  <text x="445" y="215" fill="#F59E42" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">10</text>
+  <text x="445" y="215" fill="#F59E42" font-family="'Manrope', sans-serif" font-size="12" font-weight="700">10</text>
   <circle cx="100" cy="160" r="18" fill="#1A2540" stroke="#4A7BF7" stroke-width="2.5"/>
-  <text x="95" y="166" fill="#E8ECF4" font-family="'Space Grotesk', sans-serif" font-size="14" font-weight="700">A</text>
+  <text x="95" y="166" fill="#E8ECF4" font-family="'Manrope', sans-serif" font-size="14" font-weight="700">A</text>
   <circle cx="220" cy="80" r="18" fill="#1A2540" stroke="#4A7BF7" stroke-width="2.5"/>
-  <text x="215" y="86" fill="#E8ECF4" font-family="'Space Grotesk', sans-serif" font-size="14" font-weight="700">B</text>
+  <text x="215" y="86" fill="#E8ECF4" font-family="'Manrope', sans-serif" font-size="14" font-weight="700">B</text>
   <circle cx="220" cy="240" r="18" fill="#1A2540" stroke="#4A7BF7" stroke-width="2.5"/>
-  <text x="215" y="246" fill="#E8ECF4" font-family="'Space Grotesk', sans-serif" font-size="14" font-weight="700">C</text>
+  <text x="215" y="246" fill="#E8ECF4" font-family="'Manrope', sans-serif" font-size="14" font-weight="700">C</text>
   <circle cx="300" cy="160" r="18" fill="#1A2540" stroke="#4A7BF7" stroke-width="2.5"/>
-  <text x="295" y="166" fill="#E8ECF4" font-family="'Space Grotesk', sans-serif" font-size="14" font-weight="700">D</text>
+  <text x="295" y="166" fill="#E8ECF4" font-family="'Manrope', sans-serif" font-size="14" font-weight="700">D</text>
   <circle cx="380" cy="80" r="18" fill="#1A2540" stroke="#4A7BF7" stroke-width="2.5"/>
-  <text x="375" y="86" fill="#E8ECF4" font-family="'Space Grotesk', sans-serif" font-size="14" font-weight="700">E</text>
+  <text x="375" y="86" fill="#E8ECF4" font-family="'Manrope', sans-serif" font-size="14" font-weight="700">E</text>
   <circle cx="380" cy="240" r="18" fill="#1A2540" stroke="#4A7BF7" stroke-width="2.5"/>
-  <text x="375" y="246" fill="#E8ECF4" font-family="'Space Grotesk', sans-serif" font-size="14" font-weight="700">F</text>
+  <text x="375" y="246" fill="#E8ECF4" font-family="'Manrope', sans-serif" font-size="14" font-weight="700">F</text>
   <circle cx="500" cy="160" r="18" fill="#1A2540" stroke="#10B981" stroke-width="2.5"/>
-  <text x="495" y="166" fill="#E8ECF4" font-family="'Space Grotesk', sans-serif" font-size="14" font-weight="700">G</text>
+  <text x="495" y="166" fill="#E8ECF4" font-family="'Manrope', sans-serif" font-size="14" font-weight="700">G</text>
 </svg>`;
 
 export const SVG_ARGAND_LOCUS = `<svg viewBox="0 0 600 320" className="w-full h-auto max-h-[340px] mx-auto select-none" xmlns="http://www.w3.org/2000/svg">
   <rect width="600" height="320" fill="#0A1020" rx="12" stroke="rgba(99, 130, 191, 0.3)" stroke-width="1"/>
   <line x1="60" y1="200" x2="540" y2="200" stroke="#7B8FAD" stroke-width="2"/>
   <line x1="200" y1="290" x2="200" y2="30" stroke="#7B8FAD" stroke-width="2"/>
-  <text x="530" y="190" fill="#E8ECF4" font-family="'Space Grotesk', sans-serif" font-size="13" font-weight="600">Re</text>
-  <text x="210" y="45" fill="#E8ECF4" font-family="'Space Grotesk', sans-serif" font-size="13" font-weight="600">Im</text>
-  <text x="185" y="218" fill="#7B8FAD" font-family="'Space Grotesk', sans-serif" font-size="12">O</text>
+  <text x="530" y="190" fill="#E8ECF4" font-family="'Manrope', sans-serif" font-size="13" font-weight="600">Re</text>
+  <text x="210" y="45" fill="#E8ECF4" font-family="'Manrope', sans-serif" font-size="13" font-weight="600">Im</text>
+  <text x="185" y="218" fill="#7B8FAD" font-family="'Manrope', sans-serif" font-size="12">O</text>
   <circle cx="350" cy="100" r="50" fill="rgba(74, 123, 247, 0.15)" stroke="#4A7BF7" stroke-width="2.5"/>
   <circle cx="350" cy="100" r="4" fill="#E8ECF4"/>
-  <text x="360" y="95" fill="#E8ECF4" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="600">3 + 4i</text>
+  <text x="360" y="95" fill="#E8ECF4" font-family="'Manrope', sans-serif" font-size="12" font-weight="600">3 + 4i</text>
   <line x1="350" y1="100" x2="400" y2="100" stroke="#7B8FAD" stroke-width="1.5" stroke-dasharray="3,3"/>
-  <text x="370" y="115" fill="#7B8FAD" font-family="'Space Grotesk', sans-serif" font-size="11">r = 2</text>
+  <text x="370" y="115" fill="#7B8FAD" font-family="'Manrope', sans-serif" font-size="11">r = 2</text>
   <line x1="200" y1="200" x2="450" y2="50" stroke="#F59E42" stroke-width="2.5"/>
-  <text x="440" y="40" fill="#F59E42" font-family="'Space Grotesk', sans-serif" font-size="13" font-weight="600">arg(z) = π/4</text>
+  <text x="440" y="40" fill="#F59E42" font-family="'Manrope', sans-serif" font-size="13" font-weight="600">arg(z) = π/4</text>
 </svg>`;
 
 export interface InteractivePaper {
@@ -203,6 +205,20 @@ export interface InteractivePaper {
 
 import { PURE_PAPERS_DATABASE } from './pure';
 export { PURE_PAPERS_DATABASE } from './pure';
+import { APPLIED_PAPERS_DATABASE } from './applied';
+export { APPLIED_PAPERS_DATABASE } from './applied';
+import { CORE_PURE_PAPERS_DATABASE } from './further/core';
+export { CORE_PURE_PAPERS_DATABASE } from './further/core';
+import { MECHANICS_PAPERS_DATABASE } from './further/mechanics';
+export { MECHANICS_PAPERS_DATABASE } from './further/mechanics';
+import { STATISTICS_PAPERS_DATABASE } from './further/statistics';
+export { STATISTICS_PAPERS_DATABASE } from './further/statistics';
+import { DECISION_PAPERS_DATABASE } from './further/decision';
+export { DECISION_PAPERS_DATABASE } from './further/decision';
+import { FURTHER_PURE_PAPERS_DATABASE } from './further/pure';
+export { FURTHER_PURE_PAPERS_DATABASE } from './further/pure';
+import { MOCK_PAPERS_DATABASE } from './mocks';
+export { MOCK_PAPERS_DATABASE } from './mocks';
 
 // =========================================================================
 // 1. PURE MATHEMATICS 1 (9MA0/01) — 100 MARKS TOTAL (12 Questions)
@@ -1307,7 +1323,8 @@ export const DECISION_1_BASE_QUESTIONS: InteractiveQuestion[] = [
 
 // Multi-year variation engine: guarantees distinct authentic exam questions across 2018-2025
 function generateVariedQuestions(baseQuestions: InteractiveQuestion[], paperId: string, year: number | string): InteractiveQuestion[] {
-  const numericYear = typeof year === 'number' ? year : parseInt(String(year).match(/\d+/)?.[0] || '2024', 10);
+  const rawNum = typeof year === 'number' ? year : parseInt(String(year).match(/\d+/)?.[0] || '2024', 10);
+  const numericYear = rawNum >= 2018 ? rawNum : (2018 + (rawNum % 6));
   
   // Deep clone base
   const cloned: InteractiveQuestion[] = JSON.parse(JSON.stringify(baseQuestions));
@@ -1418,14 +1435,36 @@ function generateVariedQuestions(baseQuestions: InteractiveQuestion[], paperId: 
 
 // Module resolver that guarantees authentic syllabus questions for EVERY module
 export function getQuestionsForModule(moduleId: string, paperId: string, year: number | string): InteractiveQuestion[] {
-  // Return authentic pure paper questions directly if present in authentic bank
+  // Return authentic pure or applied paper questions directly if present in authentic bank
   if (PURE_PAPERS_DATABASE[paperId]) {
     return PURE_PAPERS_DATABASE[paperId].questions;
   }
+  if (APPLIED_PAPERS_DATABASE[paperId]) {
+    return APPLIED_PAPERS_DATABASE[paperId].questions;
+  }
+  if (CORE_PURE_PAPERS_DATABASE[paperId]) {
+    return CORE_PURE_PAPERS_DATABASE[paperId].questions;
+  }
+  if (MECHANICS_PAPERS_DATABASE[paperId]) {
+    return MECHANICS_PAPERS_DATABASE[paperId].questions;
+  }
+  if (STATISTICS_PAPERS_DATABASE[paperId]) {
+    return STATISTICS_PAPERS_DATABASE[paperId].questions;
+  }
+  if (DECISION_PAPERS_DATABASE[paperId]) {
+    return DECISION_PAPERS_DATABASE[paperId].questions;
+  }
+  if (FURTHER_PURE_PAPERS_DATABASE[paperId]) {
+    return FURTHER_PURE_PAPERS_DATABASE[paperId].questions;
+  }
+  if (MOCK_PAPERS_DATABASE[paperId]) {
+    return MOCK_PAPERS_DATABASE[paperId].questions;
+  }
 
   let base: InteractiveQuestion[];
+  const cleanId = (moduleId || '').replace(/^mock-/, '').replace(/^more-/, '');
 
-  switch (moduleId) {
+  switch (cleanId) {
     case 'p1':
       base = PURE_1_BASE_QUESTIONS; // 100 marks
       break;
@@ -1476,9 +1515,9 @@ export function getInteractivePaper(
   year?: number | string,
   season?: string,
   moduleId?: string,
-  subject?: 'maths' | 'further-maths'
+  subject?: 'maths' | 'further-maths' | 'as-maths' | 'as-further-maths' | 'more-papers'
 ): InteractivePaper {
-  // Check authentic Pure database first
+  // Check authentic Pure & Applied databases first
   if (PURE_PAPERS_DATABASE[paperId]) {
     const authentic = PURE_PAPERS_DATABASE[paperId];
     return {
@@ -1487,42 +1526,111 @@ export function getInteractivePaper(
       paperCode: paperCode || authentic.paperCode,
     };
   }
+  if (APPLIED_PAPERS_DATABASE[paperId]) {
+    const authentic = APPLIED_PAPERS_DATABASE[paperId];
+    return {
+      ...authentic,
+      title: paperTitle || authentic.title,
+      paperCode: paperCode || authentic.paperCode,
+    };
+  }
+  if (CORE_PURE_PAPERS_DATABASE[paperId]) {
+    const authentic = CORE_PURE_PAPERS_DATABASE[paperId];
+    return {
+      ...authentic,
+      title: paperTitle || authentic.title,
+      paperCode: paperCode || authentic.paperCode,
+    };
+  }
+  if (MECHANICS_PAPERS_DATABASE[paperId]) {
+    const authentic = MECHANICS_PAPERS_DATABASE[paperId];
+    return {
+      ...authentic,
+      title: paperTitle || authentic.title,
+      paperCode: paperCode || authentic.paperCode,
+    };
+  }
+  if (STATISTICS_PAPERS_DATABASE[paperId]) {
+    const authentic = STATISTICS_PAPERS_DATABASE[paperId];
+    return {
+      ...authentic,
+      title: paperTitle || authentic.title,
+      paperCode: paperCode || authentic.paperCode,
+    };
+  }
+  if (DECISION_PAPERS_DATABASE[paperId]) {
+    const authentic = DECISION_PAPERS_DATABASE[paperId];
+    return {
+      ...authentic,
+      title: paperTitle || authentic.title,
+      paperCode: paperCode || authentic.paperCode,
+    };
+  }
+  if (FURTHER_PURE_PAPERS_DATABASE[paperId]) {
+    const authentic = FURTHER_PURE_PAPERS_DATABASE[paperId];
+    return {
+      ...authentic,
+      title: paperTitle || authentic.title,
+      paperCode: paperCode || authentic.paperCode,
+    };
+  }
+  if (MOCK_PAPERS_DATABASE[paperId]) {
+    const authentic = MOCK_PAPERS_DATABASE[paperId];
+    return {
+      ...authentic,
+      title: paperTitle || authentic.title,
+      paperCode: paperCode || authentic.paperCode,
+    };
+  }
 
   // Derive module identifier
-  const effectiveModuleId = moduleId || (
-    paperId.includes('-d1-') ? 'd1' :
-    paperId.includes('-d2-') ? 'd2' :
-    paperId.includes('-p2-') ? 'p2' :
-    paperId.includes('-p3-') ? 'p3' :
-    paperId.includes('-cp1-') ? 'cp1' :
-    paperId.includes('-cp2-') ? 'cp2' :
-    paperId.includes('-fm1-') ? 'fm1' :
-    paperId.includes('-fm2-') ? 'fm2' :
-    paperId.includes('-fs1-') ? 'fs1' :
-    paperId.includes('-fs2-') ? 'fs2' :
-    paperId.includes('-fp1-') ? 'fp1' :
-    paperId.includes('-fp2-') ? 'fp2' :
-    paperId.includes('-p1-') ? 'p1' : 'p1'
+  const cleanModuleId = (moduleId || '').replace(/^mock-/, '').replace(/^more-/, '').replace(/^as-/, '') || (
+    paperId.includes('-d1-') || paperId.includes('-d1') ? 'd1' :
+    paperId.includes('-d2-') || paperId.includes('-d2') ? 'd2' :
+    paperId.includes('-p2-') || paperId.includes('-p2') ? 'p2' :
+    paperId.includes('-p3-') || paperId.includes('-p3') ? 'p3' :
+    paperId.includes('-cp1-') || paperId.includes('-cp1') ? 'cp1' :
+    paperId.includes('-cp2-') || paperId.includes('-cp2') ? 'cp2' :
+    paperId.includes('-fm1-') || paperId.includes('-fm1') ? 'fm1' :
+    paperId.includes('-fm2-') || paperId.includes('-fm2') ? 'fm2' :
+    paperId.includes('-fs1-') || paperId.includes('-fs1') ? 'fs1' :
+    paperId.includes('-fs2-') || paperId.includes('-fs2') ? 'fs2' :
+    paperId.includes('-fp1-') || paperId.includes('-fp1') ? 'fp1' :
+    paperId.includes('-fp2-') || paperId.includes('-fp2') ? 'fp2' :
+    paperId.includes('-p1-') || paperId.includes('-p1') ? 'p1' : 'p1'
   );
 
+  const isAS = subject === 'as-maths' || subject === 'as-further-maths' || paperId.startsWith('as-');
   const isFM = subject === 'further-maths' || 
-               effectiveModuleId.startsWith('c') || 
-               effectiveModuleId.startsWith('d') || 
-               effectiveModuleId.startsWith('f');
+               subject === 'as-further-maths' ||
+               cleanModuleId.startsWith('c') || 
+               cleanModuleId.startsWith('d') || 
+               cleanModuleId.startsWith('f');
 
-  const duration = isFM ? 90 : 120;
-  const questions = getQuestionsForModule(effectiveModuleId, paperId, year || 2024);
+  const duration = isAS && cleanModuleId === 'p2' ? 75 : isAS && cleanModuleId === 'cp1' ? 100 : isFM ? 90 : 120;
+  const questions = getQuestionsForModule(cleanModuleId, paperId, year || 2024);
   const total = questions.reduce((sum, q) => sum + q.totalMarks, 0);
 
-  const displayTitle = paperTitle || `${season || 'June'} ${year || 2024} · ${effectiveModuleId.toUpperCase()}`;
+  const isSample = season === 'Sample' || year === 'Sample';
+  const displayTitle = paperTitle || (
+    isSample
+      ? `Sample Paper · ${cleanModuleId.toUpperCase()}`
+      : season
+        ? `${season} ${year || 2024} · ${cleanModuleId.toUpperCase()}`
+        : `${year || 2024} · ${cleanModuleId.toUpperCase()}`
+  );
   const code = paperCode || (
-    effectiveModuleId === 'p1' ? '9MA0/01' :
-    effectiveModuleId === 'p2' ? '9MA0/02' :
-    effectiveModuleId === 'p3' ? '9MA0/03' :
-    effectiveModuleId === 'cp1' ? '9FM0/01' :
-    effectiveModuleId === 'cp2' ? '9FM0/02' :
-    effectiveModuleId === 'd1' ? '9FM0/3D' :
-    effectiveModuleId === 'd2' ? '9FM0/4D' :
+    isAS && cleanModuleId === 'p1' ? '8MA0/01' :
+    isAS && cleanModuleId === 'p2' ? '8MA0/02' :
+    isAS && cleanModuleId.startsWith('c') ? '8FM0/01' :
+    isAS && isFM ? '8FM0/02' :
+    cleanModuleId === 'p1' ? '9MA0/01' :
+    cleanModuleId === 'p2' ? '9MA0/02' :
+    cleanModuleId === 'p3' ? '9MA0/03' :
+    cleanModuleId === 'cp1' ? '9FM0/01' :
+    cleanModuleId === 'cp2' ? '9FM0/02' :
+    cleanModuleId === 'd1' ? '9FM0/3D' :
+    cleanModuleId === 'd2' ? '9FM0/4D' :
     isFM ? '9FM0' : '9MA0'
   );
 

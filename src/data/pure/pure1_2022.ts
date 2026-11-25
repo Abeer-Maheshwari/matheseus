@@ -484,27 +484,21 @@ OR
       questionImageUrl: '/crops/maths/p1/2022-q7.png',
       markSchemeImageUrl: '/crops/maths/p1/2022-q7-ms.png',
       parts: [
-        {
-          partLabel: '',
-          marks: 5,
-          text: `(i)	 Given that p and q are integers such that
-pq is even
-use algebra to prove by contradiction that at least one of p or q is even.
-(3)
-(ii)	Given that x and y are integers such that
-•
-x < 0
-•
-(x + y)2 < 9x2 + y2
-show that  y > 4x
-(2)
-15
-
-`,
-          solution: `Full method for Question 7 (5 marks).`,
-          subAnswer: `See detailed mark scheme breakdown`,
-        },
-      ],
+            {
+                "partLabel": "(i)",
+                "marks": 3,
+                "text": "7. (i) Given that p and q are integers such that pq is even use algebra to prove by contradiction that at least one of p or q is even.",
+                "solution": "See official Pearson mark scheme snippet above for (i) method & accuracy marks.",
+                "subAnswer": "Refer to official mark scheme"
+            },
+            {
+                "partLabel": "(ii)",
+                "marks": 2,
+                "text": "(ii) Given that x and y are integers such that \u2022 x < 0 \u2022 (x + y)2 < 9x2 + y2 show that y > 4x",
+                "solution": "See official Pearson mark scheme snippet above for (ii) method & accuracy marks.",
+                "subAnswer": "Refer to official mark scheme"
+            }
+        ],
       fullMarkScheme: `(12
 )
 4

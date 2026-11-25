@@ -168,50 +168,21 @@ Way 1`,
       questionImageUrl: '/crops/maths/p2/2018-q4.png',
       markSchemeImageUrl: '/crops/maths/p2/2018-q4-ms.png',
       parts: [
-        {
-          partLabel: '',
-          marks: 7,
-          text: `(i)	 Show that
-3
-5
-2
-131798
-1
-16
-+
-+
-(
-) =
-=∑
-r
-r
-r
-(4)
-(ii)	A sequence u1, u2, u3, … is defined by
-u
-u
-u
-n
-n
-+ =
-=
-1
-1
-1
-2
-3
-,
-Find the exact value of
-ur
-r=∑
-1
-100
-(3)
-9`,
-          solution: `Full method for Question 4 (7 marks).`,
-          subAnswer: `See detailed mark scheme breakdown`,
-        },
-      ],
+            {
+                "partLabel": "(i)",
+                "marks": 4,
+                "text": "4. (i) Show that\u2002 3 + 5 r + 2 r = 131798 r 1 (4) DO",
+                "solution": "See official Pearson mark scheme snippet above for (i) method & accuracy marks.",
+                "subAnswer": "Refer to official mark scheme"
+            },
+            {
+                "partLabel": "(ii)",
+                "marks": 3,
+                "text": "(ii) A sequence u1, u2, u3, \u2026 is defined by NOT 1 2 WRITE u = , u = n + 1 u 1 3 n IN r=\u2211 100 THIS Find the exact value of\u2002 ur 1 (3) AREA DO NOT IN THIS AREA AREA THIS IN WRITE DO THIS WRITE NOT DO AREA IN",
+                "solution": "See official Pearson mark scheme snippet above for (ii) method & accuracy marks.",
+                "subAnswer": "Refer to official mark scheme"
+            }
+        ],
       fullMarkScheme: `gg(5)
 or 4
 or 4.4
@@ -388,25 +359,21 @@ or
       questionImageUrl: '/crops/maths/p2/2018-q7.png',
       markSchemeImageUrl: '/crops/maths/p2/2018-q7-ms.png',
       parts: [
-        {
-          partLabel: '',
-          marks: 9,
-          text: `(i)	 Solve, for  0 \\le x < 2
-\\pi ,  the equation
-4 sin x = sec x
-(4)
-(ii)	Solve, for  0 \\le \\theta < 360°,  the equation
-5 sin \\theta - 5 cos \\theta = 2
-giving your answers to one decimal place.
-(Solutions based entirely on graphical or numerical methods are not acceptable.)
-(5)
-17
-18
-19`,
-          solution: `Full method for Question 7 (9 marks).`,
-          subAnswer: `See detailed mark scheme breakdown`,
-        },
-      ],
+            {
+                "partLabel": "(i)",
+                "marks": 4,
+                "text": "7. (i) Solve, for\u2002 0\u2004\uf084\u2004x\u2004< ,\u2002 the equation 2 4\u2009sin\u2009x\u2004=\u2004sec\u2009x DO (4) NOT",
+                "solution": "See official Pearson mark scheme snippet above for (i) method & accuracy marks.",
+                "subAnswer": "Refer to official mark scheme"
+            },
+            {
+                "partLabel": "(ii)",
+                "marks": 5,
+                "text": "(ii) Solve, for\u2002 0\u2004\uf084\u2004\u03b8\u2004<\u2004360\u00b0,\u2002 the equation WRITE 5\u2009sin\u2009\u03b8\u2004\u2212\u20045\u2009cos\u2009\u03b8\u2004=\u20042 IN THIS giving your answers to one decimal place. AREA (Solutions based entirely on graphical or numerical methods are not acceptable.)  WRITE DO NOT WRITE IN AREA AREA THIS IN WRITE DO THIS WRITE NOT DO AREA IN DO NOT THIS THIS DO NOT WRITE IN AREA AREA THIS IN WRITE DO THIS WRITE NOT DO AREA IN",
+                "solution": "See official Pearson mark scheme snippet above for (ii) method & accuracy marks.",
+                "subAnswer": "Refer to official mark scheme"
+            }
+        ],
       fullMarkScheme: `
 
 

@@ -1210,31 +1210,21 @@ M1`,
       questionImageUrl: '/crops/maths/p1/2021-q15.png',
       markSchemeImageUrl: '/crops/maths/p1/2021-q15-ms.png',
       parts: [
-        {
-          partLabel: '',
-          marks: 6,
-          text: `(i)	 Use proof by exhaustion to show that for  n \\in , n \\le 4
-(n + 1)
-3 > 3
-n
-(2)
-(ii)	Given that  m3 + 5  is odd, use proof by contradiction to show, using algebra, that m
-is even.
-(4)
-49
-
-50
-
-
-51
-
-52
-
-`,
-          solution: `Full method for Question 15 (6 marks).`,
-          subAnswer: `See detailed mark scheme breakdown`,
-        },
-      ],
+            {
+                "partLabel": "(i)",
+                "marks": 2,
+                "text": "15. (i) Use proof by exhaustion to show that for ne Nn <4 (n+l) >3\" (2)",
+                "solution": "See official Pearson mark scheme snippet above for (i) method & accuracy marks.",
+                "subAnswer": "Refer to official mark scheme"
+            },
+            {
+                "partLabel": "(ii)",
+                "marks": 4,
+                "text": "(ii) Given that m+ 5 is odd, use proof by contradiction to show, using algebra, that m is even. (4)",
+                "solution": "See official Pearson mark scheme snippet above for (ii) method & accuracy marks.",
+                "subAnswer": "Refer to official mark scheme"
+            }
+        ],
       fullMarkScheme: `16
 20000 1.08 =awrt 63400
 n

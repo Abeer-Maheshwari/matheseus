@@ -10,6 +10,9 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+deploy-infinityfree
+.env
+.env.production
 *.local
 
 # Editor directories and files
@@ -23,4 +26,10 @@ dist-ssr
 *.sln
 *.sw?
 scratch/
+
+# Large exam PDFs & cropped question images (hosted on R2)
+public/papers/
+public/crops/
+Set 5/
+history.json
 

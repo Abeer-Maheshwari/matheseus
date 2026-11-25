@@ -627,49 +627,21 @@ or
       questionImageUrl: '/crops/maths/p2/2019-q8.png',
       markSchemeImageUrl: '/crops/maths/p2/2019-q8-ms.png',
       parts: [
-        {
-          partLabel: '',
-          marks: 6,
-          text: `(i) Find the value of
-20
-1
-2
-4
-× ⎛
-⎝⎜
-⎞
-⎠⎟
-=
-∞
-∑
-r
-r
-(3)
-(ii) Show that
-log5
-1
-48
-2
-1
-2
-n
-n
-n
-+
-+
-⎛
-⎝⎜
-⎞
-⎠⎟=
-=∑
-(3)
-21
-22
-23`,
-          solution: `Full method for Question 8 (6 marks).`,
-          subAnswer: `See detailed mark scheme breakdown`,
-        },
-      ],
+            {
+                "partLabel": "(i)",
+                "marks": 3,
+                "text": "8. (i) Find the value of \u221e r \u2211 \u239b 1 \u239e 20 \u00d7 \u239d\u239c \u23a0\u239f 2 r = 4",
+                "solution": "See official Pearson mark scheme snippet above for (i) method & accuracy marks.",
+                "subAnswer": "Refer to official mark scheme"
+            },
+            {
+                "partLabel": "(ii)",
+                "marks": 3,
+                "text": "(ii) Show that 48 =\u2211 \u239b n + 2 \u239e log5 \u239d\u239c \u23a0\u239f= 2 n + 1 n 1",
+                "solution": "See official Pearson mark scheme snippet above for (ii) method & accuracy marks.",
+                "subAnswer": "Refer to official mark scheme"
+            }
+        ],
       fullMarkScheme: `Way 1
 4
 5

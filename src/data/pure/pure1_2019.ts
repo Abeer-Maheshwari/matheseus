@@ -651,19 +651,21 @@ a
       questionImageUrl: '/crops/maths/p1/2019-q10.png',
       markSchemeImageUrl: '/crops/maths/p1/2019-q10-ms.png',
       parts: [
-        {
-          partLabel: '',
-          marks: 6,
-          text: `(i) Prove that for all n  , n2 + 2 is not divisible by 4
-(4)
-(ii) “Given x  , the value of µ3x - 28µ is greater than or equal to the value of (x - 9).”
-State, giving a reason, if the above statement is always true, sometimes true or never true.
-(2)
-29`,
-          solution: `Full method for Question 10 (6 marks).`,
-          subAnswer: `See detailed mark scheme breakdown`,
-        },
-      ],
+            {
+                "partLabel": "(i)",
+                "marks": 4,
+                "text": "10. (i) Prove that for all n \u008f , n2 + 2 is not divisible by 4  DO",
+                "solution": "See official Pearson mark scheme snippet above for (i) method & accuracy marks.",
+                "subAnswer": "Refer to official mark scheme"
+            },
+            {
+                "partLabel": "(ii)",
+                "marks": 2,
+                "text": "(ii) \u201cGiven x \u008f , the value of \u00b53x \u2013 28\u00b5 is greater than or equal to the value of (x \u2013 9).\u201d NOT State, giving a reason, if the above statement is always true, sometimes true or never true. (2) WRITE THIS WRITE IN AREA DO NOT IN THIS AREA IN WRITE DO THIS WRITE NOT DO AREA IN",
+                "solution": "See official Pearson mark scheme snippet above for (ii) method & accuracy marks.",
+                "subAnswer": "Refer to official mark scheme"
+            }
+        ],
       fullMarkScheme: `1
 x
 x
